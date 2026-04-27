@@ -1,5 +1,5 @@
 # HomeStyle — Business Requirements Document
-**Premium Design Furniture | Custom Web Application | v4.0**
+** Design Furniture | Custom Web Application | v4.0**
 
 | Field | Value |
 |---|---|
