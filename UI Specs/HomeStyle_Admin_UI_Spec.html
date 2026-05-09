@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeStyle — Admin Panel UI Specification v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       HOMESTYLE COLOR LIBRARY
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    --hs-clay:        #C4714B;
+    --hs-clay-light:  #D4886A;
+    --hs-clay-dark:   #A85A35;
+    --hs-clay-tint:   #FAF0EA;
+    --hs-slate:       #2C3A47;
+    --hs-slate-mid:   #4A5A6B;
+    --hs-slate-light: #7A8A9A;
+    --hs-warm-white:  #FDFAF7;
+    --hs-cream:       #F5F0EA;
+    --hs-linen:       #EDE6DC;
+    --hs-stone:       #C8BFB3;
+    --hs-charcoal:    #1C2530;
+    --hs-success:     #2D7A5F;
+    --hs-success-bg:  #EAF5F0;
+    --hs-warning:     #B07A1A;
+    --hs-warning-bg:  #FDF4E3;
+    --hs-error:       #C0392B;
+    --hs-error-bg:    #FDECEA;
+    --hs-info:        #2471A3;
+    --hs-info-bg:     #EBF5FB;
+
+    /* Admin-specific accent */
+    --admin-accent:   #3B5BA5;
+    --admin-accent-bg: #EEF2FB;
+
+    --font-display:   'DM Serif Display', Georgia, serif;
+    --font-body:      'DM Sans', system-ui, sans-serif;
+    --font-mono:      'DM Mono', 'Courier New', monospace;
+
+    --text-xs:    11px;
+    --text-sm:    13px;
+    --text-base:  15px;
+    --text-md:    17px;
+    --text-lg:    20px;
+    --text-xl:    24px;
+    --text-2xl:   30px;
+    --text-3xl:   38px;
+    --text-4xl:   52px;
+
+    --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;  --sp-4: 16px;
+    --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;  --sp-10: 40px;
+    --sp-12: 48px; --sp-16: 64px;
+
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-pill: 999px;
+
+    --shadow-sm: 0 1px 3px rgba(44,58,71,0.08), 0 1px 2px rgba(44,58,71,0.04);
+    --shadow-md: 0 4px 12px rgba(44,58,71,0.10), 0 2px 6px rgba(44,58,71,0.06);
+    --shadow-lg: 0 12px 32px rgba(44,58,71,0.13), 0 4px 12px rgba(44,58,71,0.08);
+    --shadow-card: 0 2px 8px rgba(44,58,71,0.07);
+
+    --t-fast:   100ms ease;
+    --t-base:   180ms ease;
+    --t-slow:   300ms ease;
+    --t-spring: 400ms cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--hs-slate);
+    background: var(--hs-warm-white);
+    line-height: 1.6;
+  }
+
+  /* ── Doc Layout ── */
+  .doc-sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 252px;
+    background: var(--hs-charcoal);
+    overflow-y: auto;
+    padding: var(--sp-6) 0;
+    z-index: 100;
+  }
+  .doc-sidebar .logo {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: #fff;
+    padding: 0 var(--sp-6) var(--sp-4);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: var(--sp-1);
+  }
+  .doc-sidebar .logo span { color: var(--hs-clay-light); }
+  .doc-sidebar .role-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    background: rgba(59,91,165,0.25);
+    color: #8BAEF0;
+    border: 1px solid rgba(59,91,165,0.4);
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    margin: var(--sp-3) var(--sp-6) var(--sp-3);
+  }
+  .doc-sidebar .version-tag {
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--hs-stone);
+    padding: 0 var(--sp-6) var(--sp-4);
+    display: block;
+  }
+  .nav-group { margin-bottom: var(--sp-4); }
+  .nav-group-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hs-stone);
+    padding: var(--sp-2) var(--sp-6);
+  }
+  .nav-link {
+    display: block;
+    padding: var(--sp-2) var(--sp-6);
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    transition: color var(--t-fast), background var(--t-fast);
+    border-left: 3px solid transparent;
+  }
+  .nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .nav-link.active { color: var(--hs-clay-light); border-left-color: var(--hs-clay-light); background: rgba(196,113,75,0.08); }
+
+  .doc-main { margin-left: 252px; padding: var(--sp-12) var(--sp-16); max-width: 1150px; }
+
+  h1.page-title { font-family: var(--font-display); font-size: var(--text-4xl); color: var(--hs-slate); line-height: 1.1; margin-bottom: var(--sp-3); }
+  h1.page-title em { color: var(--hs-clay); font-style: italic; }
+  .page-subtitle { font-size: var(--text-md); color: var(--hs-slate-mid); margin-bottom: var(--sp-10); }
+  .meta-bar { display: flex; gap: var(--sp-6); padding: var(--sp-4) var(--sp-6); background: var(--hs-cream); border: 1px solid var(--hs-linen); border-radius: var(--r-lg); margin-bottom: var(--sp-12); flex-wrap: wrap; }
+  .meta-item { font-size: var(--text-sm); }
+  .meta-item strong { color: var(--hs-slate); margin-right: var(--sp-1); }
+  .meta-item span { color: var(--hs-slate-mid); }
+
+  section { margin-bottom: var(--sp-16); scroll-margin-top: 24px; }
+
+  h2.section-title { font-family: var(--font-display); font-size: var(--text-3xl); color: var(--hs-slate); border-bottom: 2px solid var(--hs-linen); padding-bottom: var(--sp-4); margin-bottom: var(--sp-8); }
+  h3.subsection { font-size: var(--text-lg); font-weight: 600; color: var(--hs-slate); margin: var(--sp-8) 0 var(--sp-4); }
+  h3.subsection::before { content: '—'; color: var(--hs-clay); margin-right: var(--sp-2); }
+  h4.spec-label { font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--hs-slate-mid); margin: var(--sp-6) 0 var(--sp-3); }
+  p { margin-bottom: var(--sp-4); color: var(--hs-slate-mid); line-height: 1.7; }
+  p strong { color: var(--hs-slate); }
+
+  .spec-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); margin-bottom: var(--sp-8); background: #fff; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+  .spec-table th { background: var(--hs-charcoal); color: #fff; font-weight: 500; font-size: var(--text-xs); letter-spacing: 0.05em; text-transform: uppercase; padding: var(--sp-3) var(--sp-4); text-align: left; }
+  .spec-table td { padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--hs-linen); vertical-align: top; line-height: 1.5; }
+  .spec-table tr:last-child td { border-bottom: none; }
+  .spec-table tr:nth-child(even) td { background: var(--hs-warm-white); }
+  .spec-table code { font-family: var(--font-mono); font-size: var(--text-xs); background: var(--hs-cream); padding: 2px 6px; border-radius: var(--r-sm); color: var(--hs-clay-dark); }
+
+  .badge { display: inline-flex; align-items: center; font-size: var(--text-xs); font-weight: 600; padding: 2px 8px; border-radius: var(--r-pill); white-space: nowrap; }
+  .badge-critical { background: var(--hs-error-bg); color: var(--hs-error); }
+  .badge-high     { background: var(--hs-warning-bg); color: var(--hs-warning); }
+  .badge-med      { background: var(--hs-info-bg); color: var(--hs-info); }
+  .badge-ok       { background: var(--hs-success-bg); color: var(--hs-success); }
+  .badge-phase    { background: var(--hs-clay-tint); color: var(--hs-clay-dark); }
+  .badge-admin    { background: var(--admin-accent-bg); color: var(--admin-accent); }
+
+  .screen-frame { background: var(--hs-cream); border: 1px solid var(--hs-linen); border-radius: var(--r-xl); padding: var(--sp-8); margin-bottom: var(--sp-8); box-shadow: var(--shadow-md); }
+  .screen-header { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-6); padding-bottom: var(--sp-4); border-bottom: 1px solid var(--hs-linen); }
+  .screen-id { font-family: var(--font-mono); font-size: var(--text-xs); background: var(--hs-charcoal); color: var(--hs-clay-light); padding: 3px 10px; border-radius: var(--r-pill); }
+  .screen-name { font-weight: 600; font-size: var(--text-md); color: var(--hs-slate); flex: 1; }
+  .screen-role-tag { font-size: var(--text-xs); font-weight: 500; padding: 3px 10px; border-radius: var(--r-pill); background: var(--admin-accent-bg); color: var(--admin-accent); }
+
+  .spec-row { display: grid; grid-template-columns: 170px 1fr; gap: var(--sp-4) var(--sp-6); padding: var(--sp-3) 0; border-bottom: 1px solid var(--hs-linen); font-size: var(--text-sm); align-items: start; }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-row-key { font-weight: 600; color: var(--hs-slate); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; padding-top: 2px; }
+  .spec-row-val { color: var(--hs-slate-mid); }
+  .spec-row-val ul { padding-left: var(--sp-4); }
+  .spec-row-val li { margin-bottom: var(--sp-1); }
+
+  .field-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-6); }
+  .field-card { background: #fff; border: 1px solid var(--hs-linen); border-radius: var(--r-lg); padding: var(--sp-4); box-shadow: var(--shadow-sm); }
+  .field-card-name { font-weight: 600; font-size: var(--text-sm); color: var(--hs-slate); margin-bottom: var(--sp-2); display: flex; align-items: center; gap: var(--sp-2); }
+  .field-required { font-size: var(--text-xs); color: var(--hs-error); font-weight: 500; }
+  .field-optional { font-size: var(--text-xs); color: var(--hs-slate-light); font-weight: 400; }
+  .field-row { display: flex; justify-content: space-between; font-size: var(--text-xs); color: var(--hs-slate-mid); padding: 3px 0; border-bottom: 1px solid var(--hs-linen); }
+  .field-row:last-child { border-bottom: none; }
+  .field-row strong { color: var(--hs-slate-mid); min-width: 80px; }
+
+  .callout { padding: var(--sp-4) var(--sp-5); border-radius: var(--r-lg); margin-bottom: var(--sp-6); border-left: 4px solid; font-size: var(--text-sm); }
+  .callout-warn { background: var(--hs-warning-bg); border-color: var(--hs-warning); }
+  .callout-info { background: var(--hs-info-bg); border-color: var(--hs-info); }
+  .callout-note { background: var(--hs-clay-tint); border-color: var(--hs-clay); }
+  .callout-critical { background: var(--hs-error-bg); border-color: var(--hs-error); }
+  .callout-admin { background: var(--admin-accent-bg); border-color: var(--admin-accent); }
+  .callout strong { display: block; margin-bottom: var(--sp-1); font-weight: 700; }
+
+  .anim-card { background: var(--hs-charcoal); border-radius: var(--r-lg); padding: var(--sp-5) var(--sp-6); margin-bottom: var(--sp-4); color: #fff; }
+  .anim-title { font-weight: 600; font-size: var(--text-sm); color: var(--hs-clay-light); margin-bottom: var(--sp-2); display: flex; justify-content: space-between; }
+  .anim-detail { font-family: var(--font-mono); font-size: var(--text-xs); color: rgba(255,255,255,0.55); line-height: 2; }
+  .anim-detail em { color: rgba(255,255,255,0.85); font-style: normal; }
+
+  .ui-demo { background: var(--hs-warm-white); border: 1px solid var(--hs-linen); border-radius: var(--r-xl); padding: var(--sp-8) var(--sp-10); margin-bottom: var(--sp-8); }
+  .ui-demo-label { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.1em; color: var(--hs-stone); margin-bottom: var(--sp-5); font-weight: 600; }
+
+  /* Admin Layout Preview */
+  .admin-layout-preview { display: flex; height: 500px; border: 1px solid var(--hs-linen); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: var(--sp-8); }
+  .admin-sidenav { width: 220px; background: var(--hs-charcoal); flex-shrink: 0; padding: var(--sp-4) 0; }
+  .admin-sidenav-logo { padding: var(--sp-3) var(--sp-5) var(--sp-5); font-family: var(--font-display); color: #fff; font-size: var(--text-lg); border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: var(--sp-3); }
+  .admin-sidenav-logo small { display: block; font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 400; margin-top: 2px; }
+  .admin-nav-group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: var(--sp-3) var(--sp-5) var(--sp-1); }
+  .admin-nav-item { display: flex; align-items: center; gap: var(--sp-3); padding: 9px var(--sp-5); font-size: var(--text-sm); color: rgba(255,255,255,0.6); cursor: pointer; border-left: 3px solid transparent; transition: all var(--t-fast); }
+  .admin-nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .admin-nav-item.active { background: rgba(196,113,75,0.1); color: var(--hs-clay-light); border-left-color: var(--hs-clay-light); }
+  .admin-nav-item .nav-icon { width: 16px; text-align: center; font-size: 14px; flex-shrink: 0; }
+  .admin-nav-badge { margin-left: auto; background: var(--hs-error); color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: var(--r-pill); }
+  .admin-topbar { background: #fff; border-bottom: 1px solid var(--hs-linen); height: 56px; display: flex; align-items: center; padding: 0 var(--sp-6); gap: var(--sp-4); flex-shrink: 0; }
+  .admin-topbar-title { font-weight: 600; font-size: var(--text-md); color: var(--hs-slate); flex: 1; }
+  .admin-topbar-right { display: flex; align-items: center; gap: var(--sp-3); }
+  .admin-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--hs-clay); color: #fff; font-size: var(--text-xs); font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .admin-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--hs-warm-white); }
+  .admin-content { flex: 1; padding: var(--sp-6); overflow-y: auto; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-6); }
+  .kpi-card { background: #fff; border: 1px solid var(--hs-linen); border-radius: var(--r-lg); padding: var(--sp-4); }
+  .kpi-label { font-size: var(--text-xs); color: var(--hs-slate-mid); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2); }
+  .kpi-value { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--hs-slate); line-height: 1; margin-bottom: var(--sp-1); }
+  .kpi-delta { font-size: var(--text-xs); color: var(--hs-success); font-weight: 600; }
+  .kpi-delta.down { color: var(--hs-error); }
+
+  /* Simulated Buttons */
+  .sim-btn-row { display: flex; gap: var(--sp-3); flex-wrap: wrap; align-items: center; margin-top: var(--sp-4); }
+  .sim-btn { padding: 11px 24px; border-radius: var(--r-md); font-family: var(--font-body); font-size: var(--text-sm); font-weight: 600; cursor: pointer; transition: all var(--t-base); border: 1.5px solid transparent; }
+  .sim-btn-primary { background: var(--hs-clay); color: #fff; }
+  .sim-btn-primary:hover { background: var(--hs-clay-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .sim-btn-secondary { background: transparent; border-color: var(--hs-clay); color: var(--hs-clay); }
+  .sim-btn-secondary:hover { background: var(--hs-clay-tint); }
+  .sim-btn-ghost { background: transparent; border-color: var(--hs-linen); color: var(--hs-slate-mid); }
+  .sim-btn-ghost:hover { background: var(--hs-cream); color: var(--hs-slate); }
+  .sim-btn-danger { background: var(--hs-error); color: #fff; border-color: transparent; }
+  .sim-btn-admin { background: var(--admin-accent); color: #fff; }
+  .sim-btn-sm { padding: 7px 16px; font-size: var(--text-xs); }
+  .sim-btn-lg { padding: 14px 32px; font-size: var(--text-md); }
+  .sim-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* SLA Indicator */
+  .sla-bar { height: 6px; border-radius: var(--r-pill); background: var(--hs-linen); margin-top: var(--sp-2); overflow: hidden; }
+  .sla-fill { height: 100%; border-radius: var(--r-pill); transition: width 0.6s ease; }
+  .sla-fill-ok { background: var(--hs-success); }
+  .sla-fill-warn { background: var(--hs-warning); }
+  .sla-fill-breach { background: var(--hs-error); }
+
+  /* Order status pipeline */
+  .status-pipeline { display: flex; gap: 0; align-items: center; }
+  .sp-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+  .sp-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; z-index: 1; }
+  .sp-dot-done { background: var(--hs-success); color: #fff; }
+  .sp-dot-active { background: var(--hs-clay); color: #fff; box-shadow: 0 0 0 4px rgba(196,113,75,0.2); }
+  .sp-dot-idle { background: var(--hs-linen); color: var(--hs-stone); }
+  .sp-label { font-size: 10px; color: var(--hs-slate-mid); white-space: nowrap; font-weight: 500; margin-top: 4px; }
+  .sp-label.active { color: var(--hs-clay); font-weight: 700; }
+  .sp-line { flex: 1; height: 2px; background: var(--hs-linen); margin-bottom: 20px; }
+  .sp-line.done { background: var(--hs-success); }
+
+  /* Permission matrix */
+  .perm-check { color: var(--hs-success); font-weight: 700; }
+  .perm-cross  { color: var(--hs-stone); }
+  .perm-partial { color: var(--hs-warning); font-weight: 600; }
+
+  hr.section-break { border: none; border-top: 1px solid var(--hs-linen); margin: var(--sp-12) 0; }
+
+  code.inline { font-family: var(--font-mono); font-size: var(--text-xs); background: var(--hs-cream); padding: 2px 6px; border-radius: var(--r-sm); color: var(--hs-clay-dark); }
+
+  /* Print */
+  @media print { .doc-sidebar { display: none; } .doc-main { margin-left: 0; padding: 24px; } }
+  .doc-sidebar::-webkit-scrollbar { width: 4px; }
+  .doc-sidebar::-webkit-scrollbar-track { background: transparent; }
+  .doc-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR NAV ═══════════════ -->
+<nav class="doc-sidebar">
+  <div class="logo">Home<span>Style</span></div>
+  <span class="role-badge">Admin Panel · Role: Super Admin</span>
+  <span class="version-tag">Admin UI Spec v1.0 · MVP Phase 1</span>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Foundation</div>
+    <a class="nav-link active" href="#admin-overview">Admin Overview</a>
+    <a class="nav-link" href="#admin-roles">Roles & Permissions</a>
+    <a class="nav-link" href="#admin-layout">Admin Layout Shell</a>
+    <a class="nav-link" href="#admin-auth">Admin Auth (2FA)</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Core Modules</div>
+    <a class="nav-link" href="#sc-a-dashboard">Dashboard</a>
+    <a class="nav-link" href="#sc-a-orders">Order Management</a>
+    <a class="nav-link" href="#sc-a-products">Product Management</a>
+    <a class="nav-link" href="#sc-a-inventory">Inventory</a>
+    <a class="nav-link" href="#sc-a-returns">Returns Management</a>
+    <a class="nav-link" href="#sc-a-customers">Customer Management</a>
+    <a class="nav-link" href="#sc-a-promotions">Promotions</a>
+    <a class="nav-link" href="#sc-a-shipping">Shipping Config</a>
+    <a class="nav-link" href="#sc-a-reviews">Review Moderation</a>
+    <a class="nav-link" href="#sc-a-cms">CMS Editor</a>
+    <a class="nav-link" href="#sc-a-email">Email Templates</a>
+    <a class="nav-link" href="#sc-a-staff">Staff Management</a>
+    <a class="nav-link" href="#sc-a-reports">Reports</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Global Admin</div>
+    <a class="nav-link" href="#admin-toast">Toast & Alerts</a>
+    <a class="nav-link" href="#admin-sla">SLA Indicators</a>
+    <a class="nav-link" href="#admin-empty">Empty States</a>
+  </div>
+</nav>
+
+<!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+<main class="doc-main">
+
+  <h1 class="page-title">HomeStyle <em>Admin Panel</em><br>UI Specification</h1>
+  <p class="page-subtitle">Super Admin role — All modules. Companion to HomeStyle MVP UI Spec v1.0 (Storefront).</p>
+
+  <div class="meta-bar">
+    <div class="meta-item"><strong>Document</strong> <span>HomeStyle Admin UI Spec v1.0</span></div>
+    <div class="meta-item"><strong>Role Coverage</strong> <span>Super Admin · Operations Admin · Content Admin</span></div>
+    <div class="meta-item"><strong>Status</strong> <span>Draft — Pending Client Approval</span></div>
+    <div class="meta-item"><strong>Date</strong> <span>April 2026</span></div>
+    <div class="meta-item"><strong>BRD Reference</strong> <span>BRD v4.0 §7, §8.3, §12–17</span></div>
+    <div class="meta-item"><strong>Screen IDs</strong> <span>SC-A-01 through SC-A-55</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 1 — ADMIN OVERVIEW
+  ══════════════════════════════════════ -->
+  <section id="admin-overview">
+    <h2 class="section-title">1. Admin Panel Overview</h2>
+    <p>The HomeStyle Admin Panel is a <strong>React SPA</strong> serving as the back-office for all operational, content, and configuration tasks. It is entirely separate from the customer-facing storefront but shares the same design tokens and component library. It communicates exclusively with the backend via REST API (<code class="inline">/api/v1/admin/*</code>), with all endpoints requiring a valid admin JWT and role authorization.</p>
+
+    <div class="callout callout-critical">
+      <strong>Security: 2FA Mandatory</strong>
+      All admin accounts must complete TOTP-based two-factor authentication on every login session. 2FA cannot be bypassed or disabled for any role. See SC-A-02 for the full auth flow.
+    </div>
+
+    <h3 class="subsection">Admin Modules — Phase 1 Scope</h3>
+    <table class="spec-table">
+      <tr><th>Module</th><th>Screen IDs</th><th>BRD Reference</th><th>Super Admin</th><th>Ops Admin</th><th>Content Admin</th></tr>
+      <tr><td>Dashboard</td><td>SC-A-01</td><td>§8.3</td><td class="perm-check">✓ Full</td><td class="perm-check">✓ Full</td><td class="perm-partial">◑ Limited</td></tr>
+      <tr><td>Auth (Login + 2FA)</td><td>SC-A-02 – 04</td><td>§8.3</td><td class="perm-check">✓</td><td class="perm-check">✓</td><td class="perm-check">✓</td></tr>
+      <tr><td>Order Management</td><td>SC-A-05 – 09</td><td>§8.3, §12.1</td><td class="perm-check">✓ Full</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td></tr>
+      <tr><td>Product Management</td><td>SC-A-10 – 15</td><td>§8.3, §18.1</td><td class="perm-check">✓ Full</td><td class="perm-partial">◑ View only</td><td class="perm-check">✓ Full</td></tr>
+      <tr><td>Inventory</td><td>SC-A-16 – 17</td><td>§8.3, §18.4</td><td class="perm-check">✓ Full</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td></tr>
+      <tr><td>Returns Management</td><td>SC-A-18 – 21</td><td>§8.3, §12.2, §15</td><td class="perm-check">✓ Full</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td></tr>
+      <tr><td>Customer Management</td><td>SC-A-22 – 24</td><td>§8.3</td><td class="perm-check">✓ Full</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td></tr>
+      <tr><td>Promotions</td><td>SC-A-25 – 27</td><td>§8.3</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td><td class="perm-check">✓ Full</td></tr>
+      <tr><td>Shipping Config</td><td>SC-A-28 – 30</td><td>§8.3, §18.2</td><td class="perm-check">✓ Full</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td></tr>
+      <tr><td>Review Moderation</td><td>SC-A-31 – 32</td><td>§8.3</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td><td class="perm-check">✓ Full</td></tr>
+      <tr><td>CMS Editor</td><td>SC-A-33 – 34</td><td>§8.3</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td><td class="perm-check">✓ Full</td></tr>
+      <tr><td>Email Templates</td><td>SC-A-35 – 36</td><td>§8.3, §14</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td><td class="perm-check">✓ Full</td></tr>
+      <tr><td>Staff Management</td><td>SC-A-37 – 39</td><td>§8.3</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td><td class="perm-cross">✗</td></tr>
+      <tr><td>Reports</td><td>SC-A-40 – 45</td><td>§8.3, §19</td><td class="perm-check">✓ Full</td><td class="perm-check">✓ Full</td><td class="perm-cross">✗</td></tr>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 2 — ROLES & PERMISSIONS
+  ══════════════════════════════════════ -->
+  <section id="admin-roles">
+    <h2 class="section-title">2. Admin Roles & Permissions</h2>
+    <p>Three roles exist in Phase 1, all enforced server-side. The UI hides inaccessible modules from the side navigation. Attempting to access a restricted URL redirects to a 403 page.</p>
+
+    <table class="spec-table">
+      <tr><th>Role</th><th>Description</th><th>Module Access</th><th>Financial Access</th><th>System Settings</th></tr>
+      <tr><td><strong>Super Admin</strong></td><td>Full access to all admin panel modules</td><td>All modules</td><td class="perm-check">✓ Full</td><td class="perm-check">✓ Full</td></tr>
+      <tr><td><strong>Admin — Operations</strong></td><td>Day-to-day order, inventory, returns, shipping, and customer management</td><td>Dashboard (limited), Orders, Inventory, Returns, Customers, Shipping, Reports</td><td class="perm-cross">✗ No</td><td class="perm-cross">✗ No</td></tr>
+      <tr><td><strong>Admin — Content</strong></td><td>Product catalogue, CMS, promotions, reviews, email templates</td><td>Dashboard (limited), Products, Promotions, Reviews, CMS, Email Templates</td><td class="perm-cross">✗ No</td><td class="perm-cross">✗ No</td></tr>
+    </table>
+
+    <div class="callout callout-admin">
+      <strong>Role enforcement is server-side only.</strong>
+      The UI hides inaccessible navigation items for usability, but the API enforces role permissions on every request. A hidden menu item does not grant security — role validation occurs at the API layer on every request.
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 3 — ADMIN LAYOUT SHELL
+  ══════════════════════════════════════ -->
+  <section id="admin-layout">
+    <h2 class="section-title">3. Admin Layout Shell</h2>
+    <p>All admin screens share a consistent two-panel layout: a fixed left sidebar navigation and a scrollable main content area with a persistent top bar.</p>
+
+    <div class="admin-layout-preview">
+      <!-- Sidebar -->
+      <div class="admin-sidenav">
+        <div class="admin-sidenav-logo">HomeStyle <span style="color:var(--hs-clay-light)">Admin</span><small>Super Admin</small></div>
+        <div class="admin-nav-group-label">Main</div>
+        <div class="admin-nav-item active"><span class="nav-icon">⬛</span> Dashboard</div>
+        <div class="admin-nav-item"><span class="nav-icon">📋</span> Orders <span class="admin-nav-badge">3</span></div>
+        <div class="admin-nav-item"><span class="nav-icon">🛋️</span> Products</div>
+        <div class="admin-nav-item"><span class="nav-icon">📦</span> Inventory</div>
+        <div class="admin-nav-item"><span class="nav-icon">↩️</span> Returns <span class="admin-nav-badge">2</span></div>
+        <div class="admin-nav-group-label">Store</div>
+        <div class="admin-nav-item"><span class="nav-icon">👥</span> Customers</div>
+        <div class="admin-nav-item"><span class="nav-icon">🎫</span> Promotions</div>
+        <div class="admin-nav-item"><span class="nav-icon">🚚</span> Shipping</div>
+        <div class="admin-nav-group-label">Content</div>
+        <div class="admin-nav-item"><span class="nav-icon">⭐</span> Reviews <span class="admin-nav-badge">7</span></div>
+        <div class="admin-nav-item"><span class="nav-icon">📄</span> CMS Pages</div>
+        <div class="admin-nav-group-label">System</div>
+        <div class="admin-nav-item"><span class="nav-icon">📊</span> Reports</div>
+        <div class="admin-nav-item"><span class="nav-icon">👤</span> Staff</div>
+      </div>
+      <!-- Main area -->
+      <div class="admin-main">
+        <div class="admin-topbar">
+          <div class="admin-topbar-title">Dashboard</div>
+          <div class="admin-topbar-right">
+            <span class="badge badge-ok">Store Live</span>
+            <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">Fri 17 Apr 2026</div>
+            <div class="admin-avatar">SA</div>
+          </div>
+        </div>
+        <div class="admin-content">
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-label">Today's Revenue</div><div class="kpi-value">$4,820</div><div class="kpi-delta">↑ +12% vs yesterday</div></div>
+            <div class="kpi-card"><div class="kpi-label">New Orders</div><div class="kpi-value">18</div><div class="kpi-delta">↑ +3 from yesterday</div></div>
+            <div class="kpi-card"><div class="kpi-label">New Customers</div><div class="kpi-value">6</div><div class="kpi-delta">↑ +1 from yesterday</div></div>
+            <div class="kpi-card"><div class="kpi-label">Low Stock Alerts</div><div class="kpi-value" style="color:var(--hs-warning)">4</div><div class="kpi-delta down">↑ +2 from yesterday</div></div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--hs-linen);border-radius:var(--r-lg);padding:var(--sp-5);height:180px;display:flex;align-items:center;justify-content:center;color:var(--hs-slate-light);font-size:var(--text-sm)">Sales Trend Chart (7-day, line) — recharts component</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="subsection">Layout Specifications</h3>
+    <div class="spec-row"><div class="spec-row-key">URL Base</div><div class="spec-row-val"><code>/admin/*</code> — completely separate from storefront. Served as React SPA. Not SSR.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Sidebar Width</div><div class="spec-row-val">240px fixed. Charcoal (<code class="inline">--hs-charcoal</code>) background. Non-collapsible on desktop. On tablet (≤1024px): icon-only rail (56px) with hover labels.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Top Bar Height</div><div class="spec-row-val">56px. White background, border-bottom: 1px <code class="inline">--hs-linen</code>. Contains: page title (left), contextual action buttons (center-right), notification bell with badge, admin avatar + dropdown (far right).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Content Area</div><div class="spec-row-val">Fills remaining viewport. <code class="inline">--hs-warm-white</code> background. Scrollable independently of sidebar. Padding: 24px all sides.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Notification Badge</div><div class="spec-row-val">Red pill badge on sidebar nav items showing unread/pending count. Badges shown for: Orders (awaiting confirmation), Returns (pending review), Reviews (pending moderation). Max display: 99+.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Breadcrumbs</div><div class="spec-row-val">Shown on all detail pages. Format: <code class="inline">Module / Sub-page / Record</code>. Font: DM Sans 13px. Color: <code class="inline">--hs-slate-mid</code>. Active item: <code class="inline">--hs-slate</code>.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Avatar Dropdown</div><div class="spec-row-val">Shows: logged-in admin name + role · "My Profile" · "Notification Settings" · "Sign Out" (with confirmation modal). Clicking outside dismisses.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Session Timeout</div><div class="spec-row-val">TC-03: Admin session expires after 8 hours of inactivity. Warning modal shown at 7h 45min with "Stay logged in" / "Log out" options. On timeout: redirect to <code class="inline">/admin/login</code>.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 4 — ADMIN AUTH (2FA)
+  ══════════════════════════════════════ -->
+  <section id="admin-auth">
+    <h2 class="section-title">4. Admin Authentication (SC-A-02 – A-04)</h2>
+    <p>Admin login is a three-step flow: credentials → TOTP verification → dashboard. 2FA is mandatory and cannot be skipped.</p>
+
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-A-02</span>
+        <span class="screen-name">Admin Login</span>
+        <span class="screen-role-tag">All Admin Roles</span>
+      </div>
+      <div style="max-width:400px;margin:0 auto;padding:var(--sp-8) 0">
+        <div style="font-family:var(--font-display);font-size:var(--text-2xl);color:var(--hs-slate);margin-bottom:var(--sp-2)">Admin Sign In</div>
+        <div style="font-size:var(--text-sm);color:var(--hs-slate-mid);margin-bottom:var(--sp-8)">HomeStyle Operations Panel</div>
+        <div style="margin-bottom:var(--sp-4)">
+          <div style="font-size:var(--text-xs);font-weight:600;color:var(--hs-slate);margin-bottom:var(--sp-2)">Email Address</div>
+          <div style="padding:10px 14px;border:1.5px solid var(--hs-clay);border-radius:var(--r-md);background:#fff;font-size:var(--text-sm);color:var(--hs-slate);box-shadow:0 0 0 3px rgba(196,113,75,0.12)">admin@homestyleshop.com</div>
+        </div>
+        <div style="margin-bottom:var(--sp-6)">
+          <div style="font-size:var(--text-xs);font-weight:600;color:var(--hs-slate);margin-bottom:var(--sp-2)">Password</div>
+          <div style="padding:10px 14px;border:1.5px solid var(--hs-linen);border-radius:var(--r-md);background:#fff;font-size:var(--text-sm);color:var(--hs-slate-light)">••••••••••••</div>
+        </div>
+        <button class="sim-btn sim-btn-primary" style="width:100%;text-align:center;display:block">Continue →</button>
+        <div style="text-align:center;margin-top:var(--sp-4);font-size:var(--text-xs);color:var(--hs-slate-mid)">Forgot password? Contact your Super Admin.</div>
+      </div>
+    </div>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/login</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Fields</div><div class="spec-row-val">Email (required, type=email), Password (required, min 12 chars, show/hide toggle). No social login on admin panel.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Rate Limiting</div><div class="spec-row-val">TC-11: 5 failed attempts → account locked for 15 minutes. Lockout countdown displayed. Alert email sent to Super Admin.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Brute Force</div><div class="spec-row-val">After 10 cumulative failed attempts across sessions: account suspended. Only Super Admin can reactivate. Immediate email alert to Super Admin.</div></div>
+    <div class="spec-row"><div class="spec-row-key">No "Remember Me"</div><div class="spec-row-val">Admin panel never uses persistent login cookies. Every new browser session requires full re-authentication including 2FA.</div></div>
+
+    <div class="screen-frame" style="margin-top:var(--sp-8)">
+      <div class="screen-header">
+        <span class="screen-id">SC-A-03</span>
+        <span class="screen-name">TOTP 2FA Verification</span>
+        <span class="screen-role-tag">All Admin Roles</span>
+      </div>
+      <div style="max-width:400px;margin:0 auto;padding:var(--sp-8) 0;text-align:center">
+        <div style="width:56px;height:56px;background:var(--admin-accent-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto var(--sp-5)">🔐</div>
+        <div style="font-family:var(--font-display);font-size:var(--text-2xl);color:var(--hs-slate);margin-bottom:var(--sp-2)">Two-Factor Authentication</div>
+        <div style="font-size:var(--text-sm);color:var(--hs-slate-mid);margin-bottom:var(--sp-8)">Enter the 6-digit code from your authenticator app</div>
+        <div style="display:flex;gap:var(--sp-2);justify-content:center;margin-bottom:var(--sp-6)">
+          <div style="width:48px;height:56px;border:2px solid var(--hs-clay);border-radius:var(--r-md);background:#fff;display:flex;align-items:center;justify-content:center;font-size:var(--text-2xl);font-weight:600;color:var(--hs-slate)">4</div>
+          <div style="width:48px;height:56px;border:2px solid var(--hs-clay);border-radius:var(--r-md);background:#fff;display:flex;align-items:center;justify-content:center;font-size:var(--text-2xl);font-weight:600;color:var(--hs-slate)">8</div>
+          <div style="width:48px;height:56px;border:2px solid var(--hs-clay);border-radius:var(--r-md);background:#fff;display:flex;align-items:center;justify-content:center;font-size:var(--text-2xl);font-weight:600;color:var(--hs-slate)">2</div>
+          <div style="width:48px;height:56px;border:1.5px solid var(--hs-linen);border-radius:var(--r-md);background:var(--hs-cream);display:flex;align-items:center;justify-content:center;font-size:var(--text-2xl);color:var(--hs-slate-light)"> </div>
+          <div style="width:48px;height:56px;border:1.5px solid var(--hs-linen);border-radius:var(--r-md);background:var(--hs-cream);display:flex;align-items:center;justify-content:center;font-size:var(--text-2xl);color:var(--hs-slate-light)"> </div>
+          <div style="width:48px;height:56px;border:1.5px solid var(--hs-linen);border-radius:var(--r-md);background:var(--hs-cream);display:flex;align-items:center;justify-content:center;font-size:var(--text-2xl);color:var(--hs-slate-light)"> </div>
+        </div>
+        <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">Code expires in <strong style="color:var(--hs-slate)">28s</strong></div>
+      </div>
+    </div>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/2fa</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Input</div><div class="spec-row-val">6 individual digit boxes. Auto-advances on each digit. Auto-submits on 6th digit. Paste support: pasting a 6-digit code fills all boxes and auto-submits. No "Remember this device" option.</div></div>
+    <div class="spec-row"><div class="spec-row-key">TOTP Validity</div><div class="spec-row-val">TC-03: Standard 30-second TOTP window. Clock drift tolerance: ±1 window (±30s). Countdown display shown below input.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Failed Attempts</div><div class="spec-row-val">3 failed 2FA attempts → session invalidated, return to login. Counts toward TC-11 lockout threshold.</div></div>
+    <div class="spec-row"><div class="spec-row-key">First Time Setup</div><div class="spec-row-val">SC-A-04: New admin accounts require 2FA enrollment before dashboard access. QR code shown for authenticator app pairing + 8 one-time backup recovery codes (downloadable PDF). Super Admin must provide initial temporary password.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 5 — DASHBOARD
+  ══════════════════════════════════════ -->
+  <section id="sc-a-dashboard">
+    <h2 class="section-title">5. Dashboard (SC-A-01)</h2>
+    <p>The dashboard is the default landing screen after login. It provides a real-time operational overview with KPI cards, a sales trend chart, and priority action queues (orders needing confirmation, overdue SLAs, pending returns).</p>
+
+    <div class="callout callout-admin">
+      <strong>Role-based dashboard visibility</strong>
+      Super Admin and Operations Admin: see full dashboard including revenue data. Content Admin: sees only pending reviews count and product alerts. Revenue KPI cards are hidden for Content Admin.
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/dashboard</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Data Refresh</div><div class="spec-row-val">KPI cards auto-refresh every 60 seconds via polling. Sales chart refreshes on manual page reload or every 5 minutes. No full page reload — fetch and state update only.</div></div>
+
+    <h3 class="subsection">KPI Cards — Super Admin / Ops Admin</h3>
+    <table class="spec-table">
+      <tr><th>KPI Card</th><th>Metric</th><th>API Endpoint</th><th>Update Freq</th><th>Drill-Down Link</th></tr>
+      <tr><td>Today's Revenue</td><td>Sum of completed orders today (current currency)</td><td><code>GET /api/v1/admin/reports/revenue/today</code></td><td>60s</td><td>/admin/reports/revenue</td></tr>
+      <tr><td>New Orders (Today)</td><td>Count of orders placed today</td><td><code>GET /api/v1/admin/orders?date=today&count=true</code></td><td>60s</td><td>/admin/orders</td></tr>
+      <tr><td>Awaiting Confirmation</td><td>Orders in "Pending" status exceeding 0 mins</td><td><code>GET /api/v1/admin/orders?status=pending&count=true</code></td><td>60s</td><td>/admin/orders?filter=pending</td></tr>
+      <tr><td>SLA Breaches</td><td>Orders breaching TC-17 (4h) or TC-18 (48h) SLAs</td><td><code>GET /api/v1/admin/orders/sla-breaches</code></td><td>60s</td><td>/admin/orders?filter=sla-breached</td></tr>
+      <tr><td>New Customers (Today)</td><td>Registered accounts created today</td><td><code>GET /api/v1/admin/customers?date=today&count=true</code></td><td>5min</td><td>/admin/customers</td></tr>
+      <tr><td>Low Stock Alerts</td><td>SKUs at or below low-stock threshold (TC-27)</td><td><code>GET /api/v1/admin/inventory/low-stock/count</code></td><td>5min</td><td>/admin/inventory?filter=low-stock</td></tr>
+      <tr><td>Pending Returns</td><td>Return requests awaiting admin review</td><td><code>GET /api/v1/admin/returns?status=pending&count=true</code></td><td>60s</td><td>/admin/returns?filter=pending</td></tr>
+      <tr><td>Pending Reviews</td><td>Customer reviews awaiting moderation</td><td><code>GET /api/v1/admin/reviews?status=pending&count=true</code></td><td>5min</td><td>/admin/reviews?filter=pending</td></tr>
+    </table>
+
+    <h3 class="subsection">Sales Trend Chart</h3>
+    <div class="spec-row"><div class="spec-row-key">Chart Type</div><div class="spec-row-val">Line chart with area fill. Library: Recharts. Responsive width.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Time Ranges</div><div class="spec-row-val">Toggle tabs: Last 7 Days · Last 30 Days · Last 90 Days. Default: Last 7 Days. Each tab triggers a new API fetch.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Data</div><div class="spec-row-val">X-axis: dates. Y-axis: revenue in admin's default currency (USD). Tooltip shows exact date + revenue + order count. Line color: <code class="inline">--hs-clay</code>. Area fill: rgba(196,113,75,0.08).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Currency Note</div><div class="spec-row-val">Pending OD-02 resolution: for now, chart shows USD revenue only. If multi-currency live rates confirmed, chart shows converted totals with a currency selector.</div></div>
+
+    <h3 class="subsection">Priority Action Queue</h3>
+    <p>Below the chart: a compact table of the 5 most urgent orders requiring action (oldest pending first, SLA-breached orders pinned to top with red highlight). Columns: Order ID · Customer · Items · Time Pending · SLA Status · Quick Action button.</p>
+
+    <div class="spec-row"><div class="spec-row-key">SLA visual</div><div class="spec-row-val">Each row shows a narrow SLA progress bar. Green = within SLA. Amber = &gt;75% of window elapsed. Red = breached. Clicking a row navigates to the full order detail.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Quick Action</div><div class="spec-row-val">"Confirm Order" button inline in the table row. Triggers a confirmation modal. On confirm: status updated to Confirmed via API. Row removed from queue on success.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 6 — ORDER MANAGEMENT
+  ══════════════════════════════════════ -->
+  <section id="sc-a-orders">
+    <h2 class="section-title">6. Order Management (SC-A-05 – A-09)</h2>
+    <p>The Order Management module covers the full lifecycle: listing and filtering orders, viewing order details, updating status, creating shipments, and printing packing slips.</p>
+
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-A-05</span>
+        <span class="screen-name">Order List</span>
+        <span class="screen-role-tag">Super Admin · Ops Admin</span>
+      </div>
+      <!-- Simulated order list -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-5);gap:var(--sp-4);flex-wrap:wrap">
+        <div style="font-family:var(--font-display);font-size:var(--text-xl);color:var(--hs-slate)">All Orders <span style="font-size:var(--text-base);color:var(--hs-slate-mid);font-family:var(--font-body);font-weight:400">(1,284 total)</span></div>
+        <div style="display:flex;gap:var(--sp-3)">
+          <div style="padding:9px 14px;border:1.5px solid var(--hs-linen);border-radius:var(--r-md);font-size:var(--text-sm);background:#fff;color:var(--hs-slate-mid)">🔍 Search orders…</div>
+          <button class="sim-btn sim-btn-ghost sim-btn-sm">Filter ▾</button>
+          <button class="sim-btn sim-btn-ghost sim-btn-sm">Export CSV</button>
+        </div>
+      </div>
+      <!-- Filter chips -->
+      <div style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-4);flex-wrap:wrap">
+        <span class="badge badge-admin" style="padding:4px 10px">All Statuses</span>
+        <span class="badge" style="background:var(--hs-cream);color:var(--hs-slate-mid);padding:4px 10px">Pending</span>
+        <span class="badge" style="background:var(--hs-cream);color:var(--hs-slate-mid);padding:4px 10px">Confirmed</span>
+        <span class="badge" style="background:var(--hs-cream);color:var(--hs-slate-mid);padding:4px 10px">Shipped</span>
+        <span class="badge" style="background:var(--hs-cream);color:var(--hs-slate-mid);padding:4px 10px">Delivered</span>
+        <span class="badge badge-critical" style="padding:4px 10px">SLA Breached</span>
+      </div>
+      <!-- Table -->
+      <table class="spec-table" style="margin-bottom:0">
+        <tr><th>Order ID</th><th>Customer</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>SLA</th><th>Actions</th></tr>
+        <tr style="background:rgba(192,57,43,0.04)">
+          <td><code>#HS-2026-0381</code></td><td>Sarah M.</td><td>17 Apr, 08:22</td><td>2 items</td><td>$1,240</td>
+          <td><span class="badge badge-critical">SLA Breached</span></td>
+          <td><div style="font-size:var(--text-xs);color:var(--hs-error)">+2h overdue</div><div class="sla-bar"><div class="sla-fill sla-fill-breach" style="width:100%"></div></div></td>
+          <td><button class="sim-btn sim-btn-primary sim-btn-sm">Confirm</button></td>
+        </tr>
+        <tr>
+          <td><code>#HS-2026-0382</code></td><td>James K.</td><td>17 Apr, 10:05</td><td>1 item</td><td>€520</td>
+          <td><span class="badge badge-high">Pending</span></td>
+          <td><div style="font-size:var(--text-xs);color:var(--hs-warning)">2h 40m left</div><div class="sla-bar"><div class="sla-fill sla-fill-warn" style="width:65%"></div></div></td>
+          <td><button class="sim-btn sim-btn-primary sim-btn-sm">Confirm</button></td>
+        </tr>
+        <tr>
+          <td><code>#HS-2026-0380</code></td><td>Emma W.</td><td>16 Apr, 14:18</td><td>3 items</td><td>$3,100</td>
+          <td><span class="badge badge-ok">Confirmed</span></td>
+          <td><div style="font-size:var(--text-xs);color:var(--hs-success)">30h left</div><div class="sla-bar"><div class="sla-fill sla-fill-ok" style="width:25%"></div></div></td>
+          <td><button class="sim-btn sim-btn-secondary sim-btn-sm">Ship</button></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/orders</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Default Sort</div><div class="spec-row-val">SLA-breached orders pinned to top (sorted oldest first), then Pending orders by date ascending (oldest first), then all other statuses by date descending.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Filter Options</div><div class="spec-row-val">Status (multi-select): Pending · Confirmed · Shipped · Delivered · Cancelled · Refunded · SLA Breached. Date range (from/to date pickers). Customer name/email search. Order ID search. Currency filter (USD/EUR/GBP).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Pagination</div><div class="spec-row-val">50 rows per page. Pagination controls at bottom. URL-synced: <code class="inline">/admin/orders?page=2&status=pending</code>.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Export</div><div class="spec-row-val">"Export CSV" applies current filters and exports all matching records (not just current page). Max 10,000 rows. File named: <code class="inline">homestyle-orders-{date}.csv</code>.</div></div>
+    <div class="spec-row"><div class="spec-row-key">SLA Column</div><div class="spec-row-val">Shows remaining time until SLA breach. For Pending orders: TC-17 (4 business hours). For Confirmed orders: TC-18 (48 business hours). Progress bar: green (≤50%), amber (50–90%), red (≥90% or breached). Business hours only: Mon–Fri 09:00–17:00 local warehouse time.</div></div>
+
+    <h3 class="subsection">Order Detail (SC-A-06)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/orders/{order-id}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Layout</div><div class="spec-row-val">Two-column: Left (wider): order items, customer & shipping address, payment summary, order notes. Right (narrower, sticky): order status panel with action buttons, SLA timer, order timeline/history.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Order Items</div><div class="spec-row-val">Table: product image thumbnail (40×40px) · product name · SKU · variant (color/material/size) · qty · unit price · line total. Variant details in small text below product name.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Payment Summary</div><div class="spec-row-val">Subtotal · Shipping · Discount (if applied, with code) · Tax (US: sales tax; EU: VAT breakdown) · Total. Stripe PaymentIntent ID shown as monospace link (opens Stripe dashboard in new tab — Super Admin only).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Status Actions</div><div class="spec-row-val">Context-sensitive based on current status:<br>Pending → "Confirm Order" (primary) | "Cancel Order" (danger, with reason modal)<br>Confirmed → "Create Shipment" (primary) | "Cancel Order" (danger)<br>Shipped → "Mark as Delivered" | (tracking link editable)<br>Delivered → no status change available; "Initiate Refund" if within 30 days</div></div>
+    <div class="spec-row"><div class="spec-row-key">Order Timeline</div><div class="spec-row-val">Chronological log of all status changes with timestamp, admin who made the change, and any notes. Irreversible. Format: "Status changed to Confirmed by admin@example.com — 17 Apr 2026, 11:34".</div></div>
+    <div class="spec-row"><div class="spec-row-key">Admin Notes</div><div class="spec-row-val">Free-text notes field (internal only, not visible to customer). Character limit: 500. Saved notes appear in timeline with admin name and timestamp.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Packing Slip</div><div class="spec-row-val">"Print Packing Slip" button generates a PDF via the API and opens in a new tab for printing. Format: A4. Includes: order ID, items, quantities, shipping address, barcode.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Invoice Download</div><div class="spec-row-val">"Download Invoice" generates a PDF invoice including VAT/tax breakdown. Available for all statuses except Cancelled.</div></div>
+
+    <h3 class="subsection">Create Shipment (SC-A-07)</h3>
+    <div class="spec-row"><div class="spec-row-key">Trigger</div><div class="spec-row-val">Accessible via "Create Shipment" button on SC-A-06 (Order Detail) when status = Confirmed.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Form Fields</div><div class="spec-row-val">Carrier (dropdown: FedEx / UPS / DHL / DPD / LTL Freight / White-Glove Service / Other) · Tracking Number (text, required) · Estimated Delivery Date (date picker, optional but recommended) · Notes to Customer (text, max 200 chars, optional — appended to shipping confirmation email).</div></div>
+    <div class="spec-row"><div class="spec-row-key">On Submit</div><div class="spec-row-val">Order status → Shipped. Shipping confirmation email auto-dispatched to customer (TC-29: retry logic applies). Tracking number stored and linked on customer-facing order detail.</div></div>
+
+    <h3 class="subsection">Cancel Order (SC-A-08)</h3>
+    <div class="spec-row"><div class="spec-row-key">Modal Required</div><div class="spec-row-val">Cancellation always requires a reason (dropdown: Duplicate Order · Customer Request · Out of Stock · Payment Failed · Fraud Suspicion · Other). "Other" requires free-text (min 20 chars).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Refund Logic</div><div class="spec-row-val">If payment was captured: system auto-initiates Stripe refund on cancellation. Refund amount shown in modal for confirmation. TC-30: if Stripe webhook not received within 24h, admin alert triggered.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Restrictions</div><div class="spec-row-val">Cannot cancel orders in Shipped or Delivered status — must use Returns flow instead. Super Admin can override with note (audit logged).</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 7 — PRODUCT MANAGEMENT
+  ══════════════════════════════════════ -->
+  <section id="sc-a-products">
+    <h2 class="section-title">7. Product Management (SC-A-10 – A-15)</h2>
+    <p>Full product catalogue CRUD: create, edit, archive products; manage multi-image galleries; define variant combinations (color, material, size, finish, leg type); set per-currency pricing; upload assembly PDFs.</p>
+
+    <h3 class="subsection">Product List (SC-A-10)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/products</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Columns</div><div class="spec-row-val">Thumbnail (48×48px) · Product Name + SKU (sub-label) · Category · Variants count · Price range · Status (Active / Draft / Archived) · Stock level indicator · Last updated. Sortable columns: Name, Price, Stock, Updated.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Filters</div><div class="spec-row-val">Status (Active / Draft / Archived) · Category (multi-select) · Stock status (In Stock / Low Stock / Out of Stock) · Search by name/SKU. URL-synced query params.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Bulk Actions</div><div class="spec-row-val">Checkbox multi-select. Bulk actions: Set status (Active/Draft/Archived) · Delete (soft delete; confirmation required; only Super Admin). Bulk action bar appears at top when ≥1 item selected.</div></div>
+    <div class="spec-row"><div class="spec-row-key">New Product CTA</div><div class="spec-row-val">"+ Add Product" primary button in top right. Navigates to SC-A-11.</div></div>
+
+    <h3 class="subsection">Product Create / Edit Form (SC-A-11)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val">Create: <code>/admin/products/new</code> · Edit: <code>/admin/products/{id}/edit</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Layout</div><div class="spec-row-val">Three-column at desktop: Left 2/3: form sections (Details, Images, Variants, Pricing, SEO, Assets). Right 1/3 sticky: status toggle, category selector, publish button, visibility settings.</div></div>
+
+    <h4 class="spec-label">Form Sections</h4>
+    <table class="spec-table">
+      <tr><th>Section</th><th>Fields</th><th>Notes</th></tr>
+      <tr><td>Basic Details</td><td>Product Name (required), Short Description (required, max 160 chars), Full Description (rich text — see SC-A-11a), Parent SKU (required, auto-generated or manual), Category (required), Collections (multi-select), Tags (comma-separated)</td><td>Parent SKU format: HS-[CATEGORY]-[4-digit code]</td></tr>
+      <tr><td>Dimensions</td><td>Width (in), Depth (in), Height (in), Weight (lbs). Auto-converts to cm and kg. Stored as structured fields — not free text.</td><td>Required for all products. Enables delivery calculator and shipping rate logic.</td></tr>
+      <tr><td>Images</td><td>Multi-image upload (drag-and-drop + file picker). Min 1, recommended 6. First image = primary. Reorderable via drag. 360° image sequence upload (separate uploader, numbered files).</td><td>Upload to AWS S3. Max 8MB per image. Accept: JPEG, WebP, PNG. Auto-resize to 2048×2048 max via Lambda. See SC-A-12 for image manager.</td></tr>
+      <tr><td>Variants</td><td>Up to 5 variant dimensions (axes): Color / Material / Finish / Size / Leg Type. Each axis: add options (chips). Variant matrix auto-generated from axis combinations. Per-variant: SKU (auto-generated, editable), Price Delta (USD, EUR, GBP), Stock Qty, Weight Override.</td><td>BRD §18.1. No 3-variant limit (unlike Shopify). See SC-A-13 for variant manager.</td></tr>
+      <tr><td>Pricing</td><td>Base Price: USD, EUR, GBP (three inputs). Sale Price (optional, per currency). Pending OD-02: if live rates, only USD entered; other currencies auto-calculated.</td><td>Prices stored net (excl. tax). EU VAT added at display time.</td></tr>
+      <tr><td>Assembly PDF</td><td>PDF upload. Max 10MB. Filename auto-set to parent SKU. Replaces existing if re-uploaded.</td><td>Served via TC-09: 15-min presigned S3 URL — regenerated on each product page load.</td></tr>
+      <tr><td>SEO</td><td>SEO Title (max 60 chars, auto-populated from product name), Meta Description (max 160 chars, auto-populated from short description), URL Slug (auto-generated, editable), Open Graph Image (defaults to primary product image).</td><td>Character counters with color coding (green/amber/red).</td></tr>
+    </table>
+
+    <div class="spec-row"><div class="spec-row-key">Auto-Save</div><div class="spec-row-val">Draft auto-saved to local storage every 30 seconds. "Unsaved changes" indicator in header. On navigate away with unsaved changes: browser confirmation dialog.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Publish Controls</div><div class="spec-row-val">Status toggle (right panel): Draft (not visible on storefront) · Active (live) · Archived (redirects PDP to category, not searchable, not purchasable). "Publish" button sets status to Active. "Save Draft" saves without publishing.</div></div>
+
+    <h3 class="subsection">Category & Collection Management (SC-A-14)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/products/categories</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Tree View</div><div class="spec-row-val">Hierarchical tree: Room (top-level) → Category → Subcategory. Drag-and-drop reordering within the same level. Max 3 levels deep.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Category Fields</div><div class="spec-row-val">Name · Slug (auto-generated, editable) · Parent (dropdown) · Description · Hero Image (for category landing page) · SEO fields · Visible toggle.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Collections</div><div class="spec-row-val">Separate section. Collections are cross-category product groups (e.g. "Nordic Series", "Summer Sale"). Each collection: Name · Slug · Description · Hero Image · Start/End date (optional, for seasonal) · Products (multi-select search).</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 8 — INVENTORY
+  ══════════════════════════════════════ -->
+  <section id="sc-a-inventory">
+    <h2 class="section-title">8. Inventory Management (SC-A-16 – A-17)</h2>
+
+    <h3 class="subsection">Inventory Overview (SC-A-16)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/inventory</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Columns</div><div class="spec-row-val">Product Name · SKU · Variant Description · Current Stock · Low Stock Threshold · Status badge (In Stock / Low Stock / Out of Stock / Held) · Last Updated · Edit inline action.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Status Badges</div><div class="spec-row-val">
+      <span class="badge badge-ok" style="margin-right:4px">In Stock</span> stock_qty &gt; threshold ·
+      <span class="badge badge-high" style="margin-right:4px">Low Stock</span> stock_qty ≤ threshold ·
+      <span class="badge badge-critical" style="margin-right:4px">Out of Stock</span> stock_qty = 0 ·
+      <span class="badge badge-med">Held</span> active Redis hold exists
+    </div></div>
+    <div class="spec-row"><div class="spec-row-key">Inline Edit</div><div class="spec-row-val">Click stock qty → editable input field in-place. Save icon confirms. Escape cancels. Reason dropdown required for stock adjustments (Received Stock / Damaged / Audit Correction / Other). All changes logged with admin, timestamp, and reason.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Low Stock Threshold</div><div class="spec-row-val">Per-SKU configurable threshold (inline editable). Default: 5 units. TC-27: when stock drops to threshold, admin email alert sent with 24h cooldown (prevents alert spam on rapid sales).</div></div>
+
+    <h3 class="subsection">Bulk Stock Update (SC-A-17)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/inventory/bulk-update</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">CSV Import</div><div class="spec-row-val">Accepts CSV file: required columns: <code class="inline">sku</code>, <code class="inline">stock_qty</code>. Optional: <code class="inline">low_stock_threshold</code>. Drop zone + "Choose File" button. Max 5MB.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Validation Preview</div><div class="spec-row-val">Before import: show a preview table (first 20 rows) with validation: green checkmark (valid), amber warning (SKU not found — will be skipped), red error (invalid qty format). Summary: X rows valid, Y rows skipped. Confirm / Cancel buttons.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Audit Log</div><div class="spec-row-val">All bulk imports logged: admin user, timestamp, number of records updated, CSV filename. Accessible via Inventory Audit Log screen. Export as CSV available (Super Admin only).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Template Download</div><div class="spec-row-val">"Download CSV Template" link provides a pre-formatted template with current SKUs pre-filled for convenience.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 9 — RETURNS MANAGEMENT
+  ══════════════════════════════════════ -->
+  <section id="sc-a-returns">
+    <h2 class="section-title">9. Returns Management (SC-A-18 – A-21)</h2>
+    <p>Admin-side returns workflow: receive, review, approve/reject, track item return, confirm receipt, issue Stripe refund. All SLA timers visible and tracked against BRD Section 15 rules.</p>
+
+    <h3 class="subsection">Returns List (SC-A-18)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/returns</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Columns</div><div class="spec-row-val">Return ID · Order ID · Customer · Request Date · Return Reason · Status · SLA Status · Actions.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Status Values</div><div class="spec-row-val">
+      <span class="badge badge-high" style="margin-right:4px">Pending Review</span>
+      <span class="badge badge-med" style="margin-right:4px">Approved — Awaiting Item</span>
+      <span class="badge badge-med" style="margin-right:4px">Item Received</span>
+      <span class="badge badge-ok" style="margin-right:4px">Refunded</span>
+      <span class="badge badge-critical">Rejected</span>
+    </div></div>
+    <div class="spec-row"><div class="spec-row-key">SLA Indicators</div><div class="spec-row-val">TC-21: Pending Review → 2 business days. TC-22: Item Received → 1 business day to initiate refund. TC-23: Total target ≤12 business days from request to refund. Progress bar per row. Overdue items shown with red badge.</div></div>
+
+    <h3 class="subsection">Return Detail (SC-A-19)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/returns/{return-id}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Layout</div><div class="spec-row-val">Left: return request details (order info, items being returned, customer reason, customer-uploaded photos, customer notes). Right (sticky): action panel with current status, SLA timer, available actions, return timeline.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Customer Photos</div><div class="spec-row-val">Grid of uploaded photos (max 5). Clickable to full-screen lightbox. If no photos uploaded, placeholder shown with note.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Return Reason</div><div class="spec-row-val">Customer-selected reason displayed. Admin notes field for internal comments (not visible to customer). Required before status change.</div></div>
+
+    <h3 class="subsection">Return Actions (SC-A-20)</h3>
+    <table class="spec-table">
+      <tr><th>Action</th><th>Trigger Condition</th><th>Modal / Fields Required</th><th>Outcome</th></tr>
+      <tr><td>Approve Return</td><td>Status = Pending Review</td><td>Return method: Send Label (email PDF to customer) / Schedule Pickup (freetext address note). Optional admin message to customer (max 500 chars).</td><td>Status → Approved — Awaiting Item. Customer notified. TC-20: 14-day ship-back window starts.</td></tr>
+      <tr><td>Reject Return</td><td>Status = Pending Review</td><td>Required rejection reason (dropdown + free text). Customer-visible message (required, max 300 chars).</td><td>Status → Rejected. Customer notified with reason.</td></tr>
+      <tr><td>Mark Item Received</td><td>Status = Approved — Awaiting Item</td><td>Condition of item: Good Condition / Minor Damage / Significant Damage / Not Received. Optional notes.</td><td>Status → Item Received. TC-22: 1 business day SLA for refund starts.</td></tr>
+      <tr><td>Issue Refund</td><td>Status = Item Received</td><td>Refund amount (pre-filled from order total, editable for partial refunds). Refund reason (required for partial). Confirmation checkbox: "I confirm this refund amount is correct."</td><td>Stripe refund API called. Status → Refunded. TC-30: if webhook absent after 24h, alert triggered. Customer notified of refund.</td></tr>
+    </table>
+    <div class="spec-row"><div class="spec-row-key">Partial Refunds</div><div class="spec-row-val">Supported. Admin enters custom refund amount (validated: 0 &lt; amount ≤ original order total). Reason required. Stripe refund API called with specific amount. Partial refund badge shown in customer-facing order detail.</div></div>
+    <div class="spec-row"><div class="spec-row-key">TC-20 Alert</div><div class="spec-row-val">BullMQ job: if no tracking update 14 days after approval, admin receives email alert: "Return tracking update absent — #RET-XXXX". Admin can manually override and mark as not received.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 10 — CUSTOMER MANAGEMENT
+  ══════════════════════════════════════ -->
+  <section id="sc-a-customers">
+    <h2 class="section-title">10. Customer Management (SC-A-22 – A-24)</h2>
+
+    <h3 class="subsection">Customer List (SC-A-22)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/customers</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Columns</div><div class="spec-row-val">Customer Name · Email · Registration Date · Country · Total Orders · Lifetime Value · Account Status (Active / Inactive / Suspended) · Actions.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Search & Filter</div><div class="spec-row-val">Search by name or email. Filter by: Account Status · Registration date range · Country · Has orders / No orders. URL-synced params.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Export</div><div class="spec-row-val">CSV export of filtered results. Super Admin only. Fields: name, email, registration date, country, order count, lifetime value. PII handling: GDPR compliant — do not export to unsecured storage. Export action logged.</div></div>
+
+    <h3 class="subsection">Customer Detail (SC-A-23)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/customers/{customer-id}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Profile Section</div><div class="spec-row-val">Name · Email · Phone · Registration date · Marketing consent status (read-only, from consent records) · GDPR data source (email/social) · Account status badge.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Address Book</div><div class="spec-row-val">All saved addresses listed. Read-only in admin view.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Order History</div><div class="spec-row-val">Table: all orders for this customer. Columns: Order ID · Date · Status · Total. Clickable rows → order detail (SC-A-06).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Account Actions</div><div class="spec-row-val">Deactivate Account (soft suspend — customer cannot log in; reversible). Send Password Reset Email. View Login History (last 10 sessions: IP, device, date). GDPR Erasure Request: marks account for deletion, triggers automated PII anonymization job within 30 days (TC-31).</div></div>
+    <div class="spec-row"><div class="spec-row-key">GDPR Erasure</div><div class="spec-row-val">Super Admin only. Requires typed confirmation: "DELETE CUSTOMER DATA". Creates erasure job. PII anonymized within 30 days (TC-31). Order records retained for financial compliance (TC-32: 7 years) with customer PII replaced by anonymized ID. Irreversible once confirmed.</div></div>
+
+    <div class="callout callout-critical">
+      <strong>GDPR / CCPA Caution</strong>
+      Customer PII is subject to GDPR (EU) and CCPA (California) data protection rules. Admin users must not export, share, or store customer data outside of approved channels. The GDPR Erasure flow is the only sanctioned method for customer data deletion — manual DB deletions are prohibited.
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 11 — PROMOTIONS
+  ══════════════════════════════════════ -->
+  <section id="sc-a-promotions">
+    <h2 class="section-title">11. Promotions (SC-A-25 – A-27)</h2>
+
+    <h3 class="subsection">Discount Code List (SC-A-25)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/promotions</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Columns</div><div class="spec-row-val">Code · Type (% / Fixed) · Value · Min Order Value · Usage (Used / Limit) · Expiry Date · Status (Active / Expired / Disabled) · Actions (Edit / Disable / Delete).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Status Badges</div><div class="spec-row-val"><span class="badge badge-ok" style="margin-right:4px">Active</span> <span class="badge badge-high" style="margin-right:4px">Expiring Soon</span> <span class="badge badge-critical" style="margin-right:4px">Expired</span> <span class="badge" style="background:var(--hs-linen);color:var(--hs-slate-mid)">Disabled</span></div></div>
+
+    <h3 class="subsection">Create / Edit Discount Code (SC-A-26)</h3>
+    <div class="field-grid">
+      <div class="field-card">
+        <div class="field-card-name">Code <span class="field-required">*</span></div>
+        <div class="field-row"><strong>Type</strong> Text input or "Generate Random"</div>
+        <div class="field-row"><strong>Format</strong> A-Z, 0-9, hyphens only. Max 20 chars. Uppercase enforced.</div>
+        <div class="field-row"><strong>Unique</strong> Server-side uniqueness check on blur</div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-name">Discount Type <span class="field-required">*</span></div>
+        <div class="field-row"><strong>Options</strong> Percentage Off / Fixed Amount Off</div>
+        <div class="field-row"><strong>Value</strong> Numeric input. For %, max 100. For fixed: per-currency inputs (USD/EUR/GBP).</div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-name">Minimum Order Value <span class="field-optional">Optional</span></div>
+        <div class="field-row"><strong>Per currency</strong> USD / EUR / GBP inputs</div>
+        <div class="field-row"><strong>0 = no minimum</strong> default</div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-name">Usage Limits <span class="field-optional">Optional</span></div>
+        <div class="field-row"><strong>Total uses</strong> Max total redemptions (0 = unlimited)</div>
+        <div class="field-row"><strong>Per customer</strong> Max per customer (1 = one-time use per customer)</div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-name">Validity Period <span class="field-optional">Optional</span></div>
+        <div class="field-row"><strong>Start Date</strong> Date + time picker</div>
+        <div class="field-row"><strong>Expiry Date</strong> Date + time picker (must be after start)</div>
+        <div class="field-row"><strong>No dates</strong> = active indefinitely</div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-name">Stacking Rules <span class="field-required">*</span></div>
+        <div class="field-row"><strong>OD-04</strong> Pending client decision</div>
+        <div class="field-row"><strong>Options</strong> One code per order only / Can stack with sale prices / Cannot stack with sale prices</div>
+      </div>
+    </div>
+
+    <h3 class="subsection">Promotions Analytics (SC-A-27)</h3>
+    <div class="spec-row"><div class="spec-row-key">Per Code Stats</div><div class="spec-row-val">Visible in "View" mode on each code: Total redemptions · Total discount value given (per currency) · Average order value with code · First/last used date.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 12 — SHIPPING CONFIG
+  ══════════════════════════════════════ -->
+  <section id="sc-a-shipping">
+    <h2 class="section-title">12. Shipping Configuration (SC-A-28 – A-30)</h2>
+    <p>Admin-managed shipping zones (US states / EU countries), rate rules (flat-rate and weight-based), white-glove delivery configuration, and remote area surcharges.</p>
+
+    <h3 class="subsection">Shipping Zones (SC-A-28)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/shipping/zones</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Zone Types</div><div class="spec-row-val">Domestic US (by state groups), EU (by country), UK (standalone). Each zone has a name, geographic scope, and one or more rate rules.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Rate Rules per Zone</div><div class="spec-row-val">Add multiple rate rules per zone: Rate Name · Type (Flat Rate / Weight-Based / Free Shipping threshold) · Price (per currency) · Weight range (for weight-based). Each rule can have a White-Glove option toggle (for eligible large items).</div></div>
+    <div class="spec-row"><div class="spec-row-key">White-Glove Config</div><div class="spec-row-val">Toggle per rate rule. When enabled: additional surcharge (flat or % of order) · eligible ZIP/postal codes (editable list or CSV import) · estimated delivery window text (e.g. "7–14 business days").</div></div>
+    <div class="spec-row"><div class="spec-row-key">Remote Surcharges</div><div class="spec-row-val">SC-A-29: Separate surcharge table. Columns: ZIP/Postal prefix · Carrier · Surcharge amount. Importable via CSV. Applied on top of base shipping rate at checkout.</div></div>
+    <div class="spec-row"><div class="spec-row-key">LTL Freight Config</div><div class="spec-row-val">SC-A-30: Configures which product categories trigger LTL carrier rates (e.g. Sofas, Beds, Wardrobes). LTL rates fetched from carrier API (EasyPost / ShipEngine) or manual fallback table if API unavailable. TC-15: 30-second API timeout.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 13 — REVIEW MODERATION
+  ══════════════════════════════════════ -->
+  <section id="sc-a-reviews">
+    <h2 class="section-title">13. Review Moderation (SC-A-31 – A-32)</h2>
+
+    <h3 class="subsection">Review Queue (SC-A-31)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/reviews</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Default View</div><div class="spec-row-val">Shows Pending reviews first, sorted by date ascending (oldest unmoderated first). Tabs: Pending · Approved · Rejected · Flagged.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Review Card</div><div class="spec-row-val">Product thumbnail + name · Customer name + verified purchase badge · Star rating (1–5) · Review title · Review body (full) · Date submitted · Photos (if attached) · Moderation action buttons.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Actions per Review</div><div class="spec-row-val">
+      <strong>Approve</strong>: Review published on storefront. Customer notified (TC-25: if submitted within 180-day window).
+      <strong>Reject</strong>: Requires rejection reason (dropdown: Inappropriate Content / Spam / Unverifiable / Policy Violation). Customer not notified by default (configurable).
+      <strong>Flag</strong>: Marks for escalation to Super Admin review. Adds to Flagged tab.
+      <strong>Respond</strong>: Admin public response (max 500 chars) appended below customer review on storefront. Label: "Response from HomeStyle Team".
+    </div></div>
+    <div class="spec-row"><div class="spec-row-key">Bulk Moderation</div><div class="spec-row-val">Checkbox multi-select. Bulk approve or bulk reject (with shared reason). Available for Pending tab only.</div></div>
+
+    <h3 class="subsection">Review Detail (SC-A-32)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/reviews/{review-id}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Content</div><div class="spec-row-val">Full review with all metadata · Customer order history link (to verify purchase) · Product link · All attached photos (full-size lightbox) · Moderation history (previous status changes) · Admin response composer (with live preview).</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 14 — CMS EDITOR
+  ══════════════════════════════════════ -->
+  <section id="sc-a-cms">
+    <h2 class="section-title">14. CMS Content Editor (SC-A-33 – A-34)</h2>
+    <p>Manages all static content pages: About Us, FAQ, Delivery Info, Returns Policy, Privacy Policy, Terms & Conditions, and any future pages created by the admin.</p>
+
+    <h3 class="subsection">CMS Pages List (SC-A-33)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/cms</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Columns</div><div class="spec-row-val">Page Title · Slug · Last Updated · Updated By · Status (Published / Draft) · Actions (Edit / Preview / Toggle Status).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Protected Pages</div><div class="spec-row-val">Privacy Policy, Terms & Conditions, Returns Policy, Cookie Policy are marked with a "Legal" badge. Changes to these pages trigger a notification to the Super Admin email for review before publishing.</div></div>
+
+    <h3 class="subsection">CMS Page Editor (SC-A-34)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/cms/{page-id}/edit</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Rich Text Editor</div><div class="spec-row-val">Block-based editor (e.g., TipTap or Slate.js). Supported blocks: Heading (H2, H3, H4) · Paragraph · Bulleted list · Numbered list · Blockquote · Divider · Image (with alt text) · Table · Internal link · External link. No custom HTML input (security restriction).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Live Preview</div><div class="spec-row-val">"Preview" button opens a storefront-rendered preview of the page in a new tab using the draft content (preview token, not publicly accessible).</div></div>
+    <div class="spec-row"><div class="spec-row-key">SEO Fields</div><div class="spec-row-val">SEO Title (max 60 chars) · Meta Description (max 160 chars) · Indexed toggle (noindex for internal pages).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Version History</div><div class="spec-row-val">Last 10 saved versions accessible. Admin can restore a previous version. Restoration creates a new version entry (does not delete history).</div></div>
+    <div class="spec-row"><div class="spec-row-key">FAQ Page Special</div><div class="spec-row-val">FAQ page uses an accordion block editor: each item has a Question (plain text) + Answer (rich text). Items reorderable via drag-and-drop. New FAQ items added via "+ Add FAQ Item".</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 15 — EMAIL TEMPLATES
+  ══════════════════════════════════════ -->
+  <section id="sc-a-email">
+    <h2 class="section-title">15. Email Template Management (SC-A-35 – A-36)</h2>
+    <p>All transactional email templates are editable by Content Admin and Super Admin. Changes take effect immediately for future sends. Template variables are rendered from the system at send time.</p>
+
+    <h3 class="subsection">Template List (SC-A-35)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/email-templates</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Templates (Phase 1)</div><div class="spec-row-val">Order Confirmation · Order Dispatched (with tracking) · Order Delivered · Return Approved · Return Rejected · Refund Processed · Review Prompt (TC-24: 7 days post-delivery) · Back-in-Stock Notification (TC-28: within 1 hour of restock) · Welcome Email · Password Reset · Low Stock Admin Alert · SLA Breach Admin Alert · 2FA Setup (SC-A-04) · Account Suspended.</div></div>
+
+    <h3 class="subsection">Template Editor (SC-A-36)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/email-templates/{template-id}/edit</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Editable Content</div><div class="spec-row-val">Subject line · Preheader text · Email body (rich text, limited block types: Heading, Paragraph, Button, Divider, Image). Brand colors and layout structure are not editable (design-locked in email template framework).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Variable Tokens</div><div class="spec-row-val">Available variables shown as a clickable chip panel. Clicking inserts token at cursor position. Examples: <code class="inline">{{customer_name}}</code> · <code class="inline">{{order_id}}</code> · <code class="inline">{{tracking_link}}</code> · <code class="inline">{{return_window_days}}</code> · <code class="inline">{{refund_amount}}</code>.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Send Test Email</div><div class="spec-row-val">"Send Test" button: sends a rendered preview email to the logged-in admin's email address with sample data substituted for all tokens.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Live Preview</div><div class="spec-row-val">Side-by-side preview pane shows rendered email (desktop and mobile width toggle: 600px / 375px). Preview updates as user types.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Retry Logic</div><div class="spec-row-val">Email retry configuration is system-level (not template-level). TC-29: System retries failed sends 3× at 1-minute intervals, then once at 15 minutes. Failure state visible in notification logs.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 16 — STAFF MANAGEMENT
+  ══════════════════════════════════════ -->
+  <section id="sc-a-staff">
+    <h2 class="section-title">16. Staff Management (SC-A-37 – A-39)</h2>
+    <p>Super Admin only. Create, edit, and deactivate admin user accounts. Assign roles. View login history. Cannot create additional Super Admin accounts from within the panel (requires server-side seeding).</p>
+
+    <h3 class="subsection">Staff List (SC-A-37)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/staff</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Columns</div><div class="spec-row-val">Name · Email · Role · Last Login · 2FA Status (Enrolled / Not Enrolled) · Account Status (Active / Inactive) · Actions (Edit / Deactivate / Reset 2FA).</div></div>
+    <div class="spec-row"><div class="spec-row-key">2FA Enforcement</div><div class="spec-row-val">Admin accounts with 2FA Not Enrolled shown with amber warning badge. Super Admin can send a 2FA setup reminder email. Accounts without 2FA cannot log in after a 7-day grace period.</div></div>
+
+    <h3 class="subsection">Create / Edit Staff (SC-A-38)</h3>
+    <div class="field-grid">
+      <div class="field-card">
+        <div class="field-card-name">Full Name <span class="field-required">*</span></div>
+        <div class="field-row"><strong>Type</strong> Text, max 100 chars</div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-name">Email <span class="field-required">*</span></div>
+        <div class="field-row"><strong>Type</strong> Email, unique across all admin accounts</div>
+        <div class="field-row"><strong>Note</strong> Used as login username</div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-name">Role <span class="field-required">*</span></div>
+        <div class="field-row"><strong>Options</strong> Admin — Operations / Admin — Content</div>
+        <div class="field-row"><strong>Note</strong> Super Admin not assignable via UI</div>
+      </div>
+      <div class="field-card">
+        <div class="field-card-name">Notification Settings</div>
+        <div class="field-row"><strong>Toggles</strong> New Orders / Low Stock / New Returns / Pending Reviews</div>
+        <div class="field-row"><strong>Default</strong> All on for Operations; Reviews on for Content</div>
+      </div>
+    </div>
+    <div class="spec-row"><div class="spec-row-key">Onboarding</div><div class="spec-row-val">On create: system sends a welcome email with a one-time setup link (TC-05: link expires in 24 hours). New admin sets their own password and enrolls 2FA via SC-A-04 flow.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Password Reset</div><div class="spec-row-val">Super Admin can trigger a password reset email for any staff account. TC-04: reset link expires in 15 minutes. Action logged in audit trail.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Deactivation</div><div class="spec-row-val">Soft deactivation: account suspended, cannot log in, all active sessions immediately invalidated. Account can be reactivated. Permanent deletion: hard delete (confirmation required, "DELETE ACCOUNT" typed), all audit logs retained, sessions wiped. Super Admin only.</div></div>
+
+    <h3 class="subsection">Login History (SC-A-39)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/staff/{id}/login-history</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Data shown</div><div class="spec-row-val">Last 50 login sessions: timestamp · IP address · Browser / OS · 2FA used (yes/no) · Session duration · Logout reason (manual / timeout / forced by Super Admin).</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 17 — REPORTS
+  ══════════════════════════════════════ -->
+  <section id="sc-a-reports">
+    <h2 class="section-title">17. Reports (SC-A-40 – A-45)</h2>
+    <p>All reports are available to Super Admin and Operations Admin. Reports are built from DB query results and can be exported to PDF and Excel. Content Admin does not have access to Reports.</p>
+
+    <h3 class="subsection">Reports Index (SC-A-40)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/admin/reports</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Report Cards</div><div class="spec-row-val">Grid of report cards, each linking to a specific report module. Each card shows: report name, description, last run date, and shortcut "Run with default settings" CTA.</div></div>
+
+    <table class="spec-table">
+      <tr><th>Report</th><th>Screen ID</th><th>Key Metrics</th><th>BRD KPI Reference</th></tr>
+      <tr><td>Revenue Report</td><td>SC-A-41</td><td>Revenue by date range, product, category, currency. AOV. Refunds. Net revenue.</td><td>§19.1: Online Revenue Contribution, AOV</td></tr>
+      <tr><td>Orders Report</td><td>SC-A-42</td><td>Order volume by day/week/month. SLA compliance rates (TC-17, TC-18). Cancellation reasons. Checkout timeout rate (TC-14).</td><td>§19.3: SLA Compliance KPIs</td></tr>
+      <tr><td>Customer Acquisition Report</td><td>SC-A-43</td><td>New vs. returning customer ratio. Registration source (email/Google/Facebook). CAC estimate (requires marketing spend input).</td><td>§19.1: New vs. Returning ratio, CAC</td></tr>
+      <tr><td>Top Products Report</td><td>SC-A-44</td><td>Top 20 products by revenue and unit sales. Filter by date range and category. Average rating per product.</td><td>§19.2: Avg. Product Rating</td></tr>
+      <tr><td>Returns Report</td><td>SC-A-45</td><td>Return rate by category/product. Return reasons breakdown. Average resolution time vs. TC-23 target. Refund amounts by date range.</td><td>§19.3: Return Rate, Return Resolution Time</td></tr>
+      <tr><td>Inventory Report</td><td>SC-A-45a</td><td>Current stock levels. Low-stock SKUs. Out-of-stock duration by SKU. Stock turnover rate.</td><td>§18.4</td></tr>
+    </table>
+
+    <h3 class="subsection">Report Controls (All report screens)</h3>
+    <div class="spec-row"><div class="spec-row-key">Date Range Picker</div><div class="spec-row-val">Preset options: Today · Yesterday · Last 7 Days · Last 30 Days · Last 90 Days · This Month · Last Month · Custom Range. Custom range: dual calendar date picker.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Currency Selector</div><div class="spec-row-val">USD / EUR / GBP toggle. Pending OD-02 resolution; if live rates: all values converted to selected currency using rates at time of transaction.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Export Options</div><div class="spec-row-val">"Export PDF" — formatted report with HomeStyle branding and admin name/date watermark. "Export Excel (.xlsx)" — raw data in tabular format, all columns. Export action logged with admin, timestamp, and report type.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Chart Types</div><div class="spec-row-val">Bar charts for comparisons. Line charts for trends over time. Donut charts for breakdowns (e.g. return reasons). Library: Recharts. All charts include a raw data table below (screen-reader accessible).</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 18 — ADMIN TOAST & ALERTS
+  ══════════════════════════════════════ -->
+  <section id="admin-toast">
+    <h2 class="section-title">18. Toast Notifications & System Alerts</h2>
+
+    <h3 class="subsection">Toast Messages</h3>
+    <p>Admin toasts follow the same design system as storefront toasts. Position: top-right, 16px from top and right edge. Max 3 toasts visible simultaneously (oldest dismissed first). Admin-specific durations (longer than storefront).</p>
+    <table class="spec-table">
+      <tr><th>Trigger</th><th>Type</th><th>Message</th><th>Duration</th></tr>
+      <tr><td>Order confirmed</td><td>Success</td><td>"Order #HS-XXXX confirmed successfully"</td><td>4s</td></tr>
+      <tr><td>Shipment created</td><td>Success</td><td>"Shipment created — confirmation email sent to customer"</td><td>5s</td></tr>
+      <tr><td>Return approved</td><td>Success</td><td>"Return approved — label sent to customer"</td><td>5s</td></tr>
+      <tr><td>Refund issued</td><td>Success</td><td>"Refund of $X.XX initiated via Stripe"</td><td>6s</td></tr>
+      <tr><td>Product saved (draft)</td><td>Info</td><td>"Draft saved"</td><td>3s</td></tr>
+      <tr><td>Product published</td><td>Success</td><td>"Product published to storefront"</td><td>4s</td></tr>
+      <tr><td>SLA breach (real-time)</td><td>Warning</td><td>"Order #HS-XXXX has breached the confirmation SLA" [View Order]</td><td>Persistent — dismiss required</td></tr>
+      <tr><td>Low stock alert</td><td>Warning</td><td>"Stock alert: {SKU} is now at low stock threshold" [View]</td><td>Persistent — dismiss required</td></tr>
+      <tr><td>Stripe refund no webhook</td><td>Warning</td><td>"Stripe refund webhook not received for Return #RET-XXX" [View]</td><td>Persistent — dismiss required</td></tr>
+      <tr><td>API error</td><td>Error</td><td>"Action failed — please try again or contact support"</td><td>8s</td></tr>
+      <tr><td>CSV import complete</td><td>Success</td><td>"Bulk stock update complete: X records updated, Y skipped"</td><td>6s</td></tr>
+    </table>
+
+    <h3 class="subsection">Persistent SLA Alerts</h3>
+    <div class="spec-row"><div class="spec-row-key">Mechanism</div><div class="spec-row-val">SLA breach alerts appear as a persistent banner below the top bar (not as dismissible toasts). They remain visible until the underlying order is actioned. Background: <code class="inline">--hs-error-bg</code>. Border-left: 4px <code class="inline">--hs-error</code>. Icon: ⚠️. Includes a direct "View Order" CTA.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Multiple Breaches</div><div class="spec-row-val">If 3+ SLA breaches exist: banner shows "3 orders require urgent attention" with link to filtered order list. Individual breach alerts consolidated to avoid banner overflow.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 19 — SLA INDICATORS
+  ══════════════════════════════════════ -->
+  <section id="admin-sla">
+    <h2 class="section-title">19. SLA Indicator System</h2>
+    <p>SLA indicators appear in the Order List, Order Detail, Returns List, and Returns Detail. They represent time constraints from BRD Section 17.</p>
+
+    <table class="spec-table">
+      <tr><th>SLA</th><th>TC Reference</th><th>Window</th><th>Scope</th><th>Visual When Breached</th></tr>
+      <tr><td>Order Confirmation</td><td>TC-17</td><td>4 business hours from order placement</td><td>Pending → Confirmed</td><td>Red badge "SLA Breached" · Row background tint · Top of list</td></tr>
+      <tr><td>Order Dispatch</td><td>TC-18</td><td>48 business hours from Confirmed</td><td>Confirmed → Shipped</td><td>Red badge "Dispatch Overdue"</td></tr>
+      <tr><td>Return Review</td><td>TC-21</td><td>2 business days from return request</td><td>Pending Review</td><td>Amber → Red badge. Super Admin alert email.</td></tr>
+      <tr><td>Refund Initiation</td><td>TC-22</td><td>1 business day from Item Received</td><td>Item Received → Refunded</td><td>Red badge "Refund Overdue"</td></tr>
+      <tr><td>Total Return Resolution</td><td>TC-23</td><td>12 business days total</td><td>End-to-end return</td><td>Progress bar shown in return detail. Warning at 75%.</td></tr>
+    </table>
+
+    <div class="ui-demo">
+      <div class="ui-demo-label">SLA Progress Bar States</div>
+      <div style="max-width:400px">
+        <div style="margin-bottom:var(--sp-4)">
+          <div style="font-size:var(--text-xs);color:var(--hs-slate-mid);margin-bottom:var(--sp-2)">Within SLA — 1h 20m remaining (33% elapsed)</div>
+          <div class="sla-bar"><div class="sla-fill sla-fill-ok" style="width:33%"></div></div>
+        </div>
+        <div style="margin-bottom:var(--sp-4)">
+          <div style="font-size:var(--text-xs);color:var(--hs-slate-mid);margin-bottom:var(--sp-2)">Approaching Breach — 30m remaining (87% elapsed)</div>
+          <div class="sla-bar"><div class="sla-fill sla-fill-warn" style="width:87%"></div></div>
+        </div>
+        <div>
+          <div style="font-size:var(--text-xs);color:var(--hs-error);margin-bottom:var(--sp-2);font-weight:600">SLA BREACHED — 2h 15m overdue</div>
+          <div class="sla-bar"><div class="sla-fill sla-fill-breach" style="width:100%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">Business Hours</div><div class="spec-row-val">SLA timers only count business hours: Monday–Friday, 09:00–17:00 local warehouse timezone (configurable in System Settings). Weekends and public holidays do not count. Holiday calendar is admin-configurable per market (US / EU).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Visual threshold</div><div class="spec-row-val">&lt;50% elapsed: green bar. 50–89% elapsed: amber bar + amber time label. ≥90% elapsed: red bar. Breached: full red bar, elapsed time shows negative (e.g. "-2h 15m").</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 20 — EMPTY STATES
+  ══════════════════════════════════════ -->
+  <section id="admin-empty">
+    <h2 class="section-title">20. Admin Empty States</h2>
+    <table class="spec-table">
+      <tr><th>Screen</th><th>Illustration</th><th>Headline</th><th>Sub-text</th><th>CTA</th></tr>
+      <tr><td>No orders (filtered)</td><td>Empty inbox with checkmark</td><td>"No orders match these filters"</td><td>"Try adjusting your date range or status filters"</td><td>"Clear Filters"</td></tr>
+      <tr><td>No pending returns</td><td>Return box with checkmark</td><td>"All returns are handled"</td><td>"No return requests require your attention right now"</td><td>—</td></tr>
+      <tr><td>No pending reviews</td><td>Star outline with checkmark</td><td>"Review queue is empty"</td><td>"All submitted reviews have been moderated"</td><td>—</td></tr>
+      <tr><td>No products (filtered)</td><td>Furniture outline</td><td>"No products match your search"</td><td>"Try a different search term or clear filters"</td><td>"Clear Filters"</td></tr>
+      <tr><td>No customers (search)</td><td>Person outline with magnifier</td><td>"No customers found"</td><td>"No accounts match "{query}"</td><td>"Clear Search"</td></tr>
+      <tr><td>No staff accounts</td><td>Team outline</td><td>"No additional staff accounts"</td><td>"You're the only admin. Add team members to delegate tasks."</td><td>"+ Add Staff Member"</td></tr>
+      <tr><td>No promotions</td><td>Discount tag outline</td><td>"No discount codes created"</td><td>"Create your first promo code to offer discounts to customers"</td><td>"+ Create Discount Code"</td></tr>
+    </table>
+    <p>Illustrations: SVG, single color <code class="inline">--hs-linen</code> on <code class="inline">--hs-warm-white</code>. Max 96px height. Never use stock photos for admin empty states.</p>
+  </section>
+
+  <!-- Closing note -->
+  <hr class="section-break">
+  <div style="background:var(--hs-cream);border:1px solid var(--hs-linen);border-radius:var(--r-xl);padding:var(--sp-8) var(--sp-10);margin-top:var(--sp-8)">
+    <div style="font-family:var(--font-display);font-size:var(--text-xl);color:var(--hs-slate);margin-bottom:var(--sp-3)">Pending Decisions & Open Items</div>
+    <p>The following BRD open decisions directly affect admin UI behavior and must be resolved before SRS sign-off:</p>
+    <ul style="padding-left:var(--sp-6);color:var(--hs-slate-mid);font-size:var(--text-sm);line-height:2">
+      <li><strong style="color:var(--hs-slate)">OD-02</strong> — Currency model: live rates vs. manual admin pricing affects Product Edit form (one price input vs. three) and Reports currency converter.</li>
+      <li><strong style="color:var(--hs-slate)">OD-04</strong> — Discount stacking rules affect the Promotions create form and checkout-side validation logic.</li>
+      <li><strong style="color:var(--hs-slate)">OD-09</strong> — Return window duration affects the return eligibility display in Order Detail and Returns queue.</li>
+      <li><strong style="color:var(--hs-slate)">OD-10</strong> — Admin-configurable TC values: if confirmed, a System Settings module (SC-A-50 – A-54) is added to the admin panel to manage configurable SLA and timer values. Not included in this spec pending decision.</li>
+    </ul>
+    <p style="margin-bottom:0;margin-top:var(--sp-4)">Screen IDs SC-A-50 through SC-A-55 are reserved for System Settings, Notification Preferences, and Audit Log modules, to be specced in a follow-up addendum once OD-10 is resolved.</p>
+  </div>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

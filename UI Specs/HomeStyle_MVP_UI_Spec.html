@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeStyle — MVP UI Specification v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       HOMESTYLE COLOR LIBRARY
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+    /* — Brand Core — */
+    --hs-clay:        #C4714B;   /* Primary CTA, links, focus rings */
+    --hs-clay-light:  #D4886A;   /* Hover state for clay */
+    --hs-clay-dark:   #A85A35;   /* Active/pressed state */
+    --hs-clay-tint:   #FAF0EA;   /* Clay backgrounds, selected chips */
+
+    --hs-slate:       #2C3A47;   /* Primary text, headings */
+    --hs-slate-mid:   #4A5A6B;   /* Secondary text, labels */
+    --hs-slate-light: #7A8A9A;   /* Placeholder, disabled text */
+
+    /* — Neutrals — */
+    --hs-warm-white:  #FDFAF7;   /* Page background */
+    --hs-cream:       #F5F0EA;   /* Card background, inputs */
+    --hs-linen:       #EDE6DC;   /* Borders, dividers */
+    --hs-stone:       #C8BFB3;   /* Inactive, muted borders */
+    --hs-charcoal:    #1C2530;   /* Dark mode base, nav bar */
+
+    /* — Semantic — */
+    --hs-success:     #2D7A5F;   /* Order confirmed, in-stock */
+    --hs-success-bg:  #EAF5F0;
+    --hs-warning:     #B07A1A;   /* Low stock, pending */
+    --hs-warning-bg:  #FDF4E3;
+    --hs-error:       #C0392B;   /* Validation errors, out-of-stock */
+    --hs-error-bg:    #FDECEA;
+    --hs-info:        #2471A3;   /* Tracking, info banners */
+    --hs-info-bg:     #EBF5FB;
+
+    /* — Typography scale — */
+    --font-display:   'DM Serif Display', Georgia, serif;
+    --font-body:      'DM Sans', system-ui, sans-serif;
+    --font-mono:      'DM Mono', 'Courier New', monospace;
+
+    --text-xs:    11px;
+    --text-sm:    13px;
+    --text-base:  15px;
+    --text-md:    17px;
+    --text-lg:    20px;
+    --text-xl:    24px;
+    --text-2xl:   30px;
+    --text-3xl:   38px;
+    --text-4xl:   52px;
+
+    /* — Spacing — */
+    --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;  --sp-4: 16px;
+    --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;  --sp-10: 40px;
+    --sp-12: 48px; --sp-16: 64px;
+
+    /* — Radius — */
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-pill: 999px;
+
+    /* — Shadows — */
+    --shadow-sm: 0 1px 3px rgba(44,58,71,0.08), 0 1px 2px rgba(44,58,71,0.04);
+    --shadow-md: 0 4px 12px rgba(44,58,71,0.10), 0 2px 6px rgba(44,58,71,0.06);
+    --shadow-lg: 0 12px 32px rgba(44,58,71,0.13), 0 4px 12px rgba(44,58,71,0.08);
+    --shadow-card: 0 2px 8px rgba(44,58,71,0.07);
+
+    /* — Transitions — */
+    --t-fast:   100ms ease;
+    --t-base:   180ms ease;
+    --t-slow:   300ms ease;
+    --t-spring: 400ms cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--hs-slate);
+    background: var(--hs-warm-white);
+    line-height: 1.6;
+  }
+
+  /* ── Doc Layout ── */
+  .doc-sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 240px;
+    background: var(--hs-charcoal);
+    overflow-y: auto;
+    padding: var(--sp-6) 0;
+    z-index: 100;
+  }
+  .doc-sidebar .logo {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: #fff;
+    padding: 0 var(--sp-6) var(--sp-6);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: var(--sp-4);
+  }
+  .doc-sidebar .logo span { color: var(--hs-clay-light); }
+  .doc-sidebar .version-tag {
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--hs-stone);
+    padding: 0 var(--sp-6) var(--sp-4);
+    display: block;
+  }
+  .nav-group { margin-bottom: var(--sp-4); }
+  .nav-group-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hs-stone);
+    padding: var(--sp-2) var(--sp-6);
+  }
+  .nav-link {
+    display: block;
+    padding: var(--sp-2) var(--sp-6);
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    transition: color var(--t-fast), background var(--t-fast);
+    border-left: 3px solid transparent;
+  }
+  .nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .nav-link.active { color: var(--hs-clay-light); border-left-color: var(--hs-clay-light); background: rgba(196,113,75,0.08); }
+
+  .doc-main {
+    margin-left: 240px;
+    padding: var(--sp-12) var(--sp-16);
+    max-width: 1100px;
+  }
+
+  /* ── Doc Typography ── */
+  h1.page-title {
+    font-family: var(--font-display);
+    font-size: var(--text-4xl);
+    color: var(--hs-slate);
+    line-height: 1.1;
+    margin-bottom: var(--sp-3);
+  }
+  h1.page-title em { color: var(--hs-clay); font-style: italic; }
+  .page-subtitle {
+    font-size: var(--text-md);
+    color: var(--hs-slate-mid);
+    margin-bottom: var(--sp-10);
+  }
+  .meta-bar {
+    display: flex;
+    gap: var(--sp-6);
+    padding: var(--sp-4) var(--sp-6);
+    background: var(--hs-cream);
+    border: 1px solid var(--hs-linen);
+    border-radius: var(--r-lg);
+    margin-bottom: var(--sp-12);
+    flex-wrap: wrap;
+  }
+  .meta-item { font-size: var(--text-sm); }
+  .meta-item strong { color: var(--hs-slate); margin-right: var(--sp-1); }
+  .meta-item span { color: var(--hs-slate-mid); }
+
+  section { margin-bottom: var(--sp-16); scroll-margin-top: 24px; }
+
+  h2.section-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--hs-slate);
+    border-bottom: 2px solid var(--hs-linen);
+    padding-bottom: var(--sp-4);
+    margin-bottom: var(--sp-8);
+  }
+  h3.subsection {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--hs-slate);
+    margin: var(--sp-8) 0 var(--sp-4);
+  }
+  h3.subsection::before {
+    content: '—';
+    color: var(--hs-clay);
+    margin-right: var(--sp-2);
+  }
+  h4.spec-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--hs-slate-mid);
+    margin: var(--sp-6) 0 var(--sp-3);
+  }
+  p { margin-bottom: var(--sp-4); color: var(--hs-slate-mid); line-height: 1.7; }
+  p strong { color: var(--hs-slate); }
+
+  /* ── Tables ── */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    margin-bottom: var(--sp-8);
+    background: #fff;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .spec-table th {
+    background: var(--hs-charcoal);
+    color: #fff;
+    font-weight: 500;
+    font-size: var(--text-xs);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: var(--sp-3) var(--sp-4);
+    text-align: left;
+  }
+  .spec-table td {
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: 1px solid var(--hs-linen);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .spec-table tr:last-child td { border-bottom: none; }
+  .spec-table tr:nth-child(even) td { background: var(--hs-warm-white); }
+  .spec-table code {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    background: var(--hs-cream);
+    padding: 2px 6px;
+    border-radius: var(--r-sm);
+    color: var(--hs-clay-dark);
+  }
+
+  /* ── Chips & Badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    white-space: nowrap;
+  }
+  .badge-critical { background: var(--hs-error-bg); color: var(--hs-error); }
+  .badge-high     { background: var(--hs-warning-bg); color: var(--hs-warning); }
+  .badge-med      { background: var(--hs-info-bg); color: var(--hs-info); }
+  .badge-ok       { background: var(--hs-success-bg); color: var(--hs-success); }
+  .badge-phase    { background: var(--hs-clay-tint); color: var(--hs-clay-dark); }
+
+  /* ── Color Swatches ── */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-8);
+  }
+  .swatch-card {
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--hs-linen);
+  }
+  .swatch-color { height: 72px; }
+  .swatch-info {
+    padding: var(--sp-3) var(--sp-3);
+    background: #fff;
+  }
+  .swatch-name { font-size: var(--text-sm); font-weight: 600; color: var(--hs-slate); }
+  .swatch-hex  { font-size: var(--text-xs); font-family: var(--font-mono); color: var(--hs-slate-light); }
+  .swatch-role { font-size: var(--text-xs); color: var(--hs-slate-mid); margin-top: 2px; }
+
+  /* ── Screen Mockup Frame ── */
+  .screen-frame {
+    background: var(--hs-cream);
+    border: 1px solid var(--hs-linen);
+    border-radius: var(--r-xl);
+    padding: var(--sp-8);
+    margin-bottom: var(--sp-8);
+    box-shadow: var(--shadow-md);
+  }
+  .screen-header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-6);
+    padding-bottom: var(--sp-4);
+    border-bottom: 1px solid var(--hs-linen);
+  }
+  .screen-id {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    background: var(--hs-charcoal);
+    color: var(--hs-clay-light);
+    padding: 3px 10px;
+    border-radius: var(--r-pill);
+  }
+  .screen-name {
+    font-weight: 600;
+    font-size: var(--text-md);
+    color: var(--hs-slate);
+    flex: 1;
+  }
+  .screen-role-tag {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: var(--r-pill);
+    background: var(--hs-linen);
+    color: var(--hs-slate-mid);
+  }
+
+  /* ── Spec Rows ── */
+  .spec-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--sp-4) var(--sp-6);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--hs-linen);
+    font-size: var(--text-sm);
+    align-items: start;
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-row-key {
+    font-weight: 600;
+    color: var(--hs-slate);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-top: 2px;
+  }
+  .spec-row-val { color: var(--hs-slate-mid); }
+  .spec-row-val ul { padding-left: var(--sp-4); }
+  .spec-row-val li { margin-bottom: var(--sp-1); }
+
+  /* ── Field Spec Cards ── */
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-6);
+  }
+  .field-card {
+    background: #fff;
+    border: 1px solid var(--hs-linen);
+    border-radius: var(--r-lg);
+    padding: var(--sp-4);
+    box-shadow: var(--shadow-sm);
+  }
+  .field-card-name {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--hs-slate);
+    margin-bottom: var(--sp-2);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+  .field-required {
+    font-size: var(--text-xs);
+    color: var(--hs-error);
+    font-weight: 500;
+  }
+  .field-optional {
+    font-size: var(--text-xs);
+    color: var(--hs-slate-light);
+    font-weight: 400;
+  }
+  .field-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    color: var(--hs-slate-mid);
+    padding: 3px 0;
+    border-bottom: 1px solid var(--hs-linen);
+  }
+  .field-row:last-child { border-bottom: none; }
+  .field-row strong { color: var(--hs-slate-mid); min-width: 80px; }
+
+  /* ── Animation Spec Box ── */
+  .anim-card {
+    background: var(--hs-charcoal);
+    border-radius: var(--r-lg);
+    padding: var(--sp-5) var(--sp-6);
+    margin-bottom: var(--sp-4);
+    color: #fff;
+  }
+  .anim-title {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--hs-clay-light);
+    margin-bottom: var(--sp-2);
+    display: flex;
+    justify-content: space-between;
+  }
+  .anim-detail {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: rgba(255,255,255,0.55);
+    line-height: 2;
+  }
+  .anim-detail em { color: rgba(255,255,255,0.85); font-style: normal; }
+
+  /* ── Callout Boxes ── */
+  .callout {
+    padding: var(--sp-4) var(--sp-5);
+    border-radius: var(--r-lg);
+    margin-bottom: var(--sp-6);
+    border-left: 4px solid;
+    font-size: var(--text-sm);
+  }
+  .callout-warn { background: var(--hs-warning-bg); border-color: var(--hs-warning); }
+  .callout-info { background: var(--hs-info-bg); border-color: var(--hs-info); }
+  .callout-note { background: var(--hs-clay-tint); border-color: var(--hs-clay); }
+  .callout strong { display: block; margin-bottom: var(--sp-1); font-weight: 700; }
+
+  /* ── Validation Spec ── */
+  .validation-box {
+    background: var(--hs-error-bg);
+    border: 1px solid #f5b7b1;
+    border-radius: var(--r-lg);
+    padding: var(--sp-4) var(--sp-5);
+    margin-bottom: var(--sp-4);
+    font-size: var(--text-sm);
+  }
+  .validation-box h5 {
+    color: var(--hs-error);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--sp-3);
+  }
+  .validation-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: var(--sp-3);
+    padding: var(--sp-2) 0;
+    border-bottom: 1px solid rgba(192,57,43,0.12);
+    color: var(--hs-slate-mid);
+  }
+  .validation-row:last-child { border-bottom: none; }
+  .validation-row code { font-family: var(--font-mono); font-size: var(--text-xs); }
+  .val-field { font-weight: 600; color: var(--hs-slate); font-size: var(--text-xs); }
+
+  /* ── UI Component Illustration ── */
+  .ui-demo {
+    background: var(--hs-warm-white);
+    border: 1px solid var(--hs-linen);
+    border-radius: var(--r-xl);
+    padding: var(--sp-8) var(--sp-10);
+    margin-bottom: var(--sp-8);
+  }
+  .ui-demo-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--hs-stone);
+    margin-bottom: var(--sp-5);
+    font-weight: 600;
+  }
+
+  /* ── Simulated Components ── */
+  .sim-input-group { margin-bottom: var(--sp-4); }
+  .sim-label { font-size: var(--text-xs); font-weight: 600; color: var(--hs-slate); margin-bottom: var(--sp-2); }
+  .sim-label span { color: var(--hs-error); margin-left: 2px; }
+  .sim-input {
+    width: 100%;
+    max-width: 360px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--hs-linen);
+    border-radius: var(--r-md);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    background: #fff;
+    color: var(--hs-slate);
+    transition: border-color var(--t-base), box-shadow var(--t-base);
+    outline: none;
+  }
+  .sim-input:focus { border-color: var(--hs-clay); box-shadow: 0 0 0 3px rgba(196,113,75,0.15); }
+  .sim-input.error { border-color: var(--hs-error); background: var(--hs-error-bg); }
+  .sim-input.success { border-color: var(--hs-success); }
+  .sim-input::placeholder { color: var(--hs-slate-light); }
+  .sim-hint { font-size: var(--text-xs); color: var(--hs-slate-mid); margin-top: var(--sp-1); }
+  .sim-error-msg { font-size: var(--text-xs); color: var(--hs-error); margin-top: var(--sp-1); display: flex; align-items: center; gap: 4px; }
+  .sim-success-msg { font-size: var(--text-xs); color: var(--hs-success); margin-top: var(--sp-1); }
+
+  .sim-btn-row { display: flex; gap: var(--sp-3); flex-wrap: wrap; align-items: center; margin-top: var(--sp-4); }
+  .sim-btn {
+    padding: 11px 24px;
+    border-radius: var(--r-md);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--t-base);
+    border: 1.5px solid transparent;
+    letter-spacing: 0.01em;
+  }
+  .sim-btn-primary { background: var(--hs-clay); color: #fff; }
+  .sim-btn-primary:hover { background: var(--hs-clay-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(196,113,75,0.35); }
+  .sim-btn-secondary { background: transparent; color: var(--hs-clay); border-color: var(--hs-clay); }
+  .sim-btn-secondary:hover { background: var(--hs-clay-tint); }
+  .sim-btn-ghost { background: transparent; color: var(--hs-slate-mid); border-color: var(--hs-linen); }
+  .sim-btn-ghost:hover { background: var(--hs-cream); color: var(--hs-slate); }
+  .sim-btn-danger { background: var(--hs-error); color: #fff; }
+  .sim-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+  .sim-btn-sm { padding: 7px 16px; font-size: var(--text-xs); }
+  .sim-btn-lg { padding: 14px 32px; font-size: var(--text-md); }
+
+  /* Status dots */
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+  .dot-green  { background: var(--hs-success); }
+  .dot-amber  { background: #E8A21A; }
+  .dot-red    { background: var(--hs-error); }
+  .dot-gray   { background: var(--hs-stone); }
+  .dot-blue   { background: var(--hs-info); }
+
+  /* Nav mockup */
+  .sim-nav {
+    background: var(--hs-charcoal);
+    padding: 0 var(--sp-8);
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    gap: var(--sp-8);
+  }
+  .sim-nav-logo { font-family: var(--font-display); font-size: var(--text-lg); color: #fff; }
+  .sim-nav-logo span { color: var(--hs-clay-light); }
+  .sim-nav-links { display: flex; gap: var(--sp-6); flex: 1; }
+  .sim-nav-link { font-size: var(--text-sm); color: rgba(255,255,255,0.6); text-decoration: none; }
+  .sim-nav-link.active { color: #fff; }
+  .sim-nav-actions { display: flex; gap: var(--sp-3); align-items: center; }
+  .sim-icon-btn {
+    width: 36px; height: 36px;
+    border-radius: var(--r-md);
+    background: rgba(255,255,255,0.08);
+    border: none;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .sim-cart-badge {
+    position: relative;
+  }
+  .sim-cart-badge::after {
+    content: '3';
+    position: absolute;
+    top: -4px; right: -4px;
+    width: 16px; height: 16px;
+    background: var(--hs-clay);
+    border-radius: 50%;
+    font-size: 9px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  /* Misc */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-8); }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-4); }
+  @media (max-width: 900px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  .divider { border: none; border-top: 2px solid var(--hs-linen); margin: var(--sp-8) 0; }
+
+  .chip-row { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-4); }
+  .chip {
+    padding: 5px 12px;
+    border-radius: var(--r-pill);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    border: 1.5px solid;
+    cursor: pointer;
+  }
+  .chip-default { border-color: var(--hs-linen); color: var(--hs-slate-mid); background: #fff; }
+  .chip-selected { border-color: var(--hs-clay); color: var(--hs-clay-dark); background: var(--hs-clay-tint); }
+
+  .toast {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-5);
+    border-radius: var(--r-lg);
+    font-size: var(--text-sm);
+    box-shadow: var(--shadow-lg);
+  }
+  .toast-success { background: var(--hs-slate); color: #fff; border-left: 4px solid var(--hs-success); }
+  .toast-error   { background: var(--hs-slate); color: #fff; border-left: 4px solid var(--hs-error); }
+  .toast-info    { background: var(--hs-slate); color: #fff; border-left: 4px solid var(--hs-clay); }
+
+  code.inline { font-family: var(--font-mono); font-size: var(--text-xs); background: var(--hs-cream); padding: 2px 6px; border-radius: var(--r-sm); color: var(--hs-clay-dark); }
+
+  .number-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--hs-clay);
+    color: #fff;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .step-row {
+    display: flex;
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-4);
+    align-items: flex-start;
+  }
+  .step-content { font-size: var(--text-sm); color: var(--hs-slate-mid); }
+  .step-content strong { color: var(--hs-slate); display: block; margin-bottom: 2px; }
+
+  .progress-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: var(--sp-6);
+  }
+  .ps-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-1);
+    position: relative;
+  }
+  .ps-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    z-index: 1;
+  }
+  .ps-dot-done { background: var(--hs-success); color: #fff; }
+  .ps-dot-active { background: var(--hs-clay); color: #fff; box-shadow: 0 0 0 4px rgba(196,113,75,0.2); }
+  .ps-dot-idle { background: var(--hs-linen); color: var(--hs-stone); }
+  .ps-label { font-size: 10px; color: var(--hs-slate-mid); white-space: nowrap; font-weight: 500; }
+  .ps-label.active { color: var(--hs-clay); font-weight: 700; }
+  .ps-line { flex: 1; height: 2px; background: var(--hs-linen); min-width: 40px; margin-bottom: 18px; }
+  .ps-line.done { background: var(--hs-success); }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--hs-linen) 25%, var(--hs-cream) 50%, var(--hs-linen) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--r-sm);
+  }
+  @keyframes shimmer { 0% {background-position: 200% 0} 100% {background-position: -200% 0} }
+
+  hr.section-break { border: none; border-top: 1px solid var(--hs-linen); margin: var(--sp-12) 0; }
+
+  /* Print */
+  @media print {
+    .doc-sidebar { display: none; }
+    .doc-main { margin-left: 0; padding: 24px; }
+  }
+
+  /* Scrollbar */
+  .doc-sidebar::-webkit-scrollbar { width: 4px; }
+  .doc-sidebar::-webkit-scrollbar-track { background: transparent; }
+  .doc-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR NAV ═══════════════ -->
+<nav class="doc-sidebar">
+  <div class="logo">Home<span>Style</span></div>
+  <span class="version-tag">UI Spec v1.0 · MVP Phase 1</span>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Foundation</div>
+    <a class="nav-link active" href="#colors">Color Library</a>
+    <a class="nav-link" href="#typography">Typography</a>
+    <a class="nav-link" href="#spacing">Spacing & Grid</a>
+    <a class="nav-link" href="#components">Core Components</a>
+    <a class="nav-link" href="#animations">Animation System</a>
+    <a class="nav-link" href="#validation">Validation Rules</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">User Roles</div>
+    <a class="nav-link" href="#roles">Role Overview</a>
+    <a class="nav-link" href="#guest">Guest / Visitor</a>
+    <a class="nav-link" href="#customer">Registered Customer</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Storefront Screens</div>
+    <a class="nav-link" href="#sc-home">Homepage</a>
+    <a class="nav-link" href="#sc-plp">Product Listing</a>
+    <a class="nav-link" href="#sc-pdp">Product Detail</a>
+    <a class="nav-link" href="#sc-cart">Cart</a>
+    <a class="nav-link" href="#sc-checkout">Checkout</a>
+    <a class="nav-link" href="#sc-auth">Auth Screens</a>
+    <a class="nav-link" href="#sc-account">My Account</a>
+    <a class="nav-link" href="#sc-orders">Orders & Tracking</a>
+    <a class="nav-link" href="#sc-returns">Returns Portal</a>
+    <a class="nav-link" href="#sc-wishlist">Wishlist</a>
+    <a class="nav-link" href="#sc-search">Search</a>
+    <a class="nav-link" href="#sc-cms">CMS Pages</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Global</div>
+    <a class="nav-link" href="#global-nav">Navigation</a>
+    <a class="nav-link" href="#global-toast">Toast System</a>
+    <a class="nav-link" href="#global-empty">Empty States</a>
+    <a class="nav-link" href="#global-gdpr">GDPR Banner</a>
+    <a class="nav-link" href="#global-responsive">Responsive</a>
+  </div>
+</nav>
+
+<!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+<main class="doc-main">
+
+  <!-- COVER -->
+  <div style="margin-bottom: var(--sp-12);">
+    <h1 class="page-title">HomeStyle <em>MVP</em><br>UI Specification</h1>
+    <p class="page-subtitle">Customer-facing storefront — Phase 1 · Roles: Guest &amp; Registered Customer</p>
+    <div class="meta-bar">
+      <div class="meta-item"><strong>Version</strong><span>1.0 Draft</span></div>
+      <div class="meta-item"><strong>Scope</strong><span>Customer Storefront (Phase 1)</span></div>
+      <div class="meta-item"><strong>Audience</strong><span>Dev Team · Design Team</span></div>
+      <div class="meta-item"><strong>Admin Screens</strong><span class="badge badge-phase">Separate document</span></div>
+      <div class="meta-item"><strong>Stack</strong><span>Next.js · TypeScript · Tailwind</span></div>
+      <div class="meta-item"><strong>Markets</strong><span>US (USD) · EU (EUR) · UK (GBP)</span></div>
+    </div>
+    <div class="callout callout-note">
+      <strong>Scope of this document</strong>
+      Admin panel screens (Super Admin, Admin-Operations, Admin-Content roles) are defined in a separate spec. This document covers all Guest and Registered Customer-facing screens, plus the global design system tokens that both storefront and admin must share.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 1 — COLOR LIBRARY
+  ══════════════════════════════════════ -->
+  <section id="colors">
+    <h2 class="section-title">1. Color Library</h2>
+    <p>All colors are defined as CSS custom properties (tokens) on <code class="inline">:root</code>. No hardcoded hex values anywhere in components. Tokens must also be exported as a <code class="inline">tokens.json</code> for Figma variable sync.</p>
+
+    <h3 class="subsection">Brand Core</h3>
+    <div class="color-grid">
+      <div class="swatch-card"><div class="swatch-color" style="background:#C4714B"></div><div class="swatch-info"><div class="swatch-name">Clay</div><div class="swatch-hex">--hs-clay · #C4714B</div><div class="swatch-role">Primary CTA, links, focus rings</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#D4886A"></div><div class="swatch-info"><div class="swatch-name">Clay Light</div><div class="swatch-hex">--hs-clay-light · #D4886A</div><div class="swatch-role">Hover state on Clay elements</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#A85A35"></div><div class="swatch-info"><div class="swatch-name">Clay Dark</div><div class="swatch-hex">--hs-clay-dark · #A85A35</div><div class="swatch-role">Active / pressed state</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#FAF0EA"></div><div class="swatch-info"><div class="swatch-name">Clay Tint</div><div class="swatch-hex">--hs-clay-tint · #FAF0EA</div><div class="swatch-role">Selected chips, light CTA backgrounds</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#2C3A47"></div><div class="swatch-info"><div class="swatch-name">Slate</div><div class="swatch-hex">--hs-slate · #2C3A47</div><div class="swatch-role">Primary text, headings</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#4A5A6B"></div><div class="swatch-info"><div class="swatch-name">Slate Mid</div><div class="swatch-hex">--hs-slate-mid · #4A5A6B</div><div class="swatch-role">Secondary text, labels</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#7A8A9A"></div><div class="swatch-info"><div class="swatch-name">Slate Light</div><div class="swatch-hex">--hs-slate-light · #7A8A9A</div><div class="swatch-role">Placeholder, disabled text</div></div></div>
+    </div>
+
+    <h3 class="subsection">Neutrals</h3>
+    <div class="color-grid">
+      <div class="swatch-card"><div class="swatch-color" style="background:#FDFAF7; border-bottom:1px solid #EDE6DC"></div><div class="swatch-info"><div class="swatch-name">Warm White</div><div class="swatch-hex">--hs-warm-white · #FDFAF7</div><div class="swatch-role">Page background</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#F5F0EA"></div><div class="swatch-info"><div class="swatch-name">Cream</div><div class="swatch-hex">--hs-cream · #F5F0EA</div><div class="swatch-role">Card background, input background</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#EDE6DC"></div><div class="swatch-info"><div class="swatch-name">Linen</div><div class="swatch-hex">--hs-linen · #EDE6DC</div><div class="swatch-role">Borders, dividers, table rows</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#C8BFB3"></div><div class="swatch-info"><div class="swatch-name">Stone</div><div class="swatch-hex">--hs-stone · #C8BFB3</div><div class="swatch-role">Muted borders, inactive states</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#1C2530"></div><div class="swatch-info"><div class="swatch-name">Charcoal</div><div class="swatch-hex">--hs-charcoal · #1C2530</div><div class="swatch-role">Navigation bar, dark backgrounds</div></div></div>
+    </div>
+
+    <h3 class="subsection">Semantic Colors</h3>
+    <div class="color-grid">
+      <div class="swatch-card"><div class="swatch-color" style="background:#2D7A5F"></div><div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-hex">--hs-success · #2D7A5F</div><div class="swatch-role">In-stock, confirmed, refunded</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#EAF5F0"></div><div class="swatch-info"><div class="swatch-name">Success BG</div><div class="swatch-hex">--hs-success-bg · #EAF5F0</div><div class="swatch-role">Success message backgrounds</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#B07A1A"></div><div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-hex">--hs-warning · #B07A1A</div><div class="swatch-role">Low stock, pending review</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#FDF4E3"></div><div class="swatch-info"><div class="swatch-name">Warning BG</div><div class="swatch-hex">--hs-warning-bg · #FDF4E3</div><div class="swatch-role">Warning message backgrounds</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#C0392B"></div><div class="swatch-info"><div class="swatch-name">Error</div><div class="swatch-hex">--hs-error · #C0392B</div><div class="swatch-role">Validation errors, out-of-stock</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#FDECEA"></div><div class="swatch-info"><div class="swatch-name">Error BG</div><div class="swatch-hex">--hs-error-bg · #FDECEA</div><div class="swatch-role">Error input backgrounds, alerts</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#2471A3"></div><div class="swatch-info"><div class="swatch-name">Info</div><div class="swatch-hex">--hs-info · #2471A3</div><div class="swatch-role">Tracking updates, info banners</div></div></div>
+      <div class="swatch-card"><div class="swatch-color" style="background:#EBF5FB"></div><div class="swatch-info"><div class="swatch-name">Info BG</div><div class="swatch-hex">--hs-info-bg · #EBF5FB</div><div class="swatch-role">Info banner backgrounds</div></div></div>
+    </div>
+
+    <h4 class="spec-label">Accessibility — Contrast Requirements</h4>
+    <table class="spec-table">
+      <tr><th>Combination</th><th>Ratio</th><th>WCAG Level</th><th>Usage</th></tr>
+      <tr><td><code>Clay #C4714B</code> on <code>Warm White</code></td><td>4.6:1</td><td><span class="badge badge-ok">AA</span></td><td>CTA buttons, links</td></tr>
+      <tr><td><code>Slate #2C3A47</code> on <code>Warm White</code></td><td>12.1:1</td><td><span class="badge badge-ok">AAA</span></td><td>Body text, headings</td></tr>
+      <tr><td><code>Slate Mid</code> on <code>Warm White</code></td><td>6.8:1</td><td><span class="badge badge-ok">AA</span></td><td>Secondary text</td></tr>
+      <tr><td>White on <code>Charcoal</code></td><td>14.5:1</td><td><span class="badge badge-ok">AAA</span></td><td>Nav bar text</td></tr>
+      <tr><td>White on <code>Clay</code></td><td>4.6:1</td><td><span class="badge badge-ok">AA</span></td><td>Button labels</td></tr>
+      <tr><td><code>Slate Light</code> on <code>Warm White</code></td><td>3.9:1</td><td><span class="badge badge-high">AA Large only</span></td><td>Placeholders only — never body copy</td></tr>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 2 — TYPOGRAPHY
+  ══════════════════════════════════════ -->
+  <section id="typography">
+    <h2 class="section-title">2. Typography</h2>
+    <p>Two families: <strong>DM Serif Display</strong> for editorial headings (brand identity, hero text) and <strong>DM Sans</strong> for all UI body, labels, buttons. <strong>DM Mono</strong> for codes, order numbers, SKUs.</p>
+
+    <table class="spec-table">
+      <tr><th>Token</th><th>Size</th><th>Weight</th><th>Family</th><th>Usage</th></tr>
+      <tr><td><code>--text-4xl</code></td><td>52px</td><td>400</td><td>DM Serif Display</td><td>Hero headline, homepage title</td></tr>
+      <tr><td><code>--text-3xl</code></td><td>38px</td><td>400 / Italic</td><td>DM Serif Display</td><td>Section headings, PDP product name</td></tr>
+      <tr><td><code>--text-2xl</code></td><td>30px</td><td>400</td><td>DM Serif Display</td><td>Page titles, cart summary heading</td></tr>
+      <tr><td><code>--text-xl</code></td><td>24px</td><td>600</td><td>DM Sans</td><td>Card headings, checkout section titles</td></tr>
+      <tr><td><code>--text-lg</code></td><td>20px</td><td>600</td><td>DM Sans</td><td>Sub-headings, prices on PDP</td></tr>
+      <tr><td><code>--text-md</code></td><td>17px</td><td>400/500</td><td>DM Sans</td><td>Body copy (long-form), important labels</td></tr>
+      <tr><td><code>--text-base</code></td><td>15px</td><td>400</td><td>DM Sans</td><td>Default body text, form fields</td></tr>
+      <tr><td><code>--text-sm</code></td><td>13px</td><td>400/500</td><td>DM Sans</td><td>Labels, helper text, table content</td></tr>
+      <tr><td><code>--text-xs</code></td><td>11px</td><td>500/600</td><td>DM Sans</td><td>Badges, tags, legal fine print, nav labels</td></tr>
+      <tr><td>Mono</td><td>13px</td><td>400/500</td><td>DM Mono</td><td>Order IDs, SKUs, tracking numbers, code</td></tr>
+    </table>
+
+    <div class="callout callout-warn">
+      <strong>Line-height rules</strong>
+      Serif Display headings: <code class="inline">line-height: 1.1</code>. Body text: <code class="inline">line-height: 1.7</code>. UI labels / buttons: <code class="inline">line-height: 1.3</code>. Never use unitless values below 1.4 for body content (WCAG 1.4.12).
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 3 — SPACING & GRID
+  ══════════════════════════════════════ -->
+  <section id="spacing">
+    <h2 class="section-title">3. Spacing &amp; Grid</h2>
+    <p>4px base unit. All spacing tokens are multiples of 4.</p>
+    <table class="spec-table">
+      <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+      <tr><td><code>--sp-1</code></td><td>4px</td><td>Icon gaps, tight inline spacing</td></tr>
+      <tr><td><code>--sp-2</code></td><td>8px</td><td>Badge padding, tag gaps</td></tr>
+      <tr><td><code>--sp-3</code></td><td>12px</td><td>Input padding (vertical), card inner</td></tr>
+      <tr><td><code>--sp-4</code></td><td>16px</td><td>Default component padding, gap between fields</td></tr>
+      <tr><td><code>--sp-5</code></td><td>20px</td><td>Section sub-gaps, card padding</td></tr>
+      <tr><td><code>--sp-6</code></td><td>24px</td><td>Navigation padding, section header gap</td></tr>
+      <tr><td><code>--sp-8</code></td><td>32px</td><td>Between sections within a card</td></tr>
+      <tr><td><code>--sp-10</code></td><td>40px</td><td>Page content top padding</td></tr>
+      <tr><td><code>--sp-12</code></td><td>48px</td><td>Section-to-section spacing on desktop</td></tr>
+      <tr><td><code>--sp-16</code></td><td>64px</td><td>Page horizontal padding desktop</td></tr>
+    </table>
+
+    <h3 class="subsection">Breakpoints</h3>
+    <table class="spec-table">
+      <tr><th>Name</th><th>Breakpoint</th><th>Columns</th><th>Gutter</th><th>Notes</th></tr>
+      <tr><td>Mobile</td><td>375px – 767px</td><td>4</td><td>16px</td><td>Default — mobile-first</td></tr>
+      <tr><td>Tablet</td><td>768px – 1023px</td><td>8</td><td>24px</td><td>Stacked cart layout, 2-col PLP</td></tr>
+      <tr><td>Desktop</td><td>1024px – 1439px</td><td>12</td><td>32px</td><td>Primary design target</td></tr>
+      <tr><td>Wide</td><td>1440px+</td><td>12</td><td>32px</td><td>Max-width 1280px centered</td></tr>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 4 — CORE COMPONENTS
+  ══════════════════════════════════════ -->
+  <section id="components">
+    <h2 class="section-title">4. Core Components</h2>
+
+    <h3 class="subsection">Buttons</h3>
+    <div class="ui-demo">
+      <div class="ui-demo-label">Live Component Preview</div>
+      <div class="sim-btn-row">
+        <button class="sim-btn sim-btn-primary">Add to Cart</button>
+        <button class="sim-btn sim-btn-secondary">Save to Wishlist</button>
+        <button class="sim-btn sim-btn-ghost">Cancel</button>
+        <button class="sim-btn sim-btn-danger">Remove</button>
+        <button class="sim-btn sim-btn-primary" disabled>Processing…</button>
+      </div>
+      <div class="sim-btn-row" style="margin-top:var(--sp-3)">
+        <button class="sim-btn sim-btn-primary sim-btn-lg">Proceed to Checkout</button>
+        <button class="sim-btn sim-btn-secondary sim-btn-sm">Edit</button>
+        <button class="sim-btn sim-btn-ghost sim-btn-sm">View Details</button>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <tr><th>Variant</th><th>Background</th><th>Border</th><th>Text</th><th>Hover</th><th>Active</th></tr>
+      <tr><td>Primary</td><td><code>--hs-clay</code></td><td>none</td><td>white</td><td><code>--hs-clay-light</code> + translateY(-1px) + shadow</td><td><code>--hs-clay-dark</code></td></tr>
+      <tr><td>Secondary</td><td>transparent</td><td><code>--hs-clay</code> 1.5px</td><td><code>--hs-clay</code></td><td><code>--hs-clay-tint</code> bg</td><td>same + border darker</td></tr>
+      <tr><td>Ghost</td><td>transparent</td><td><code>--hs-linen</code> 1.5px</td><td><code>--hs-slate-mid</code></td><td><code>--hs-cream</code> bg, text darkens</td><td>same + slight press</td></tr>
+      <tr><td>Danger</td><td><code>--hs-error</code></td><td>none</td><td>white</td><td>darken 8%</td><td>darken 15%</td></tr>
+      <tr><td>Disabled (any)</td><td>same</td><td>same</td><td>same</td><td>no hover effect</td><td>opacity 0.45, cursor not-allowed</td></tr>
+    </table>
+
+    <h4 class="spec-label">Button Sizes</h4>
+    <table class="spec-table">
+      <tr><th>Size</th><th>Padding</th><th>Font size</th><th>Border radius</th><th>Usage</th></tr>
+      <tr><td>sm</td><td>7px 16px</td><td>13px (--text-xs)</td><td>--r-md (8px)</td><td>Table actions, secondary card actions</td></tr>
+      <tr><td>default</td><td>11px 24px</td><td>15px (--text-base)</td><td>--r-md (8px)</td><td>Standard CTAs</td></tr>
+      <tr><td>lg</td><td>14px 32px</td><td>17px (--text-md)</td><td>--r-md (8px)</td><td>Checkout CTA, primary hero action</td></tr>
+      <tr><td>full-width</td><td>14px</td><td>17px</td><td>--r-md</td><td>Mobile primary actions</td></tr>
+    </table>
+
+    <h3 class="subsection">Form Fields</h3>
+    <div class="ui-demo">
+      <div class="ui-demo-label">Field States</div>
+      <div class="two-col">
+        <div>
+          <div class="sim-input-group">
+            <div class="sim-label">Email Address <span>*</span></div>
+            <input class="sim-input" type="email" placeholder="your@email.com">
+            <div class="sim-hint">We'll send your order confirmation here.</div>
+          </div>
+          <div class="sim-input-group">
+            <div class="sim-label">Email Address <span>*</span></div>
+            <input class="sim-input error" type="email" value="notanemail">
+            <div class="sim-error-msg">⚠ Please enter a valid email address.</div>
+          </div>
+        </div>
+        <div>
+          <div class="sim-input-group">
+            <div class="sim-label">First Name <span>*</span></div>
+            <input class="sim-input success" type="text" value="Sarah">
+            <div class="sim-success-msg">✓ Looks good!</div>
+          </div>
+          <div class="sim-input-group">
+            <div class="sim-label">Promo Code <span style="color:var(--hs-slate-light);font-weight:400">(optional)</span></div>
+            <input class="sim-input" type="text" placeholder="e.g. WELCOME10">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <tr><th>State</th><th>Border</th><th>Background</th><th>Shadow on focus</th><th>Notes</th></tr>
+      <tr><td>Default</td><td>1.5px <code>--hs-linen</code></td><td><code>#fff</code></td><td>—</td><td>—</td></tr>
+      <tr><td>Focus</td><td>1.5px <code>--hs-clay</code></td><td><code>#fff</code></td><td><code>0 0 0 3px rgba(196,113,75,0.15)</code></td><td>ring must be visible at 200% zoom</td></tr>
+      <tr><td>Filled / Valid</td><td>1.5px <code>--hs-success</code></td><td><code>#fff</code></td><td>—</td><td>Show only after blur + valid</td></tr>
+      <tr><td>Error</td><td>1.5px <code>--hs-error</code></td><td><code>--hs-error-bg</code></td><td>—</td><td>Show inline error message below</td></tr>
+      <tr><td>Disabled</td><td>1.5px <code>--hs-linen</code></td><td><code>--hs-cream</code></td><td>—</td><td>opacity 0.6, cursor not-allowed</td></tr>
+    </table>
+    <p><strong>Input padding:</strong> 10px 14px. <strong>Border radius:</strong> <code class="inline">--r-md</code> (8px). <strong>Font:</strong> DM Sans 15px. <strong>Placeholder color:</strong> <code class="inline">--hs-slate-light</code>.</p>
+
+    <h3 class="subsection">Chips / Filter Tabs</h3>
+    <div class="ui-demo">
+      <div class="ui-demo-label">Color variant chips</div>
+      <div class="chip-row">
+        <span class="chip chip-selected">Oak Wood</span>
+        <span class="chip chip-default">Walnut</span>
+        <span class="chip chip-default">White Ash</span>
+        <span class="chip chip-default">Ebony</span>
+        <span class="chip chip-default" style="opacity:0.4;cursor:not-allowed">Pine (OOS)</span>
+      </div>
+    </div>
+    <p>Selected chip: <code class="inline">--hs-clay</code> border + <code class="inline">--hs-clay-tint</code> bg + <code class="inline">--hs-clay-dark</code> text. Out-of-stock chips: opacity 0.4, cursor not-allowed, add "(OOS)" label suffix.</p>
+
+    <h3 class="subsection">Toast / Notification System</h3>
+    <div class="ui-demo">
+      <div class="ui-demo-label">Toast variants — bottom-right, stacked</div>
+      <div style="display:flex;flex-direction:column;gap:var(--sp-3);align-items:flex-start">
+        <div class="toast toast-success">✓ &nbsp;Item added to cart</div>
+        <div class="toast toast-info">↗ &nbsp;Order #HS-2024-0418 shipped — FedEx tracking active</div>
+        <div class="toast toast-error">✕ &nbsp;Payment declined — please check your card details</div>
+      </div>
+    </div>
+    <p>Position: fixed bottom-right. Padding: 12px 20px. Border-radius: <code class="inline">--r-lg</code>. Max-width 400px. <strong>Auto-dismiss:</strong> Success 4s, Error 7s, Info 6s. <strong>Animation:</strong> slide-up from +20px + fade-in 200ms ease-out. Dismiss with ×.</p>
+
+    <h3 class="subsection">Loading States</h3>
+    <div class="ui-demo">
+      <div class="ui-demo-label">Skeleton loading — product card</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4)">
+        <div style="background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm)">
+          <div class="skeleton" style="height:200px;border-radius:0"></div>
+          <div style="padding:var(--sp-4)">
+            <div class="skeleton" style="height:14px;width:70%;margin-bottom:8px"></div>
+            <div class="skeleton" style="height:12px;width:50%;margin-bottom:12px"></div>
+            <div class="skeleton" style="height:20px;width:40%"></div>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm)">
+          <div class="skeleton" style="height:200px;border-radius:0"></div>
+          <div style="padding:var(--sp-4)">
+            <div class="skeleton" style="height:14px;width:80%;margin-bottom:8px"></div>
+            <div class="skeleton" style="height:12px;width:55%;margin-bottom:12px"></div>
+            <div class="skeleton" style="height:20px;width:35%"></div>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm)">
+          <div class="skeleton" style="height:200px;border-radius:0"></div>
+          <div style="padding:var(--sp-4)">
+            <div class="skeleton" style="height:14px;width:60%;margin-bottom:8px"></div>
+            <div class="skeleton" style="height:12px;width:45%;margin-bottom:12px"></div>
+            <div class="skeleton" style="height:20px;width:42%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>Use skeleton screens (not spinners) for all content loads. Shimmer animation: 1.5s linear infinite. Spinner only for button loading states (16px, centered, replaces label text).</p>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 5 — ANIMATION SYSTEM
+  ══════════════════════════════════════ -->
+  <section id="animations">
+    <h2 class="section-title">5. Animation System</h2>
+    <p>Animations serve purpose — they communicate state, guide attention, confirm action. No decoration-only animations. All transitions must respect <code class="inline">prefers-reduced-motion</code>: replace movement with instant opacity changes when set.</p>
+
+    <h3 class="subsection">Transition Tokens</h3>
+    <table class="spec-table">
+      <tr><th>Token</th><th>Value</th><th>Use Case</th></tr>
+      <tr><td><code>--t-fast</code></td><td>100ms ease</td><td>Hover color/bg changes, icon swaps</td></tr>
+      <tr><td><code>--t-base</code></td><td>180ms ease</td><td>Focus ring, button state, field border</td></tr>
+      <tr><td><code>--t-slow</code></td><td>300ms ease</td><td>Panel slides, dropdown open, modal enter</td></tr>
+      <tr><td><code>--t-spring</code></td><td>400ms cubic-bezier(0.34,1.56,0.64,1)</td><td>Cart add confirm bounce, success checkmark, toast enter</td></tr>
+    </table>
+
+    <h3 class="subsection">Named Animations</h3>
+
+    <div class="anim-card">
+      <div class="anim-title">Page Load — Staggered Reveal <span class="badge badge-ok" style="font-size:10px">CSS only</span></div>
+      <div class="anim-detail">
+        Trigger: <em>page mount</em><br>
+        Effect: <em>elements fade in + translateY(16px → 0)</em><br>
+        Duration: <em>400ms ease-out</em><br>
+        Stagger: <em>children receive animation-delay: 0ms, 80ms, 160ms, 240ms, 320ms</em><br>
+        Applies to: <em>hero text, nav, first section, product grid rows</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">Add to Cart — Confirmation Pulse</div>
+      <div class="anim-detail">
+        Trigger: <em>POST /cart success response</em><br>
+        Effect: <em>button background flashes --hs-success for 600ms, then returns to --hs-clay. Cart icon in nav bounces: scale(1 → 1.3 → 1) spring. Cart count badge updates with scale(0 → 1) spring.</em><br>
+        Duration: <em>button 600ms, icon 400ms spring</em><br>
+        Toast: <em>"Item added to cart" slides up from +20px, fade in 200ms</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">Image Gallery — Crossfade</div>
+      <div class="anim-detail">
+        Trigger: <em>thumbnail click or swipe</em><br>
+        Effect: <em>outgoing image fades to opacity 0 over 200ms. Incoming image fades from opacity 0 over 200ms. No translateX — avoid nausea on furniture (complex patterns).</em><br>
+        Thumbnail: <em>active thumbnail gets 2px --hs-clay border, scale(1.05) with 180ms transition</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">360° Image Carousel — Drag Scrub</div>
+      <div class="anim-detail">
+        Trigger: <em>pointer drag or touch swipe</em><br>
+        Effect: <em>frame advances/reverses on deltaX. No easing — 1:1 with drag. On release: snap nearest frame, 100ms ease snap. Cursor: grab → grabbing. On mobile: touch-action: pan-y to prevent page scroll conflict.</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">Modal — Enter / Exit</div>
+      <div class="anim-detail">
+        Enter: <em>backdrop fades in opacity(0 → 0.5) 200ms. Panel slides up translateY(24px → 0) + opacity(0 → 1) 300ms ease-out</em><br>
+        Exit: <em>reverse — 200ms ease-in. Backdrop exits last.</em><br>
+        Backdrop: <em>rgba(28,37,48,0.5) blur(2px)</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">Toast — Enter / Exit</div>
+      <div class="anim-detail">
+        Enter: <em>translateY(16px → 0) + opacity(0 → 1) 200ms ease-out</em><br>
+        Exit: <em>translateX(0 → 100%) 180ms ease-in (slides right out), OR opacity(1 → 0) if reduced-motion</em><br>
+        Stack: <em>existing toasts shift up by (toast-height + 8px) with 200ms ease transition on transform</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">Accordion / FAQ — Expand</div>
+      <div class="anim-detail">
+        Effect: <em>height: 0 → auto via max-height trick (max-height: 0 → 1000px, overflow: hidden) 280ms ease. Chevron rotates 0 → 180deg 200ms ease.</em><br>
+        Note: <em>Use CSS grid rows for height animation on modern browsers (grid-template-rows: 0fr → 1fr) for smoother result.</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">Checkout Step Progress — Stepper</div>
+      <div class="anim-detail">
+        Trigger: <em>"Continue" CTA click — step validated and complete</em><br>
+        Effect: <em>completed step dot color transitions from --hs-clay to --hs-success over 300ms. Connecting line fills left-to-right with a width transition 400ms ease. New active step dot pulses once: scale(1 → 1.15 → 1) 300ms spring.</em><br>
+        Content panel: <em>old step fades out + translateX(-20px) 200ms ease-in. New step fades in + translateX(20px → 0) 250ms ease-out. 80ms gap between exit and entrance.</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">Wishlist Heart — Toggle</div>
+      <div class="anim-detail">
+        Add: <em>heart icon scale(1 → 1.35 → 1) spring 350ms. Fill color transitions transparent → --hs-clay 200ms. Particle burst: 6 small dots radiate outward fade out 400ms.</em><br>
+        Remove: <em>fill color transitions --hs-clay → transparent 150ms. No scale.</em>
+      </div>
+    </div>
+
+    <div class="anim-card">
+      <div class="anim-title">Filter Panel — Slide In (Mobile)</div>
+      <div class="anim-detail">
+        Trigger: <em>"Filter" button tap on mobile</em><br>
+        Effect: <em>full-screen panel translateX(100% → 0) 280ms ease-out. Backdrop fades in. Dismiss: swipe right or tap backdrop.</em>
+      </div>
+    </div>
+
+    <div class="callout callout-warn" style="margin-top:var(--sp-6)">
+      <strong>Reduced Motion — Required Implementation</strong>
+      Every component using transform or opacity transitions must check <code class="inline">@media (prefers-reduced-motion: reduce)</code>. Inside this query: set all transition durations to 0ms and remove keyframe animations. Replace with instant opacity changes only. This is mandatory for WCAG 2.3.3.
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 6 — VALIDATION
+  ══════════════════════════════════════ -->
+  <section id="validation">
+    <h2 class="section-title">6. Validation Rules</h2>
+    <p><strong>Strategy:</strong> Validate on blur (not on keystroke) for text fields. Validate on change for dropdowns and checkboxes. Re-validate on submit. Show inline errors below the field with a ⚠ icon prefix. Clear error on valid input (on keystroke, after initial error shown). Never show generic "field required" — always provide specific guidance.</p>
+
+    <div class="callout callout-info">
+      <strong>Error copy tone</strong>
+      Be human, not robotic. "Please enter a valid email" ✓. "Invalid email format" ✗. "Password must have at least 8 characters" ✓. "Password too short" ✗.
+    </div>
+
+    <h3 class="subsection">Auth Fields</h3>
+    <div class="validation-box">
+      <h5>Validation Rules — Registration &amp; Login</h5>
+      <div class="validation-row"><span class="val-field">Email</span><span>Required · valid email regex · max 254 chars · unique check on blur (debounced 600ms API call)</span></div>
+      <div class="validation-row"><span class="val-field">Password (create)</span><span>Required · min 8 chars · must contain: 1 uppercase, 1 lowercase, 1 digit · max 128 chars · show/hide toggle (eye icon)</span></div>
+      <div class="validation-row"><span class="val-field">Confirm Password</span><span>Must match Password field exactly · validate on blur after both filled</span></div>
+      <div class="validation-row"><span class="val-field">First Name</span><span>Required · 1–50 chars · letters, hyphens, apostrophes, spaces only</span></div>
+      <div class="validation-row"><span class="val-field">Last Name</span><span>Required · 1–50 chars · same character rules</span></div>
+      <div class="validation-row"><span class="val-field">Password (login)</span><span>Required · min 8 chars · on 5 failed attempts: 30-minute lockout + CAPTCHA</span></div>
+    </div>
+
+    <h3 class="subsection">Checkout Fields</h3>
+    <div class="validation-box">
+      <h5>Validation Rules — Address Step</h5>
+      <div class="validation-row"><span class="val-field">Full Name</span><span>Required · 2–80 chars · letters/spaces/hyphens/apostrophes</span></div>
+      <div class="validation-row"><span class="val-field">Address Line 1</span><span>Required · 5–100 chars</span></div>
+      <div class="validation-row"><span class="val-field">Address Line 2</span><span>Optional · max 100 chars</span></div>
+      <div class="validation-row"><span class="val-field">City</span><span>Required · 2–50 chars</span></div>
+      <div class="validation-row"><span class="val-field">ZIP / Postcode</span><span>Required · US: 5-digit or ZIP+4 format · UK: valid UK postcode regex · EU: country-specific format. Validate against delivery availability table on blur (debounced 800ms).</span></div>
+      <div class="validation-row"><span class="val-field">State / County</span><span>Required for US (dropdown from state list) · Required for UK (county, free text) · EU: show relevant field by country</span></div>
+      <div class="validation-row"><span class="val-field">Country</span><span>Required · dropdown · defaults to user's locale-detected country</span></div>
+      <div class="validation-row"><span class="val-field">Phone</span><span>Optional · min 7 digits · max 15 digits · strip formatting characters before API call · show "(for delivery queries only)" hint</span></div>
+    </div>
+
+    <h3 class="subsection">Return Request Form</h3>
+    <div class="validation-box">
+      <h5>Validation Rules — Returns Portal</h5>
+      <div class="validation-row"><span class="val-field">Return Reason</span><span>Required · radio group — must select one. If "Other" selected: free text field becomes required.</span></div>
+      <div class="validation-row"><span class="val-field">Other Reason (text)</span><span>Required when reason = "Other" · 10–500 chars</span></div>
+      <div class="validation-row"><span class="val-field">Photos (upload)</span><span>Required when reason = "Damaged on arrival" or "Wrong item received" · Accept: JPG, PNG, WebP only · Max file size: 5MB per file · Max files: 5 · Show error if wrong type or oversized</span></div>
+      <div class="validation-row"><span class="val-field">Items to return</span><span>Required · at least 1 item must be selected · quantities cannot exceed original order qty</span></div>
+    </div>
+
+    <h3 class="subsection">Review Form</h3>
+    <div class="validation-box">
+      <h5>Validation Rules — Product Review</h5>
+      <div class="validation-row"><span class="val-field">Star Rating</span><span>Required · 1–5 stars · no half stars · must be clicked (not default 0)</span></div>
+      <div class="validation-row"><span class="val-field">Review Title</span><span>Required · 5–100 chars</span></div>
+      <div class="validation-row"><span class="val-field">Review Body</span><span>Required · 20–2000 chars · real-time character count shown below</span></div>
+      <div class="validation-row"><span class="val-field">Display Name</span><span>Required · 2–30 chars · pre-filled with account first name · editable</span></div>
+    </div>
+
+    <h3 class="subsection">Global Validation Behaviors</h3>
+    <table class="spec-table">
+      <tr><th>Behavior</th><th>Specification</th></tr>
+      <tr><td>Error display timing</td><td>Show on blur. Suppress on initial focus. Re-validate on keystroke once error shown.</td></tr>
+      <tr><td>Error icon</td><td>⚠ icon (16px) before error text. Color: <code>--hs-error</code>. Font: 13px DM Sans.</td></tr>
+      <tr><td>Success icon</td><td>✓ icon. Color: <code>--hs-success</code>. Show only for fields with async validation (email uniqueness, ZIP check).</td></tr>
+      <tr><td>Submit blocked</td><td>Primary submit button must be disabled if any required field has validation error. Clicking disabled submit: shake animation on form (translateX ±4px 4 times, 300ms total) + scroll to first error.</td></tr>
+      <tr><td>Server errors</td><td>Non-field server errors display in a red callout box above form. Field-level server errors map back to specific fields.</td></tr>
+      <tr><td>ARIA</td><td><code>aria-invalid="true"</code> on error fields. <code>aria-describedby</code> linking field to error message ID. Role <code>alert</code> on dynamically injected errors.</td></tr>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 7 — USER ROLES
+  ══════════════════════════════════════ -->
+  <section id="roles">
+    <h2 class="section-title">7. User Roles (Customer-Side)</h2>
+
+    <table class="spec-table">
+      <tr><th>Role</th><th>Auth state</th><th>Session</th><th>Capabilities</th></tr>
+      <tr>
+        <td><strong>Guest / Visitor</strong></td>
+        <td>Unauthenticated</td>
+        <td>Server-side session token (cookie), preserved until browser close or 30-day expiry</td>
+        <td>Browse, search, view PDPs, check delivery availability, view reviews, add to cart (session-based), view wishlist if shared link, contact form</td>
+      </tr>
+      <tr>
+        <td><strong>Registered Customer</strong></td>
+        <td>JWT (1hr) + silent refresh</td>
+        <td>JWT in HTTP-only cookie. Refresh token 30 days.</td>
+        <td>All guest permissions + persistent cart (merged from guest on login), wishlist, order history, order tracking, returns portal, post-purchase reviews, account management, saved addresses</td>
+      </tr>
+    </table>
+
+    <div class="callout callout-info">
+      <strong>Cart merge behavior on login</strong>
+      When a guest user logs in or creates an account, their session cart is merged with any existing persistent cart. Conflicts (same SKU): use higher quantity. Guest cart then destroyed.
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 8 — GUEST SCREENS
+  ══════════════════════════════════════ -->
+  <section id="guest">
+    <h2 class="section-title">8. Guest / Visitor Screens</h2>
+    <p>Guests can access all browsing and discovery screens. Cart is available but persistent checkout may require account creation (pending OD-01 business decision). All screens noted below are accessible without authentication.</p>
+
+    <div class="callout callout-warn">
+      <strong>OD-01 Decision Pending — Guest Checkout</strong>
+      This spec assumes guest checkout IS allowed (Option A). If rejected, the checkout flow redirects unauthenticated users to the sign-in gate at checkout start. Update this spec when OD-01 is confirmed.
+    </div>
+
+    <p>Guest-accessible screens: Homepage, Category/PLP, Product Detail Page, Search Results, Cart, Checkout (pending OD-01), Order Confirmation, CMS Pages (About, FAQ, Delivery, Returns Policy, Privacy, T&amp;C), Contact Form, GDPR Consent Banner.</p>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 9 — HOMEPAGE
+  ══════════════════════════════════════ -->
+  <section id="sc-home">
+    <h2 class="section-title">9. Homepage</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-01</span>
+        <span class="screen-name">Homepage</span>
+        <span class="screen-role-tag">Guest + Customer</span>
+      </div>
+
+      <!-- Nav mockup -->
+      <div class="sim-nav">
+        <div class="sim-nav-logo">Home<span>Style</span></div>
+        <div class="sim-nav-links">
+          <a class="sim-nav-link active" href="#">Living Room</a>
+          <a class="sim-nav-link" href="#">Bedroom</a>
+          <a class="sim-nav-link" href="#">Dining</a>
+          <a class="sim-nav-link" href="#">Home Office</a>
+          <a class="sim-nav-link" href="#">Collections</a>
+        </div>
+        <div class="sim-nav-actions">
+          <button class="sim-icon-btn" title="Search">🔍</button>
+          <button class="sim-icon-btn" title="Wishlist">♡</button>
+          <button class="sim-icon-btn sim-cart-badge" title="Cart" style="position:relative;">🛒</button>
+          <button class="sim-icon-btn" title="Account">👤</button>
+        </div>
+      </div>
+      <!-- Hero -->
+      <div style="background: linear-gradient(135deg, var(--hs-charcoal) 0%, #2C3A47 100%); padding: var(--sp-12) var(--sp-10); border-radius: 0 0 var(--r-xl) var(--r-xl); display:flex; justify-content:space-between; align-items:center; gap:var(--sp-8);">
+        <div style="flex:1">
+          <div style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.12em;color:var(--hs-clay-light);font-weight:600;margin-bottom:var(--sp-4)">New Spring Collection</div>
+          <div style="font-family:var(--font-display);font-size:var(--text-4xl);color:#fff;line-height:1.1;margin-bottom:var(--sp-5)">Living in <em style="color:var(--hs-clay-light)">Style,</em><br>Made Simple.</div>
+          <div style="color:rgba(255,255,255,0.65);font-size:var(--text-md);margin-bottom:var(--sp-8);max-width:420px">Furniture that fits your life. Free delivery over $150.</div>
+          <div style="display:flex;gap:var(--sp-3)">
+            <button class="sim-btn sim-btn-primary sim-btn-lg">Shop Living Room</button>
+            <button class="sim-btn sim-btn-ghost sim-btn-lg" style="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.8)">View Collections</button>
+          </div>
+        </div>
+        <div style="flex:1;max-width:360px;background:rgba(255,255,255,0.06);border-radius:var(--r-xl);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.25);font-size:var(--text-sm)">Hero image<br>(product photography)</div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">Layout</div><div class="spec-row-val">Sticky header + hero (100vh – nav height) + room category cards + featured collection strip + social proof + email capture footer</div></div>
+    <div class="spec-row"><div class="spec-row-key">Hero</div><div class="spec-row-val">Full-width, dark overlay or charcoal bg. Serif Display headline 52px. Subhead 17px. 2 CTAs. Primary: Shop [room]. Secondary: View Collections (ghost). Right: high-res product lifestyle image.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Room Navigation</div><div class="spec-row-val">6 cards (Living Room, Bedroom, Dining, Home Office, Outdoor — Phase 2, Accessories). Square aspect ratio 1:1. Image + label overlay. Hover: image scale(1.04), overlay darkens, label rises 4px. Each links to /category/{slug}.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Currency selector</div><div class="spec-row-val">Top right of nav. Dropdown: USD $, EUR €, GBP £. Defaults from IP geolocation. Persists in localStorage. Changes all prices immediately (no reload).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Social proof strip</div><div class="spec-row-val">Below featured products: 3 trust icons (Free Returns / Verified Reviews / White-Glove Delivery) + star rating aggregate ("4.7 · 1,240 reviews"). Background: --hs-cream.</div></div>
+    <div class="spec-row"><div class="spec-row-key">SEO</div><div class="spec-row-val">SSR via Next.js. Meta title/description injectable from CMS. JSON-LD Organization schema. Open Graph tags for social sharing.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Animation</div><div class="spec-row-val">Page load stagger: nav (0ms) → hero text (80ms) → hero image (160ms) → room cards (240ms + 40ms each). Parallax scroll on hero image (translateY 0.15 * scrollY).</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 10 — PRODUCT LISTING
+  ══════════════════════════════════════ -->
+  <section id="sc-plp">
+    <h2 class="section-title">10. Product Listing Page (PLP)</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-02</span>
+        <span class="screen-name">Category / Collection Listing</span>
+        <span class="screen-role-tag">Guest + Customer</span>
+      </div>
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:var(--sp-6);margin-top:var(--sp-4)">
+        <!-- Filters sidebar -->
+        <div style="background:#fff;border:1px solid var(--hs-linen);border-radius:var(--r-lg);padding:var(--sp-5)">
+          <div style="font-weight:600;font-size:var(--text-sm);color:var(--hs-slate);margin-bottom:var(--sp-4)">Filters</div>
+          <div style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--hs-slate-mid);margin-bottom:var(--sp-2)">Price</div>
+          <div style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-4)">
+            <input class="sim-input" style="max-width:80px;padding:6px 10px;font-size:var(--text-xs)" placeholder="$0">
+            <input class="sim-input" style="max-width:80px;padding:6px 10px;font-size:var(--text-xs)" placeholder="$5000">
+          </div>
+          <div style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--hs-slate-mid);margin-bottom:var(--sp-2)">Material</div>
+          <div class="chip-row" style="flex-direction:column;align-items:flex-start;gap:var(--sp-1);margin-bottom:var(--sp-4)">
+            <label style="display:flex;align-items:center;gap:var(--sp-2);font-size:var(--text-sm);color:var(--hs-slate-mid);cursor:pointer"><input type="checkbox" checked style="accent-color:var(--hs-clay)"> Solid Wood</label>
+            <label style="display:flex;align-items:center;gap:var(--sp-2);font-size:var(--text-sm);color:var(--hs-slate-mid);cursor:pointer"><input type="checkbox"> Upholstered</label>
+            <label style="display:flex;align-items:center;gap:var(--sp-2);font-size:var(--text-sm);color:var(--hs-slate-mid);cursor:pointer"><input type="checkbox"> Metal</label>
+          </div>
+          <div style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--hs-slate-mid);margin-bottom:var(--sp-2)">Rating</div>
+          <div style="font-size:var(--text-sm);color:var(--hs-clay)">★★★★☆ &amp; up</div>
+        </div>
+        <!-- Product grid -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-4)">
+            <div style="font-size:var(--text-sm);color:var(--hs-slate-mid)">48 products · <span style="color:var(--hs-success)">✓ 1 filter active</span></div>
+            <select style="padding:6px 12px;border:1.5px solid var(--hs-linen);border-radius:var(--r-md);font-family:var(--font-body);font-size:var(--text-sm);color:var(--hs-slate)"><option>Sort: Featured</option></select>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4)">
+            <!-- Product Card -->
+            <div style="background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-card);border:1px solid var(--hs-linen)">
+              <div style="position:relative;aspect-ratio:4/3;background:var(--hs-cream);display:flex;align-items:center;justify-content:center;color:var(--hs-stone);font-size:var(--text-sm)">
+                Product Image
+                <button style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--hs-clay);font-size:16px">♡</button>
+                <span style="position:absolute;bottom:8px;left:8px;background:var(--hs-warning-bg);color:var(--hs-warning);font-size:10px;font-weight:700;padding:3px 8px;border-radius:var(--r-pill)">LOW STOCK</span>
+              </div>
+              <div style="padding:var(--sp-4)">
+                <div style="font-size:var(--text-xs);color:var(--hs-stone);margin-bottom:4px">LIVING ROOM</div>
+                <div style="font-weight:600;font-size:var(--text-sm);color:var(--hs-slate);margin-bottom:4px">Nordic Oak Sofa</div>
+                <div style="font-size:var(--text-xs);color:var(--hs-clay)">★★★★★ (124)</div>
+                <div style="font-size:var(--text-lg);font-weight:600;color:var(--hs-slate);margin-top:var(--sp-2)">$1,240</div>
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-card);border:1px solid var(--hs-linen)">
+              <div style="position:relative;aspect-ratio:4/3;background:var(--hs-cream);display:flex;align-items:center;justify-content:center;color:var(--hs-stone);font-size:var(--text-sm)">
+                Product Image
+                <button style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--hs-stone);font-size:16px">♡</button>
+              </div>
+              <div style="padding:var(--sp-4)">
+                <div style="font-size:var(--text-xs);color:var(--hs-stone);margin-bottom:4px">LIVING ROOM</div>
+                <div style="font-weight:600;font-size:var(--text-sm);color:var(--hs-slate);margin-bottom:4px">Linen Armchair</div>
+                <div style="font-size:var(--text-xs);color:var(--hs-clay)">★★★★☆ (47)</div>
+                <div style="font-size:var(--text-lg);font-weight:600;color:var(--hs-slate);margin-top:var(--sp-2)">$540</div>
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-card);border:1px solid var(--hs-linen)">
+              <div style="position:relative;aspect-ratio:4/3;background:var(--hs-cream);display:flex;align-items:center;justify-content:center;color:var(--hs-stone);font-size:var(--text-sm)">
+                Product Image
+                <span style="position:absolute;bottom:8px;left:8px;background:var(--hs-error-bg);color:var(--hs-error);font-size:10px;font-weight:700;padding:3px 8px;border-radius:var(--r-pill)">OUT OF STOCK</span>
+              </div>
+              <div style="padding:var(--sp-4)">
+                <div style="font-size:var(--text-xs);color:var(--hs-stone);margin-bottom:4px">LIVING ROOM</div>
+                <div style="font-weight:600;font-size:var(--text-sm);color:var(--hs-slate);margin-bottom:4px">Walnut Coffee Table</div>
+                <div style="font-size:var(--text-xs);color:var(--hs-clay)">★★★★☆ (89)</div>
+                <div style="display:flex;align-items:center;gap:var(--sp-3);margin-top:var(--sp-2)">
+                  <div style="font-size:var(--text-lg);font-weight:600;color:var(--hs-slate-light);text-decoration:line-through">$680</div>
+                  <button class="sim-btn sim-btn-ghost sim-btn-sm">Notify Me</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL pattern</div><div class="spec-row-val"><code>/category/{room-slug}</code> · <code>/collection/{collection-slug}</code> · <code>/search?q={query}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Grid</div><div class="spec-row-val">Desktop: 3 columns · Tablet: 2 columns · Mobile: 2 columns (no sidebar — filter drawer). Default 24 items per page. Infinite scroll or "Load More" button — to be confirmed by dev lead.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Product Card</div><div class="spec-row-val">Image (4:3 aspect ratio) + wishlist heart top-right + stock badge bottom-left (only when Low Stock or Out of Stock) + Category breadcrumb + Product Name + Star Rating + Price. OOS cards: price muted + "Notify Me" replaces Add to Cart.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Filters</div><div class="spec-row-val">Price range (dual slider + manual inputs) · Material (checkbox) · Color (color dot chips) · Size (chips) · Rating (4★+ / 3★+) · Availability (In Stock only toggle). Active filters shown as dismissible chips above grid.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Sorting</div><div class="spec-row-val">Featured · Price Low-High · Price High-Low · Customer Rating · Newest Arrivals</div></div>
+    <div class="spec-row"><div class="spec-row-key">Card hover</div><div class="spec-row-val">Shadow elevation increase (--shadow-md) + image scale(1.03) 200ms. Quick "Add to Cart" button slides up from bottom with translateY(100%→0) 200ms on hover. Desktop only.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Empty state</div><div class="spec-row-val">Illustration + "No products match your filters" + "Clear all filters" link.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 11 — PRODUCT DETAIL
+  ══════════════════════════════════════ -->
+  <section id="sc-pdp">
+    <h2 class="section-title">11. Product Detail Page (PDP)</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-03</span>
+        <span class="screen-name">Product Detail Page</span>
+        <span class="screen-role-tag">Guest + Customer</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 420px;gap:var(--sp-8);padding:var(--sp-4) 0">
+        <!-- Left: images -->
+        <div>
+          <div style="background:var(--hs-cream);border-radius:var(--r-xl);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--hs-stone);font-size:var(--text-sm);margin-bottom:var(--sp-3)">Main product image (zoomable on click)</div>
+          <div style="display:flex;gap:var(--sp-2)">
+            <div style="width:70px;height:56px;background:var(--hs-clay-tint);border-radius:var(--r-md);border:2px solid var(--hs-clay)"></div>
+            <div style="width:70px;height:56px;background:var(--hs-cream);border-radius:var(--r-md);border:1px solid var(--hs-linen)"></div>
+            <div style="width:70px;height:56px;background:var(--hs-cream);border-radius:var(--r-md);border:1px solid var(--hs-linen)"></div>
+            <div style="width:70px;height:56px;background:var(--hs-cream);border-radius:var(--r-md);border:1px solid var(--hs-linen);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--hs-stone)">360°</div>
+          </div>
+        </div>
+        <!-- Right: product info -->
+        <div>
+          <div style="font-size:var(--text-xs);color:var(--hs-stone);margin-bottom:var(--sp-2)">Living Room › Sofas</div>
+          <div style="font-family:var(--font-display);font-size:var(--text-2xl);color:var(--hs-slate);margin-bottom:var(--sp-2);line-height:1.2">Nordic Oak 3-Seat Sofa</div>
+          <div style="display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-5)">
+            <span style="color:var(--hs-clay);font-size:var(--text-sm)">★★★★★</span>
+            <span style="color:var(--hs-slate-mid);font-size:var(--text-sm)">4.8 · 124 reviews</span>
+          </div>
+          <div style="font-size:var(--text-2xl);font-weight:700;color:var(--hs-slate);margin-bottom:var(--sp-5)">$1,240</div>
+          <div style="margin-bottom:var(--sp-4)">
+            <div style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--hs-slate-mid);margin-bottom:var(--sp-2)">Color — <span style="color:var(--hs-slate);font-weight:400;text-transform:none">Oak Wood</span></div>
+            <div class="chip-row">
+              <span class="chip chip-selected">Oak Wood</span>
+              <span class="chip chip-default">Walnut</span>
+              <span class="chip chip-default">White Ash</span>
+            </div>
+          </div>
+          <div style="margin-bottom:var(--sp-5)">
+            <div style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--hs-slate-mid);margin-bottom:var(--sp-2)">Fabric — <span style="color:var(--hs-slate);font-weight:400;text-transform:none">Linen Grey</span></div>
+            <div class="chip-row">
+              <span class="chip chip-selected">Linen Grey</span>
+              <span class="chip chip-default">Velvet Green</span>
+              <span class="chip chip-default" style="opacity:0.4">Leather (OOS)</span>
+            </div>
+          </div>
+          <div style="background:var(--hs-success-bg);border:1px solid var(--hs-success);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);font-size:var(--text-sm);color:var(--hs-success);margin-bottom:var(--sp-5)">
+            <span class="status-dot dot-green"></span>In stock · 6 left
+          </div>
+          <div style="display:flex;gap:var(--sp-3);margin-bottom:var(--sp-4)">
+            <button class="sim-btn sim-btn-primary sim-btn-lg" style="flex:1">Add to Cart</button>
+            <button class="sim-btn sim-btn-secondary" style="width:52px;padding:0;font-size:20px">♡</button>
+          </div>
+          <div style="font-size:var(--text-xs);color:var(--hs-slate-mid);padding:var(--sp-3) 0;border-top:1px solid var(--hs-linen)">
+            <span>🚚 Free delivery over $150</span> · <a href="#" style="color:var(--hs-clay);text-decoration:none">Check delivery to your ZIP</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL pattern</div><div class="spec-row-val"><code>/product/{slug}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Image gallery</div><div class="spec-row-val">Main image (4:3) + thumbnail strip (horizontal). Min 6 images. Last thumbnail labeled "360°" — opens 360 viewer overlay. Click main image: lightbox with zoom. Swipe on mobile.</div></div>
+    <div class="spec-row"><div class="spec-row-key">360° Viewer</div><div class="spec-row-val">Full-screen overlay. Drag/swipe to scrub frames. Frame count from product data (min 36 frames). Loading indicator while frames preload. Close button top-right.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Variant selector</div><div class="spec-row-val">Each dimension (color, fabric, size) in separate chip row with label + current selection. Selecting variant: update price, image, stock status, SKU in URL query param. Out-of-stock variants: opacity 0.4, disabled, "(OOS)" suffix in label.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Stock indicator</div><div class="spec-row-val">In Stock (>10): green badge. Low Stock (≤ threshold): amber "Only X left" badge. Out of Stock: red badge + "Notify Me" replaces Add to Cart. Pre-Order (if OD-03 approved): blue badge + estimated restock date.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Delivery checker</div><div class="spec-row-val">ZIP/postcode input inline. On submit: API call (debounced 600ms). Result: "✓ Standard delivery available" or "⚠ White-glove only in your area" or "✕ Delivery not available to this postcode." No page reload.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Dimensions table</div><div class="spec-row-val">Accordion. Width × Depth × Height in both inches and cm. Weight in lbs and kg. Assembly PDF download link (presigned S3 URL, opens new tab).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Reviews section</div><div class="spec-row-val">Aggregate stars + count + breakdown (5★/4★/..). Cards: reviewer name + date + verified badge + star rating + title + body. Paginated (6 per load). Sort: Most Recent / Highest Rated / Most Helpful.</div></div>
+    <div class="spec-row"><div class="spec-row-key">SEO</div><div class="spec-row-val">SSR. Canonical URL. Product JSON-LD schema with price, availability, aggregate rating. Meta title: "[Product Name] — HomeStyle". OG image: first product photo.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 12 — CART
+  ══════════════════════════════════════ -->
+  <section id="sc-cart">
+    <h2 class="section-title">12. Cart</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-04</span>
+        <span class="screen-name">Shopping Cart</span>
+        <span class="screen-role-tag">Guest + Customer</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:var(--sp-8);padding:var(--sp-4) 0">
+        <div>
+          <div style="font-family:var(--font-display);font-size:var(--text-2xl);color:var(--hs-slate);margin-bottom:var(--sp-6)">Your Cart (2 items)</div>
+          <!-- Cart item -->
+          <div style="display:flex;gap:var(--sp-5);padding:var(--sp-5) 0;border-bottom:1px solid var(--hs-linen)">
+            <div style="width:96px;height:80px;background:var(--hs-cream);border-radius:var(--r-md);flex-shrink:0"></div>
+            <div style="flex:1">
+              <div style="font-weight:600;color:var(--hs-slate);font-size:var(--text-sm)">Nordic Oak 3-Seat Sofa</div>
+              <div style="font-size:var(--text-xs);color:var(--hs-slate-mid);margin-bottom:var(--sp-3)">Oak Wood · Linen Grey · SKU: HS-SOFA-001-OL</div>
+              <div style="display:flex;align-items:center;gap:var(--sp-6)">
+                <div style="display:flex;align-items:center;border:1.5px solid var(--hs-linen);border-radius:var(--r-md);overflow:hidden">
+                  <button style="width:32px;height:32px;border:none;background:var(--hs-cream);cursor:pointer;font-size:16px;color:var(--hs-slate)">−</button>
+                  <span style="padding:0 12px;font-size:var(--text-sm);font-weight:600">1</span>
+                  <button style="width:32px;height:32px;border:none;background:var(--hs-cream);cursor:pointer;font-size:16px;color:var(--hs-slate)">+</button>
+                </div>
+                <button style="color:var(--hs-error);font-size:var(--text-xs);background:none;border:none;cursor:pointer;text-decoration:underline">Remove</button>
+                <button style="color:var(--hs-clay);font-size:var(--text-xs);background:none;border:none;cursor:pointer;text-decoration:underline">♡ Save for later</button>
+              </div>
+            </div>
+            <div style="font-weight:700;font-size:var(--text-lg);color:var(--hs-slate);text-align:right;white-space:nowrap">$1,240</div>
+          </div>
+        </div>
+        <!-- Order summary -->
+        <div style="background:var(--hs-cream);border:1px solid var(--hs-linen);border-radius:var(--r-xl);padding:var(--sp-6);height:fit-content">
+          <div style="font-weight:600;font-size:var(--text-md);color:var(--hs-slate);margin-bottom:var(--sp-5)">Order Summary</div>
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);margin-bottom:var(--sp-2)"><span style="color:var(--hs-slate-mid)">Subtotal</span><span>$1,780</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);margin-bottom:var(--sp-2)"><span style="color:var(--hs-slate-mid)">Shipping</span><span style="color:var(--hs-success)">Free</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);margin-bottom:var(--sp-4)"><span style="color:var(--hs-slate-mid)">Tax (est.)</span><span>Calculated at checkout</span></div>
+          <div style="margin-bottom:var(--sp-4)">
+            <div style="display:flex;gap:var(--sp-2)">
+              <input class="sim-input" style="flex:1;padding:8px 12px;font-size:var(--text-sm)" placeholder="Promo code">
+              <button class="sim-btn sim-btn-secondary sim-btn-sm">Apply</button>
+            </div>
+          </div>
+          <div style="border-top:2px solid var(--hs-linen);padding-top:var(--sp-4);display:flex;justify-content:space-between;font-weight:700;font-size:var(--text-lg);color:var(--hs-slate);margin-bottom:var(--sp-5)"><span>Estimated Total</span><span>$1,780</span></div>
+          <button class="sim-btn sim-btn-primary" style="width:100%;padding:14px">Proceed to Checkout</button>
+          <div style="text-align:center;font-size:var(--text-xs);color:var(--hs-slate-light);margin-top:var(--sp-3)">🔒 Secure checkout · SSL encrypted</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/cart</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Line items</div><div class="spec-row-val">Image (96×80px) + Name + variant combination + SKU + quantity stepper + unit price + line total. Remove (immediate with 300ms fade-out animation). Save for later (moves to wishlist — requires login prompt if guest).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Qty stepper</div><div class="spec-row-val">− / qty / + buttons. Min 1. Max: available stock (backend-enforced). Quantity updates debounced 500ms before PATCH /cart. Optimistic UI: update display immediately, revert on error.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Promo code</div><div class="spec-row-val">Text input + Apply button. Success: green badge under input showing code + discount amount. Invalid code: inline error "This code isn't valid or has expired." Applied discount shown as line in summary with − prefix.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Delivery threshold</div><div class="spec-row-val">If subtotal < $150: show "Add $X more for free delivery" progress bar. Green when threshold met.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Empty cart</div><div class="spec-row-val">Illustration + "Your cart is empty" + "Continue Shopping" primary CTA + "View Wishlist" secondary CTA (if logged in).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Auth gate</div><div class="spec-row-val">On "Proceed to Checkout": if guest and OD-01 = require account — show modal: "Create an account to checkout" + "Sign In" + "Create Account" CTAs + "Continue as guest" if OD-01 = allow guest.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 13 — CHECKOUT
+  ══════════════════════════════════════ -->
+  <section id="sc-checkout">
+    <h2 class="section-title">13. Checkout</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-05</span>
+        <span class="screen-name">Multi-step Checkout</span>
+        <span class="screen-role-tag">Guest + Customer</span>
+      </div>
+      <div style="margin-bottom:var(--sp-8)">
+        <div class="progress-stepper">
+          <div class="ps-step">
+            <div class="ps-dot ps-dot-done">✓</div>
+            <span class="ps-label">Cart</span>
+          </div>
+          <div class="ps-line done"></div>
+          <div class="ps-step">
+            <div class="ps-dot ps-dot-done">✓</div>
+            <span class="ps-label">Address</span>
+          </div>
+          <div class="ps-line done"></div>
+          <div class="ps-step">
+            <div class="ps-dot ps-dot-active">3</div>
+            <span class="ps-label active">Delivery</span>
+          </div>
+          <div class="ps-line"></div>
+          <div class="ps-step">
+            <div class="ps-dot ps-dot-idle">4</div>
+            <span class="ps-label">Payment</span>
+          </div>
+          <div class="ps-line"></div>
+          <div class="ps-step">
+            <div class="ps-dot ps-dot-idle">5</div>
+            <span class="ps-label">Confirm</span>
+          </div>
+        </div>
+        <!-- Delivery step -->
+        <div style="max-width:560px">
+          <div style="font-family:var(--font-display);font-size:var(--text-xl);color:var(--hs-slate);margin-bottom:var(--sp-5)">Choose Delivery Method</div>
+          <div style="border:2px solid var(--hs-clay);border-radius:var(--r-lg);padding:var(--sp-4);background:var(--hs-clay-tint);display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-3);cursor:pointer">
+            <div>
+              <div style="font-weight:600;font-size:var(--text-sm);color:var(--hs-slate)">📦 Standard Delivery</div>
+              <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">FedEx · 5–7 business days · Est. Apr 14–18</div>
+            </div>
+            <div style="font-weight:700;color:var(--hs-slate)">Free</div>
+          </div>
+          <div style="border:1.5px solid var(--hs-linen);border-radius:var(--r-lg);padding:var(--sp-4);display:flex;justify-content:space-between;align-items:center;cursor:pointer">
+            <div>
+              <div style="font-weight:600;font-size:var(--text-sm);color:var(--hs-slate)">🤵 White-Glove Delivery</div>
+              <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">Room delivery + assembly + packaging removal · 7–14 days</div>
+            </div>
+            <div style="font-weight:700;color:var(--hs-slate)">+$89</div>
+          </div>
+          <button class="sim-btn sim-btn-primary" style="margin-top:var(--sp-6);width:100%;padding:14px">Continue to Payment →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">Steps</div><div class="spec-row-val">1 Cart → 2 Address → 3 Delivery → 4 Payment → 5 Confirmation. Progress stepper persistent. "Back" link on each step (never browser back — use internal routing).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Address step</div><div class="spec-row-val">For logged-in: saved addresses shown as cards (select or add new). For guest: full address form. Required fields per validation section. ZIP delivery check on blur. State dropdown for US, postcode for UK/EU.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Delivery step</div><div class="spec-row-val">Options: Standard (carrier + estimated date) and White-Glove (if eligible for product category + ZIP). Selected option highlighted with --hs-clay border. White-glove not available in all areas — show "not available to your postcode" if ineligible.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Payment step</div><div class="spec-row-val">Stripe Elements iframe (PCI-compliant). Card input styled to match design system via Stripe Appearance API (font: DM Sans, accent: --hs-clay, border: --hs-linen). Apple Pay / Google Pay: Stripe Payment Request Button displayed above card form when available. iDEAL / SEPA: conditionally shown for EU customers.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Order summary</div><div class="spec-row-val">Persistent sticky sidebar (desktop) or collapsible accordion (mobile) showing items, subtotal, delivery, discount, tax, and total in selected currency.</div></div>
+    <div class="spec-row"><div class="spec-row-key">VAT display</div><div class="spec-row-val">EU users: "Prices include VAT" shown in summary. VAT amount shown as line item. US users: "Tax (calculated by state)" shown, actual amount revealed on payment step after Stripe Tax API call.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Place Order CTA</div><div class="spec-row-val">Label: "Place Order — $[total]". On click: spinner + "Processing…" + disabled. On success: redirect to /order-confirmation/{order-id}. On Stripe error: inline error below card form + CTA re-enables.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Trust signals</div><div class="spec-row-val">Lock icon + "SSL Encrypted". Stripe badge. "Free Returns within 30 days" reminder. All persistent in sidebar.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 14 — AUTH SCREENS
+  ══════════════════════════════════════ -->
+  <section id="sc-auth">
+    <h2 class="section-title">14. Authentication Screens</h2>
+
+    <h3 class="subsection">Sign In (SC-06)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/sign-in</code> · Query param: <code>?redirect={path}</code> for post-auth redirect</div></div>
+    <div class="spec-row"><div class="spec-row-key">Layout</div><div class="spec-row-val">Centered card (max-width 440px) on warm-white background. Left half decorative product image (desktop only, hidden mobile).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Fields</div><div class="spec-row-val">Email + Password (with show/hide) + "Remember me" checkbox (30-day session). Primary: "Sign In" button. Social: Google OAuth + Facebook OAuth divider above form.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Links</div><div class="spec-row-val">"Forgot password?" → /forgot-password. "Create an account" → /register.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Error states</div><div class="spec-row-val">Invalid credentials: top-level alert "Email or password incorrect. Please try again." (not specific which field is wrong — security). Locked account: specific message with support link.</div></div>
+
+    <h3 class="subsection">Register (SC-07)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/register</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Fields</div><div class="spec-row-val">First Name · Last Name · Email · Password · Confirm Password · "I agree to Terms & Conditions" checkbox (required) · "Subscribe to marketing emails" checkbox (optional, unchecked by default — GDPR).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Post-submit</div><div class="spec-row-val">Account created in DB (inactive). Verification email sent. Redirect to /verify-email page with "We sent a verification link to {email}". Account becomes active after click.</div></div>
+
+    <h3 class="subsection">Forgot Password (SC-08) / Reset (SC-09)</h3>
+    <div class="spec-row"><div class="spec-row-key">Forgot</div><div class="spec-row-val">Email input only. On submit: always show "If that email exists, we sent a link" — never confirm email existence (security). Token valid 1 hour.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Reset</div><div class="spec-row-val">URL: <code>/reset-password?token={token}</code>. New password + confirm. On success: "Password updated" toast + redirect to /sign-in. Expired token: error card with "Request a new link" CTA.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 15 — MY ACCOUNT
+  ══════════════════════════════════════ -->
+  <section id="sc-account">
+    <h2 class="section-title">15. My Account</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-10</span>
+        <span class="screen-name">Account Dashboard</span>
+        <span class="screen-role-tag">Registered Customer only</span>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:var(--sp-8)">
+        <div>
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--hs-clay-tint);border:2px solid var(--hs-clay);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:var(--text-xl);color:var(--hs-clay);margin-bottom:var(--sp-4)">S</div>
+          <div style="font-weight:600;color:var(--hs-slate);font-size:var(--text-sm)">Sarah M.</div>
+          <div style="font-size:var(--text-xs);color:var(--hs-slate-mid);margin-bottom:var(--sp-5)">Member since Apr 2024</div>
+          <nav style="display:flex;flex-direction:column;gap:2px">
+            <a style="padding:8px 12px;border-radius:var(--r-md);font-size:var(--text-sm);background:var(--hs-clay-tint);color:var(--hs-clay-dark);font-weight:600;text-decoration:none">Overview</a>
+            <a style="padding:8px 12px;border-radius:var(--r-md);font-size:var(--text-sm);color:var(--hs-slate-mid);text-decoration:none">Orders</a>
+            <a style="padding:8px 12px;border-radius:var(--r-md);font-size:var(--text-sm);color:var(--hs-slate-mid);text-decoration:none">Returns</a>
+            <a style="padding:8px 12px;border-radius:var(--r-md);font-size:var(--text-sm);color:var(--hs-slate-mid);text-decoration:none">Wishlist</a>
+            <a style="padding:8px 12px;border-radius:var(--r-md);font-size:var(--text-sm);color:var(--hs-slate-mid);text-decoration:none">Addresses</a>
+            <a style="padding:8px 12px;border-radius:var(--r-md);font-size:var(--text-sm);color:var(--hs-slate-mid);text-decoration:none">Settings</a>
+          </nav>
+        </div>
+        <div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-6)">
+            <div style="background:#fff;border:1px solid var(--hs-linen);border-radius:var(--r-lg);padding:var(--sp-5);text-align:center">
+              <div style="font-family:var(--font-display);font-size:var(--text-2xl);color:var(--hs-clay)">3</div>
+              <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">Total Orders</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--hs-linen);border-radius:var(--r-lg);padding:var(--sp-5);text-align:center">
+              <div style="font-family:var(--font-display);font-size:var(--text-2xl);color:var(--hs-clay)">7</div>
+              <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">Wishlist Items</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--hs-linen);border-radius:var(--r-lg);padding:var(--sp-5);text-align:center">
+              <div style="font-family:var(--font-display);font-size:var(--text-2xl);color:var(--hs-clay)">2</div>
+              <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">Reviews Written</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--hs-linen);border-radius:var(--r-lg);padding:var(--sp-5)">
+            <div style="font-weight:600;font-size:var(--text-sm);color:var(--hs-slate);margin-bottom:var(--sp-4)">Recent Orders</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--sp-3) 0;border-bottom:1px solid var(--hs-linen)">
+              <div>
+                <div style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--hs-clay-dark)">#HS-2024-0412</div>
+                <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">Nordic Oak Sofa · $1,240</div>
+              </div>
+              <span class="badge badge-ok"><span class="status-dot dot-green"></span>Delivered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL base</div><div class="spec-row-val"><code>/account</code> — requires auth, redirect to /sign-in if unauthenticated</div></div>
+    <div class="spec-row"><div class="spec-row-key">Sub-pages</div><div class="spec-row-val"><code>/account/orders</code> · <code>/account/orders/{id}</code> · <code>/account/returns</code> · <code>/account/wishlist</code> · <code>/account/addresses</code> · <code>/account/settings</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Overview</div><div class="spec-row-val">KPI cards (total orders, wishlist count, review count) + recent orders list (latest 3) + quick actions (track order, start return)</div></div>
+    <div class="spec-row"><div class="spec-row-key">Addresses</div><div class="spec-row-val">Saved address cards. Add / Edit / Delete. Max 5 saved addresses. Default address badge. Form reuses checkout address fields + same validation rules.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Settings</div><div class="spec-row-val">Change name · Change email (re-verification required) · Change password · Delete account (confirmation modal with typed "DELETE" confirmation) · Marketing email unsubscribe toggle · Cookie preferences link.</div></tr>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 16 — ORDERS & TRACKING
+  ══════════════════════════════════════ -->
+  <section id="sc-orders">
+    <h2 class="section-title">16. Orders &amp; Order Tracking</h2>
+
+    <h3 class="subsection">Order List (SC-11)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/account/orders</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">List row</div><div class="spec-row-val">Order # (monospace) + date + item count + total + status badge + "View Details" link. Paginated 10/page. Filter by status. Search by order number.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Status badges</div><div class="spec-row-val">
+      <span class="badge badge-med" style="margin-right:4px"><span class="status-dot dot-blue"></span>Pending</span>
+      <span class="badge badge-ok" style="margin-right:4px"><span class="status-dot dot-green"></span>Confirmed</span>
+      <span class="badge badge-high" style="margin-right:4px"><span class="status-dot dot-amber"></span>Packed</span>
+      <span class="badge badge-med" style="margin-right:4px"><span class="status-dot dot-blue"></span>Shipped</span>
+      <span class="badge badge-ok" style="margin-right:4px"><span class="status-dot dot-green"></span>Delivered</span>
+      <span class="badge badge-high" style="margin-right:4px"><span class="status-dot dot-amber"></span>Return Requested</span>
+      <span class="badge badge-critical"><span class="status-dot dot-red"></span>Refund Processing</span>
+    </div></div>
+
+    <h3 class="subsection">Order Detail (SC-12)</h3>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/account/orders/{order-id}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Content</div><div class="spec-row-val">Order header (# + date + status). Timeline tracker (Confirmed → Packed → Shipped → Delivered) with dates/times. Line items with images + variant. Shipping address. Delivery method. Payment summary (subtotal / delivery / discount / tax / total). Refund status if applicable.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Order timeline</div><div class="spec-row-val">Horizontal stepper (same component as checkout). Completed steps: green dots with check. Current step: clay dot pulsing. Future steps: gray dots. Each completed step shows timestamp.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Tracking link</div><div class="spec-row-val">When order is Shipped: "Track with FedEx/UPS/DHL" button (external link, new tab). Carrier + tracking number displayed.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Post-delivery actions</div><div class="spec-row-val">After Delivered status: "Request Return" button (active during 30-day window) + "Write a Review" button per item. Outside window: "Request Return" disabled with "Return window closed (30 days after delivery)" tooltip.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Refund status</div><div class="spec-row-val">If return has been processed: refund status line "Refund of $X — Initiated {date} — Expected {date range}". On Stripe webhook confirmation: updates to "Refund of $X — Completed {date}".</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 17 — RETURNS PORTAL
+  ══════════════════════════════════════ -->
+  <section id="sc-returns">
+    <h2 class="section-title">17. Returns Portal</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-13</span>
+        <span class="screen-name">Request Return / Exchange</span>
+        <span class="screen-role-tag">Registered Customer · Delivered orders within 30 days</span>
+      </div>
+      <!-- Step 1 mockup -->
+      <div style="max-width:560px">
+        <div style="font-family:var(--font-display);font-size:var(--text-xl);color:var(--hs-slate);margin-bottom:var(--sp-2)">Request a Return</div>
+        <div style="font-size:var(--text-sm);color:var(--hs-slate-mid);margin-bottom:var(--sp-6)">Order #HS-2024-0412 · Delivered Apr 7, 2024 · <strong style="color:var(--hs-success)">23 days left in return window</strong></div>
+        <!-- Item checkbox -->
+        <div style="border:1.5px solid var(--hs-linen);border-radius:var(--r-lg);padding:var(--sp-4);margin-bottom:var(--sp-4);display:flex;gap:var(--sp-4);align-items:center">
+          <input type="checkbox" checked style="accent-color:var(--hs-clay);width:18px;height:18px">
+          <div style="width:56px;height:48px;background:var(--hs-cream);border-radius:var(--r-md);flex-shrink:0"></div>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:var(--text-sm);color:var(--hs-slate)">Nordic Oak 3-Seat Sofa</div>
+            <div style="font-size:var(--text-xs);color:var(--hs-slate-mid)">Qty: 1 · $1,240</div>
+          </div>
+        </div>
+        <!-- Reason select -->
+        <div class="sim-input-group" style="margin-top:var(--sp-4)">
+          <div class="sim-label">Return Reason <span>*</span></div>
+          <select class="sim-input" style="max-width:100%">
+            <option>Damaged on arrival</option>
+            <option>Wrong item received</option>
+            <option>Item does not match description</option>
+            <option>Changed my mind</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <!-- Photo upload hint -->
+        <div style="background:var(--hs-info-bg);border:1px solid var(--hs-info);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);font-size:var(--text-sm);color:var(--hs-info);margin-bottom:var(--sp-4)">
+          ℹ Damage photos are required for "Damaged on arrival" — please have them ready.
+        </div>
+        <button class="sim-btn sim-btn-primary">Continue</button>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/account/returns/new?order={id}</code> (linked from order detail)</div></div>
+    <div class="spec-row"><div class="spec-row-key">Eligibility gate</div><div class="spec-row-val">Only accessible for Delivered orders. System checks delivery date + 30-day window. If outside window: show locked state "Return window closed" with policy link. If no order: redirect to /account/orders.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Step 1 — Select items</div><div class="spec-row-val">Checkbox list of eligible items from order. Each with image + name + variant + qty. Quantity selector if qty > 1 (partial return). Min 1 item required.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Step 2 — Reason</div><div class="spec-row-val">Radio group: Damaged on arrival · Wrong item received · Does not match description · Changed my mind · Arrived too late · Other (triggers required free text). Photo upload appears if reason = Damaged or Wrong item. Max 5 photos, JPG/PNG/WebP, max 5MB each. Drag-and-drop + browse.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Step 3 — Review &amp; Submit</div><div class="spec-row-val">Summary of selected items + reason + photos. Policy reminder (assembled items: exchange/credit only). Submit button. On success: confirmation page + email confirmation.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Return list</div><div class="spec-row-val">At <code>/account/returns</code>: list of all return requests with return #, date, status badge, and link to return detail. Status badges follow Return Status State Machine from BRD §15.4.</div></div>
+
+    <h4 class="spec-label">Return Status State Machine — Visual Treatment</h4>
+    <table class="spec-table">
+      <tr><th>Status</th><th>Badge Color</th><th>Customer Message</th></tr>
+      <tr><td>Return Requested</td><td><span class="badge badge-med">Info</span></td><td>"We've received your request. You'll hear from us within 2 business days."</td></tr>
+      <tr><td>Under Review</td><td><span class="badge badge-high">Warning</span></td><td>"Our team is reviewing your return request."</td></tr>
+      <tr><td>Return Approved</td><td><span class="badge badge-ok">Success</span></td><td>"Return approved! Check your email for shipping instructions."</td></tr>
+      <tr><td>Return Rejected</td><td><span class="badge badge-critical">Error</span></td><td>"Unfortunately we couldn't approve this return. [reason]. Need help? Contact us."</td></tr>
+      <tr><td>Item in Transit</td><td><span class="badge badge-med">Info</span></td><td>"We're waiting to receive your item."</td></tr>
+      <tr><td>Item Received</td><td><span class="badge badge-ok">Success</span></td><td>"We've received your return. Processing your refund now."</td></tr>
+      <tr><td>Refund Initiated</td><td><span class="badge badge-high">Warning</span></td><td>"Refund of $X initiated. Expect funds within 5–10 business days."</td></tr>
+      <tr><td>Refund Completed</td><td><span class="badge badge-ok">Success</span></td><td>"Refund complete. Funds should be in your account."</td></tr>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 18 — WISHLIST
+  ══════════════════════════════════════ -->
+  <section id="sc-wishlist">
+    <h2 class="section-title">18. Wishlist</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-14</span>
+        <span class="screen-name">Wishlist</span>
+        <span class="screen-role-tag">Registered Customer (share link: Guest)</span>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-5)">
+          <div style="font-family:var(--font-display);font-size:var(--text-2xl);color:var(--hs-slate)">My Wishlist <span style="font-size:var(--text-sm);font-family:var(--font-body);color:var(--hs-slate-mid)">(7 items)</span></div>
+          <button class="sim-btn sim-btn-secondary sim-btn-sm">🔗 Share Wishlist</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4)">
+          <div style="background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-card);border:1px solid var(--hs-linen)">
+            <div style="position:relative;aspect-ratio:4/3;background:var(--hs-cream);display:flex;align-items:center;justify-content:center;color:var(--hs-stone);font-size:var(--text-sm)">
+              Product Image
+              <button style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--hs-error);font-size:14px">✕</button>
+            </div>
+            <div style="padding:var(--sp-3)">
+              <div style="font-size:var(--text-xs);font-weight:600;color:var(--hs-slate);margin-bottom:4px">Nordic Oak Sofa</div>
+              <div style="font-size:var(--text-sm);font-weight:700;color:var(--hs-slate);margin-bottom:var(--sp-2)">$1,240</div>
+              <button class="sim-btn sim-btn-primary" style="width:100%;padding:8px;font-size:var(--text-xs)">Move to Cart</button>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-card);border:1px solid var(--hs-linen)">
+            <div style="position:relative;aspect-ratio:4/3;background:var(--hs-cream);display:flex;align-items:center;justify-content:center;color:var(--hs-stone);font-size:var(--text-sm)">
+              Product Image
+              <span style="position:absolute;bottom:6px;left:6px;background:var(--hs-error-bg);color:var(--hs-error);font-size:9px;font-weight:700;padding:2px 6px;border-radius:var(--r-pill)">OUT OF STOCK</span>
+              <button style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--hs-error);font-size:14px">✕</button>
+            </div>
+            <div style="padding:var(--sp-3)">
+              <div style="font-size:var(--text-xs);font-weight:600;color:var(--hs-slate);margin-bottom:4px">Linen Armchair</div>
+              <div style="font-size:var(--text-sm);font-weight:700;color:var(--hs-slate-light);margin-bottom:var(--sp-2)">$540</div>
+              <button class="sim-btn sim-btn-ghost" style="width:100%;padding:8px;font-size:var(--text-xs)">🔔 Notify Me</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/account/wishlist</code> (auth required) · Shared: <code>/wishlist/share/{token}</code> (public, read-only)</div></div>
+    <div class="spec-row"><div class="spec-row-key">Grid</div><div class="spec-row-val">Same product card as PLP. 4 columns desktop, 2 mobile. Sort: Date Added (default) / Price / Name.</div></div>
+    <div class="spec-row"><div class="spec-row-key">OOS items</div><div class="spec-row-val">OOS badge on card. "Move to Cart" → "Notify Me". When item comes back in stock: system sends E-12 email. "Notify Me" button triggers email subscription endpoint.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Share</div><div class="spec-row-val">"Share Wishlist" generates unique token URL, copies to clipboard, shows "Link copied!" toast. Shared view: same grid, no edit controls, "Sign in to save to your wishlist" CTA at top.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Move to cart</div><div class="spec-row-val">On click: add to cart API call. On success: item stays in wishlist (not removed — users often want to bookmark favorites). Toast: "Added to cart". If multiple variants and none selected on wishlist: open quick-select variant modal before adding.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 19 — SEARCH
+  ══════════════════════════════════════ -->
+  <section id="sc-search">
+    <h2 class="section-title">19. Search</h2>
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/search?q={query}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Search bar</div><div class="spec-row-val">In nav: click search icon → bar expands horizontally (translateX, 300ms ease) overlaying nav links. Press Escape or click outside to close. On mobile: full-screen overlay.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Auto-suggest</div><div class="spec-row-val">Dropdown appears after 2+ characters (debounced 200ms). Shows: matching product names (up to 5), category suggestions (up to 3). Keyboard navigable (up/down arrows, Enter to select). Loading: skeleton rows.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Results page</div><div class="spec-row-val">Same layout as PLP (grid + filters sidebar). Header: "X results for '{query}'". Zero results: "No results for '{query}'" + spelling suggestions if Algolia/ES returns them + "Browse All Products" CTA.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Typo tolerance</div><div class="spec-row-val">Elasticsearch/Algolia handles fuzzy matching. Show "Showing results for '{corrected}'" if query was auto-corrected. "Search instead for '{original}'" link below.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 20 — CMS PAGES
+  ══════════════════════════════════════ -->
+  <section id="sc-cms">
+    <h2 class="section-title">20. CMS &amp; Static Pages</h2>
+    <div class="spec-row"><div class="spec-row-key">Pages</div><div class="spec-row-val">About Us (<code>/about</code>) · FAQ (<code>/faq</code>) · Delivery Info (<code>/delivery</code>) · Returns Policy (<code>/returns-policy</code>) · Privacy Policy (<code>/privacy</code>) · Terms &amp; Conditions (<code>/terms</code>) · Contact (<code>/contact</code>)</div></div>
+    <div class="spec-row"><div class="spec-row-key">Layout</div><div class="spec-row-val">Max-width 760px centered. DM Serif Display for page title. Body copy DM Sans 17px, line-height 1.8. Section anchors for long pages. Sticky "Back to top" on pages > 2000px.</div></div>
+    <div class="spec-row"><div class="spec-row-key">FAQ</div><div class="spec-row-val">Grouped by category. Each question: accordion with chevron. Open/close animation per animation system spec.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Contact form</div><div class="spec-row-val">Name + Email + Subject (dropdown: Order Issue / Return / Product Question / General) + Message. On submit: POST to API → triggers A-07 admin notification. Success: "Thank you, we'll get back to you within 1 business day." Error: inline error + "Try emailing us at support@{domain}".</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 21 — GLOBAL NAV
+  ══════════════════════════════════════ -->
+  <section id="global-nav">
+    <h2 class="section-title">21. Global Navigation</h2>
+    <div class="spec-row"><div class="spec-row-key">Desktop nav</div><div class="spec-row-val">Sticky. Background: --hs-charcoal. Height: 60px. Left: Logo (DM Serif Display). Center: Room categories (Living Room, Bedroom, Dining, Home Office, Collections). Right: Search icon + Wishlist icon (badge if items) + Cart icon (item count badge) + Account icon (sign-in / avatar).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Mobile nav</div><div class="spec-row-val">Logo + Cart badge + Hamburger (☰). Tap hamburger: full-height drawer slides in from left (translateX -100%→0, 280ms ease-out). Backdrop fades in. Navigation items + Sign In / Account at bottom.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Currency selector</div><div class="spec-row-val">Top nav right edge. Dropdown: USD · EUR · GBP. Default from IP geolocation. Persists in localStorage. Instantly re-renders all prices without page reload.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Mega menu (desktop)</div><div class="spec-row-val">Hover on category: dropdown panel appears (200ms ease). Grid: subcategories left + featured product cards right + "Shop all {category}" CTA. Click outside or mouse-leave to close (with 150ms delay to prevent flicker).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Footer</div><div class="spec-row-val">Background: --hs-charcoal. 4 columns: About HomeStyle + Shop by Room + Customer Service + Legal. Bottom row: Copyright + GDPR "Cookie Preferences" link + CCPA "Do Not Sell My Information" link (shown for US visitors).</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 22 — TOAST & EMPTY STATES
+  ══════════════════════════════════════ -->
+  <section id="global-toast">
+    <h2 class="section-title">22. Toast System</h2>
+    <table class="spec-table">
+      <tr><th>Trigger</th><th>Type</th><th>Message</th><th>Duration</th></tr>
+      <tr><td>Add to cart</td><td>Success</td><td>"[Product name] added to your cart"</td><td>4s</td></tr>
+      <tr><td>Remove from cart</td><td>Info</td><td>"Item removed · Undo"</td><td>5s (with undo action)</td></tr>
+      <tr><td>Add to wishlist</td><td>Success</td><td>"Saved to wishlist ♡"</td><td>3s</td></tr>
+      <tr><td>Payment failed</td><td>Error</td><td>"Payment declined — please check your card details"</td><td>8s</td></tr>
+      <tr><td>Return submitted</td><td>Success</td><td>"Return request submitted. We'll email you within 2 business days."</td><td>6s</td></tr>
+      <tr><td>Review submitted</td><td>Success</td><td>"Review submitted — thank you! It'll appear after moderation."</td><td>5s</td></tr>
+      <tr><td>Promo code applied</td><td>Success</td><td>"Promo code applied — $X off"</td><td>4s</td></tr>
+      <tr><td>Invalid promo</td><td>Error</td><td>"This code isn't valid or has expired"</td><td>6s</td></tr>
+      <tr><td>Link copied</td><td>Info</td><td>"Wishlist link copied to clipboard"</td><td>3s</td></tr>
+      <tr><td>Network error</td><td>Error</td><td>"Something went wrong — please try again"</td><td>8s</td></tr>
+    </table>
+  </section>
+
+  <section id="global-empty">
+    <h2 class="section-title">23. Empty States</h2>
+    <table class="spec-table">
+      <tr><th>Screen</th><th>Illustration</th><th>Headline</th><th>CTA</th></tr>
+      <tr><td>Empty cart</td><td>Shopping bag with plants</td><td>"Your cart is feeling lonely"</td><td>"Start Shopping" → /</td></tr>
+      <tr><td>Empty wishlist</td><td>Heart outline</td><td>"No saved items yet"</td><td>"Browse Products" → /</td></tr>
+      <tr><td>No orders</td><td>Package with bow</td><td>"No orders yet"</td><td>"Shop Now" → /</td></tr>
+      <tr><td>No returns</td><td>Return arrow</td><td>"No returns on record"</td><td>"View Orders" → /account/orders</td></tr>
+      <tr><td>No search results</td><td>Magnifying glass</td><td>"No results for '{query}'"</td><td>"Browse All Products" → /</td></tr>
+      <tr><td>PLP no products</td><td>Filter icon with X</td><td>"No products match your filters"</td><td>"Clear All Filters"</td></tr>
+    </table>
+    <p>Illustrations: SVG, single-color using --hs-linen on --hs-warm-white. Max 120px height. Never stock photos for empty states.</p>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 24 — GDPR BANNER
+  ══════════════════════════════════════ -->
+  <section id="global-gdpr">
+    <h2 class="section-title">24. GDPR Cookie Banner</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">GDPR-01</span>
+        <span class="screen-name">Cookie Consent Banner</span>
+        <span class="screen-role-tag">EU users on first visit</span>
+      </div>
+      <div style="background:var(--hs-charcoal);border-radius:var(--r-xl);padding:var(--sp-6) var(--sp-8);display:flex;justify-content:space-between;align-items:center;gap:var(--sp-8)">
+        <div style="flex:1">
+          <div style="font-weight:600;color:#fff;margin-bottom:var(--sp-2);font-size:var(--text-sm)">We use cookies</div>
+          <div style="font-size:var(--text-xs);color:rgba(255,255,255,0.6);line-height:1.6">We use cookies to improve your shopping experience. Essential cookies are required. Analytics and marketing cookies are only used with your consent. <a href="/privacy" style="color:var(--hs-clay-light)">Learn more</a></div>
+        </div>
+        <div style="display:flex;gap:var(--sp-3);flex-shrink:0">
+          <button class="sim-btn sim-btn-ghost sim-btn-sm" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.7)">Manage Preferences</button>
+          <button class="sim-btn sim-btn-ghost sim-btn-sm" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.7)">Reject Non-Essential</button>
+          <button class="sim-btn sim-btn-primary sim-btn-sm">Accept All</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">Position</div><div class="spec-row-val">Fixed bottom. Full width. Slides up from -100% on page load (300ms ease). z-index: 9000.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Trigger</div><div class="spec-row-val">EU visitors on first visit (IP-based, or default-on for unknown). Do NOT set any non-essential cookies before acceptance. Essential cookies (session, cart, auth) always active.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Preference Centre</div><div class="spec-row-val">Modal triggered by "Manage Preferences". Three toggles: Essential (locked on) · Analytics (GA4) · Marketing. Save button. Choice persisted in a consent cookie for 12 months.</div></div>
+    <div class="spec-row"><div class="spec-row-key">CCPA</div><div class="spec-row-val">US visitors: no banner. "Do Not Sell My Personal Information" link in footer, links to CCPA opt-out form page.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Re-access</div><div class="spec-row-val">"Cookie Preferences" link in footer re-opens the Preference Centre modal at any time.</div></div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 25 — RESPONSIVE
+  ══════════════════════════════════════ -->
+  <section id="global-responsive">
+    <h2 class="section-title">25. Responsive Rules</h2>
+    <p>Mobile-first CSS. Design at 375px, enhance up. Test on iOS Safari 17+ and Android Chrome.</p>
+    <table class="spec-table">
+      <tr><th>Component</th><th>Desktop</th><th>Tablet (768px)</th><th>Mobile (375px)</th></tr>
+      <tr><td>Navigation</td><td>Sticky horizontal with mega menu</td><td>Condensed — no mega menu, hamburger appears</td><td>Hamburger only + cart badge</td></tr>
+      <tr><td>Product grid</td><td>3 columns</td><td>2 columns</td><td>2 columns</td></tr>
+      <tr><td>Filters</td><td>Left sidebar</td><td>Left sidebar</td><td>Bottom sheet drawer (tap Filter button)</td></tr>
+      <tr><td>PDP layout</td><td>2 columns (images | info)</td><td>2 columns (condensed)</td><td>Single column — images first, info below</td></tr>
+      <tr><td>Cart</td><td>2 columns (items | summary)</td><td>2 columns</td><td>Single column — items then summary</td></tr>
+      <tr><td>Checkout</td><td>2 columns (form | summary sticky)</td><td>2 columns</td><td>Single column — summary collapses to accordion</td></tr>
+      <tr><td>Account</td><td>Sidebar nav + content</td><td>Tab navigation</td><td>Bottom tab bar</td></tr>
+      <tr><td>Buttons</td><td>Sized per variant</td><td>Same</td><td>Full-width for primary CTAs</td></tr>
+      <tr><td>Typography</td><td>Full scale</td><td>Scale × 0.9</td><td>--text-4xl → 36px; --text-3xl → 28px</td></tr>
+      <tr><td>Touch targets</td><td>Min 36×36px</td><td>Min 44×44px</td><td>Min 44×44px (WCAG 2.5.5)</td></tr>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 26 — ORDER CONFIRMATION
+  ══════════════════════════════════════ -->
+  <section id="sc-confirm">
+    <h2 class="section-title">26. Order Confirmation Page (SC-15)</h2>
+    <div class="screen-frame">
+      <div class="screen-header">
+        <span class="screen-id">SC-15</span>
+        <span class="screen-name">Order Confirmation</span>
+        <span class="screen-role-tag">Guest + Customer — post-purchase</span>
+      </div>
+      <div style="text-align:center;padding:var(--sp-10) 0">
+        <div style="width:64px;height:64px;background:var(--hs-success-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto var(--sp-5)">✓</div>
+        <div style="font-family:var(--font-display);font-size:var(--text-3xl);color:var(--hs-slate);margin-bottom:var(--sp-2)">Order Confirmed!</div>
+        <div style="font-size:var(--text-md);color:var(--hs-slate-mid);margin-bottom:var(--sp-2)">Thank you, Sarah. Your order has been placed.</div>
+        <div style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--hs-clay-dark);background:var(--hs-clay-tint);display:inline-block;padding:var(--sp-2) var(--sp-5);border-radius:var(--r-pill);margin-bottom:var(--sp-6)">#HS-2024-0418</div>
+        <div style="font-size:var(--text-sm);color:var(--hs-slate-mid);margin-bottom:var(--sp-8)">Confirmation email sent to sarah@example.com · Estimated delivery: Apr 14–18</div>
+        <div style="display:flex;justify-content:center;gap:var(--sp-4)">
+          <button class="sim-btn sim-btn-primary">Track My Order</button>
+          <button class="sim-btn sim-btn-ghost">Continue Shopping</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-row"><div class="spec-row-key">URL</div><div class="spec-row-val"><code>/order-confirmation/{order-id}</code></div></div>
+    <div class="spec-row"><div class="spec-row-key">Content</div><div class="spec-row-val">Success icon (animated checkmark — draw SVG stroke, 600ms) + Order # (monospace pill) + confirmation email notice + estimated delivery date + order summary accordion + "Track My Order" CTA (links to /account/orders/{id}) + "Continue Shopping" secondary CTA.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Checkmark animation</div><div class="spec-row-val">SVG circle draws clockwise (stroke-dashoffset from 283 to 0, 400ms ease-out). Then checkmark path draws (same technique, 300ms ease-out, 200ms delay). Scale(0.8→1) spring on circle on complete.</div></div>
+    <div class="spec-row"><div class="spec-row-key">Guest note</div><div class="spec-row-val">For guest orders: "Create an account to track your order and access returns" callout with "Create Account" CTA (pre-filled email from order).</div></div>
+    <div class="spec-row"><div class="spec-row-key">Security</div><div class="spec-row-val">Page is only accessible immediately after successful checkout or via authenticated /account/orders/{id}. Direct URL without auth → redirect to /account/orders or sign-in.</div></div>
+  </section>
+
+  <!-- Closing -->
+  <hr class="section-break">
+  <div style="background:var(--hs-cream);border:1px solid var(--hs-linen);border-radius:var(--r-xl);padding:var(--sp-8) var(--sp-10);margin-top:var(--sp-8)">
+    <div style="font-family:var(--font-display);font-size:var(--text-xl);color:var(--hs-slate);margin-bottom:var(--sp-3)">What's Not In This Document</div>
+    <p>Admin panel screens (SC-A-01 through SC-A-XX) covering Super Admin, Operations, and Content roles are delivered as a separate specification document. This includes: Admin Dashboard, Product Management, Order Management, Returns Management, Customer Management, Promotions, Shipping Config, Review Moderation, CMS Editor, Email Templates, Staff Management, and Reports.</p>
+    <p style="margin-bottom:0">Once OD-01 through OD-08 (Open Business Decisions) are confirmed, several screens in this document will need minor updates — primarily the checkout guest flow, currency model display, and promo stacking logic in Cart.</p>
+  </div>
+
+</main>
+
+<script>
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
