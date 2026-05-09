@@ -43,6 +43,43 @@ The project currently focuses on:
 
 ---
 
+
+## 🛠️ Tools & Workflow
+
+This project was created as a personal BA portfolio project using a combination of documentation, diagramming, design, and AI-assisted productivity tools.
+
+### Tools Used
+
+* 🤖 AI Assistance:
+  * Claude
+  * ChatGPT
+  * Stitch
+  * Lucidchart AI
+
+* 📊 Process & Diagramming:
+  * Mermaid
+  * Lucidchart
+
+* 🎨 Design & Wireframing:
+  * Figma
+
+### How AI Tools Were Used
+
+AI tools were used to support and accelerate parts of the workflow, including:
+
+* Requirement brainstorming
+* Feature specification drafting
+* BPMN structure generation
+* Mermaid diagram generation
+* Documentation refinement
+* UI ideation and wireframe planning
+
+All business flows, feature logic, acceptance criteria, and final documentation decisions were manually reviewed, refined, and structured by the author.
+
+This project reflects an approach to modern Business Analysis work that combines domain thinking, structured documentation, and effective use of AI-assisted tools.
+
+---
+
 ## 🚧 Limitations
 
 * No backend implementation
