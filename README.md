@@ -76,8 +76,6 @@ AI tools were used to support and accelerate parts of the workflow, including:
 
 All business flows, feature logic, acceptance criteria, and final documentation decisions were manually reviewed, refined, and structured by the author.
 
-This project reflects an approach to modern Business Analysis work that combines domain thinking, structured documentation, and effective use of AI-assisted tools.
-
 ---
 
 ## 🚧 Limitations
