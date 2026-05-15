@@ -8,7 +8,7 @@
 | Date | April 2026 |
 | Build Type | Custom Web Application (Full-Stack) |
 | Target Market | United States & Europe |
-| Author | Product Owner / BA |
+| Author | Business Analyst|
 | Classification | Confidential |
 
 > **Change Control:** All post-approval changes must be submitted via a Change Request (CR) form, reviewed by the Project Sponsor, and versioned incrementally.
