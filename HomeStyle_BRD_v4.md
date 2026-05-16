@@ -1004,8 +1004,6 @@ flowchart TD
 
 ## 13. Business Capabilities (High-Level Requirements)
 
-> **COVERAGE NOTE (v4.0):** Section 13 covers all Phase 1 modules: B2C storefront, Trade portal, Admin panel (7 modules), Compliance (GDPR/CCPA), Notifications, CMS, and Platform Integrations. Each capability is traceable to scope (Section 8), TC values (Section 17), and Open Decisions (Section 9).
-
 ### 13.1 Product Discovery & Browsing
 
 | ID | Capability | Business Value + Time Constraints | Priority |
