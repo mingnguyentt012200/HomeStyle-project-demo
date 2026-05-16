@@ -36,8 +36,7 @@
 17. [Domain-Specific Considerations](#18-domain-specific-considerations)
 18. [Key Performance Indicators](#19-key-performance-indicators-kpis)
 19. [Stakeholder Register & RACI](#20-stakeholder-register--raci)
-20. [Warranty & Aftercare Specification (Phase 2)](#21-warranty--aftercare-specification-phase-2)
-21. [Approvals](#22-approvals)
+20. [Approvals](#22-approvals)
 
 ---
 
@@ -1631,7 +1630,7 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 *R = Responsible &nbsp; A = Accountable &nbsp; C = Consulted &nbsp; I = Informed*
 ---
 
-## 22. Approvals
+## 20. Approvals
 
 By signing below, the named stakeholder confirms they have reviewed BRD v4.0 — including all time constraints and validation rules in Section 17 and the trade portal scope in Section 8.3 — and approve it as the basis for proceeding to the Software Requirements Specification (SRS) phase.
 
