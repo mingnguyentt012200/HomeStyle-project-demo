@@ -30,7 +30,7 @@
 11. [Key Business Processes](#12-key-business-processes)
 12. [Business Capabilities](#13-business-capabilities-high-level-requirements)
 13. [System Email & Notification Triggers](#14-system-email--notification-triggers)
-14. [Returns & Exchange — Business Rules](#15-returns--exchange--business-rules)
+14. [Returns & Exchange Eligibility Rules](#15-returns--exchange--business-rules)
 15. [Non-Functional Requirements](#16-non-functional-requirements)
 16. [Time Constraints & Validation Rules](#17-time-constraints--validation-rules)
 17. [Domain-Specific Considerations](#18-domain-specific-considerations)
@@ -1171,7 +1171,7 @@ flowchart TD
 
 ---
 
-## 15. Returns & Exchange — Business Rules
+## 15. Returns & Exchange Eligibility Rules
 
 > **PENDING DECISION:** Return window duration (default TC-19: 30 days) subject to client Legal confirmation per OD-07. Made-to-order return policy subject to OD-08. All values below use 30 days as the working default for standard items.
 
