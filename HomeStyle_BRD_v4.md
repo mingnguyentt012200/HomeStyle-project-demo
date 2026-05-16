@@ -36,7 +36,7 @@
 17. [Domain-Specific Considerations](#18-domain-specific-considerations)
 18. [Key Performance Indicators](#19-key-performance-indicators-kpis)
 19. [Stakeholder Register & RACI](#20-stakeholder-register--raci)
-20. [Approvals](#22-approvals)
+20. [Approvals](#20-approvals)
 
 ---
 
@@ -1315,8 +1315,6 @@ flowchart TD
 ## 18. Domain-Specific Considerations
 
 ### 18.1 Product Hierarchy & Catalogue Model
-
-> Premium design furniture has complex multi-dimensional variants. Designing the data model correctly at the catalogue level is foundational — flat product tables break the moment we introduce bundles, flash sales, or trade-only SKUs.
 
 **Five-level catalogue hierarchy (mandatory for all catalogue work):**
 
