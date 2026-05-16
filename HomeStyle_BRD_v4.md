@@ -1,5 +1,5 @@
 # HomeStyle — Business Requirements Document
-** Design Furniture | Custom Web Application | v4.0**
+**Premium Design Furniture | Custom Web Application | v4.0**
 
 | Field | Value |
 |---|---|
@@ -8,7 +8,7 @@
 | Date | April 2026 |
 | Build Type | Custom Web Application (Full-Stack) |
 | Target Market | United States & Europe |
-| Author | Business Analyst|
+| Author | Product Owner / BA |
 | Classification | Confidential |
 
 > **Change Control:** All post-approval changes must be submitted via a Change Request (CR) form, reviewed by the Project Sponsor, and versioned incrementally.
@@ -48,6 +48,7 @@
 | 2.0 | Apr 2026 | Full revision: GDPR gaps, Returns flow, Guest Checkout decision, Currency model, Phase roadmap | PO / BA |
 | 3.0 | Apr 2026 | Platform changed to custom-built web application. Tech stack section added. | PO / BA |
 | 4.0 | Apr 2026 | Domain repositioned to premium design furniture (B2C + B2B trade). Personas, product configuration model, shipping, pricing, and B2B portal scope updated. Time constraints fully integrated (TC-01 to TC-38). | PO / BA |
+| 4.1 | May 2026 | Section 13 Business Capabilities expanded from 14 to 53 BCs. Added subsections 13.4–13.11 covering Account & Identity, Trade Portal workflow detail, Notifications, Admin Catalogue / Orders / Security & Reporting, Compliance (GDPR/CCPA), and Platform Integrations. | PO / BA |
 
 ---
 
@@ -375,6 +376,8 @@ Following evaluation of available e-commerce platforms, the client has selected 
 
 ## 13. Business Capabilities (High-Level Requirements)
 
+> **COVERAGE NOTE (v4.0):** Section 13 covers all Phase 1 modules: B2C storefront, Trade portal, Admin panel (7 modules), Compliance (GDPR/CCPA), Notifications, CMS, and Platform Integrations. Each capability is traceable to scope (Section 8), TC values (Section 17), and Open Decisions (Section 9).
+
 ### 13.1 Product Discovery & Browsing
 
 | ID | Capability | Business Value + Time Constraints | Priority |
@@ -403,6 +406,85 @@ Following evaluation of available e-commerce platforms, the client has selected 
 | BC-12 | Refund status visible in customer order view | Eliminates 'where is my refund?' tickets. TC-23: ≤12 business day total resolution target. | Critical |
 | BC-13 | Returns & exchange request portal | TC-19: 30-day window enforced server-side. TC-20: 14-day ship-back deadline. TC-21: 2-day admin review SLA. Made-to-order policy per OD-08. | Critical |
 | BC-14 | Verified post-purchase review system | TC-24: Prompt sent 7 days post-delivery. TC-25: 180-day submission window. TC-26: 48-hr moderation SLA. | High |
+
+### 13.4 Account, Identity & Personalisation
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-15 | Customer registration with email verification | Establishes verified customer base. TC-06: 24-hr verification link; max 3 resends/hr. TC-10: 5-fail lockout protects against credential stuffing. | Critical |
+| BC-16 | Social OAuth login (Google, Facebook) | Removes signup friction; lifts conversion for first-time buyers. TC-08: 10-min CSRF state token. GDPR lawful-basis recorded at first login. | High |
+| BC-17 | Password reset & account recovery | Self-service recovery reduces support tickets. TC-07: 1-hr single-use reset link; previous link invalidated on new request. | Critical |
+| BC-18 | Customer wishlist with back-in-stock notifications | Captures intent on OOS items; recovers lost revenue. TC-28: hourly BullMQ job notifies on restock; one notification per restock event. | High |
+| BC-19 | Profile, address book & saved payment methods management | Customers manage addresses, communication preferences, and Stripe-vaulted payment methods (token-only, no PAN stored). | High |
+| BC-20 | Guest checkout & guest-to-registered cart merge | Per OD-01. Reduces friction for one-time buyers; BR-002: cart merge on login sums quantities up to stock limits without data loss. TC-12: 30-day guest session TTL. | Critical |
+
+### 13.5 Trade Portal — Workflow & B2B Operations
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-21 | Trade account application & approval workflow | Verified channel for designers/architects/corporates. TC-TRA-01: 2-business-day review SLA; auto-escalation to Super Admin on breach. Rejected applicants may re-apply after 30 days. | Critical |
+| BC-22 | Trade-only project wishlists with client sharing | Trade buyers manage multiple concurrent projects; shareable view enables client sign-off without revealing trade pricing. | High |
+| BC-23 | Formal invoicing with PO reference & VAT number | Required by corporate procurement & EU B2B accounting. Invoice includes company name, VAT number, PO reference; supports B2B reverse-charge per OD-06. | Critical |
+| BC-24 | Made-to-order & pre-order handling | Per OD-03. Confirmed lead time displayed and locked at checkout; supplier order placed on payment; TC-18 dispatch SLA starts from production completion (not order date). | Critical |
+
+### 13.6 Notifications & Communications
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-25 | Transactional email delivery with retry policy | Drives trust at every order milestone. TC-29: 3 retries at 1 min + 1 at 15 min; admin alert if all fail. Covers E-01 to E-12 in Section 14. | Critical |
+| BC-26 | SLA breach alerts & admin escalations | Protects operational KPIs. Auto-alerts on TC-17 (order confirmation), TC-18 (dispatch), TC-21 (return review), TC-22 (refund initiation), TC-TRA-01 (trade review) breaches. | High |
+
+### 13.7 Admin — Catalogue, Inventory & Merchandising
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-27 | Product & configurator catalogue management | Admin Content/Super CRUD: products, multi-image upload to S3, configurator options (materials, finishes, fabric grades, base, size), per-currency pricing, lead time per configuration, specification PDF upload. | Critical |
+| BC-28 | Inventory management with stock state machine | Per Section 18.4 states (In Stock / Low Stock / OOS / Held / Made-to-Order / Discontinued). TC-27: 24-hr low-stock alert cooldown per product. | Critical |
+| BC-29 | Trade pricing tier management | Per OD-05. Admin Trade/Super maintains pricing tiers (single or designer/architect/corporate); tier assignment at trade approval. Trade prices stored as a tier, never visible to non-trade roles (BR-003). | Critical |
+| BC-30 | Promotions & discount code management | Admin Content/Super CRUD: percentage and fixed codes, trade-only codes, usage limits, expiry, stacking rules per OD-04. | High |
+| BC-31 | Shipping zones, rates & white-glove partner management | Admin Ops/Super configures shipping zones, flat-rate and weight-based rates, white-glove service zones by ZIP/postal code, and carrier API credentials. | Critical |
+| BC-32 | CMS-managed pages & email template management | Admin Content/Super manages About, Designer Profiles, FAQ, Delivery Info, Returns Policy, Privacy Policy, T&Cs, and all transactional email templates. | High |
+| BC-33 | Review moderation workflow | Protects brand quality. TC-26: 48-hr review SLA; auto-approve at 72h by default. Admin Content can approve, reject, flag, or respond. | High |
+
+### 13.8 Admin — Orders, Fulfillment & Returns Operations
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-34 | Order management workflow with SLA tracking | Admin Ops/Super handles list/search/filter, status updates, lead time tracking, shipment creation, packing slip print, invoice download. TC-17: 4-biz-hr confirmation SLA; TC-18: 48-biz-hr dispatch SLA. | Critical |
+| BC-35 | Returns & refund processing workflow | Admin Ops/Super reviews requests, approves/rejects, issues Stripe refund, tracks return status. TC-21: 2-biz-day review SLA; TC-22: 1-biz-day refund initiation; TC-30: 24-hr Stripe webhook monitoring. | Critical |
+| BC-36 | Trade account application review queue | Admin Trade/Super reviews applications, approves with tier assignment and account manager, or rejects with reason. TC-TRA-01: 2-biz-day SLA enforced. | Critical |
+| BC-37 | Customer management & account lifecycle | Admin Ops/Super views/searches customers, order history, activates/deactivates, manages trade account status. Read-only for Admin Content. | High |
+
+### 13.9 Admin — Security, RBAC, System Settings & Reporting
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-38 | Admin secure login with mandatory 2FA & inactivity timeout | TC-11: 3-fail / 30-min lockout with Super Admin email + manual unlock. TC-05: 30-min inactivity timeout with 5-min countdown warning. TOTP-based 2FA mandatory for all admin roles. | Critical |
+| BC-39 | Role-based admin access control (Super / Ops / Content / Trade) | Enforces least privilege per Section 7. BR-009 to BR-011: only Super Admin manages roles & permissions; module-scoped access per Section 18 / domain-rules. | Critical |
+| BC-40 | Admin audit logging of all sensitive actions | Compliance & forensic readiness. All admin actions logged (actor, action, timestamp, affected entity ID). Bulk operations require confirmation step. | Critical |
+| BC-41 | System Settings module for configurable TC values | Per OD-10. Super Admin configures TC values marked "Yes — Admin" in Section 17 (e.g. TC-17, TC-18, TC-19, TC-21, TC-22, TC-24, TC-25, TC-26, TC-27, TC-TRA-01). | High |
+| BC-42 | Real-time KPI dashboard & operational reporting with exports | Admin dashboard shows today's revenue, order count, new customers, low-stock alerts, pending trade applications, SLA compliance, sales trend. Reports exportable to PDF & Excel; trade vs B2C split; top-selling configurations. | Critical |
+
+### 13.10 Compliance & Data Privacy
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-43 | GDPR cookie consent with granular preference centre | Non-essential cookies blocked before consent. Granular categories (necessary / analytics / marketing). TC-36: 12-month consent validity; re-prompt on material policy change. | Critical |
+| BC-44 | GDPR right of access & data portability (DSAR) | EU regulatory requirement. Customer-initiated export of personal data in machine-readable JSON/CSV; fulfilled within 30 days. | Critical |
+| BC-45 | GDPR right to erasure within 30 days | TC-34: erasure within 30 days. TC-35: backup purge within 90 days. PII anonymised; financial records retained per TC-32 obligations. | Critical |
+| BC-46 | CCPA "Do Not Sell My Personal Information" opt-out | TC-37: opt-out takes effect immediately (same page load); GA4 and marketing pixels disabled in-session. "Do Not Sell" link present in footer for California users. | Critical |
+| BC-47 | Data retention policy enforcement | TC-31: customer PII 3 years from last activity (30-day warning email before deletion). TC-32: financial records 7 years (cannot be deleted on erasure, PII anonymised). TC-33: server logs 90-day rolling auto-purge. | Critical |
+| BC-48 | Marketing unsubscribe with suppression list | TC-38: unsubscribe processed within 10 business days. Email address blocked from re-addition. One-click unsubscribe link in all marketing emails. | High |
+
+### 13.11 Platform Integrations & Payments
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-49 | Stripe multi-currency payments & B2B invoicing | PCI DSS offloaded to Stripe; cards, Apple Pay, Google Pay, iDEAL (NL), SEPA Direct Debit. TC-15: 30-sec API timeout; TC-16: 24-hr idempotency key. B2B invoicing via Stripe Invoices for trade accounts. | Critical |
+| BC-50 | Tax engine integration — Stripe Tax / TaxJar | US sales tax by state/county; EU VAT by country; VAT exemption flag for verified trade accounts (per OD-06). Tax re-calculated server-side at checkout submission. | Critical |
+| BC-51 | Shipping carrier API integration (EasyPost / ShipEngine) | Multi-carrier label generation, rate quotes, tracking links. Supports parcel carriers (FedEx/UPS/DHL/DPD), threshold carriers, and LTL freight + white-glove partners. | Critical |
+| BC-52 | FX rate sync provider | Per OD-02. If Option A confirmed: scheduled BullMQ job syncs FX rates every 24 hours. If Option B: admin manually maintains per-currency prices via System Settings. | High |
+| BC-53 | EU VIES VAT validation (optional per OD-06) | Automated validation of EU VAT numbers at trade account application; eliminates manual verification overhead. Conditional on OD-06 Option B approval. | Medium |
 
 ---
 
