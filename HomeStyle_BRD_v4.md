@@ -58,9 +58,9 @@
 
 ---
 
-## 3. Executive Summary & Business Case
+## 2. Executive Summary & Business Case
 
-### 3.1 The Business Opportunity
+### 2.1 The Business Opportunity
 
 The global premium furniture market is projected to exceed $50 billion by 2028, driven by a growing consumer segment that demands both superior craftsmanship and a seamless digital purchasing experience. Design-conscious buyers, interior architects, and corporate workspace planners are increasingly researching, configuring, and purchasing premium furniture entirely online — yet most heritage design brands remain anchored in showroom-first, offline operations.
 
