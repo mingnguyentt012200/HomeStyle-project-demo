@@ -358,7 +358,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 | 9 | Dispatch [TC-18: 48-hr SLA for in-stock] | Admin enters shipment details. White-glove delivery partner notified. Shipping confirmation email sent with tracking link. For made-to-order: dispatch SLA starts from confirmed production completion. |
 | 10 | Post-Purchase | Order status: Delivered. TC-24: 7 days later, review prompt sent. TC-19: Return portal available for 30 days (standard items). Made-to-order return eligibility per OD-08. |
 
-**BPMN — Customer Purchase Journey:**
+**Customer Purchase Journey:**
 
 ```mermaid
 flowchart TD
@@ -414,7 +414,7 @@ flowchart TD
 - If rejected: rejection email with reason. Customer can re-apply with additional documentation.
 - Verified trade accounts see trade pricing on all product pages and in cart immediately on next login.
 
-**BPMN — Trade Account Application & Approval:**
+**Trade Account Application & Approval:**
 
 ```mermaid
 flowchart TD
@@ -466,7 +466,7 @@ flowchart TD
 - **TC-30:** If `refund.succeeded` webhook not received within 24 hours, admin alert triggered.
 - **TC-23:** Total resolution target ≤12 business days from request to refund completed.
 
-**BPMN — Returns & Exchange:**
+**Returns & Exchange:**
 
 ```mermaid
 flowchart TD
@@ -538,7 +538,7 @@ flowchart TD
 | 7 | Delivery Confirmation | Carrier delivery webhook OR admin manual mark → status `Delivered`. Triggers BullMQ job for 7-day review prompt (TC-24, E-06). |
 | 8 | Returns Window Opens | TC-19 30-day return window starts from delivery confirmation. Order eligible for Returns Portal (Process 12.3). |
 
-**BPMN — Order Fulfillment & Dispatch:**
+**Order Fulfillment & Dispatch:**
 
 ```mermaid
 flowchart TD
@@ -586,7 +586,7 @@ flowchart TD
 | 6 | Hand-off to Dispatch | Item enters standard fulfillment flow at Process 12.4 step 4 (Pick & Pack). |
 | 7 | Lead Time Breach Path | If actual production exceeds confirmed lead time: system flags overdue; admin notifies customer; eligibility for OD-08 return policy revisited. |
 
-**BPMN — Made-to-Order Production:**
+**Made-to-Order Production:**
 
 ```mermaid
 flowchart TD
@@ -629,7 +629,7 @@ flowchart TD
 | 7 | Publish | Admin moves status `Draft` → `Active`. Search index synced within 60 seconds (per BC-02). Product visible on storefront. |
 | 8 | Archive / Discontinue | Admin sets `is_archived = true`. Product page returns 301 redirect to parent collection immediately. Not purchasable or searchable. |
 
-**BPMN — Product Catalogue Management:**
+**Product Catalogue Management:**
 
 ```mermaid
 flowchart TD
@@ -675,7 +675,7 @@ flowchart TD
 | 6 | State Transition Sync | Product state (In Stock / Low Stock / OOS / Made-to-Order) synced to PDP, configurator, search index. |
 | 7 | Discontinue Flow | Admin sets `is_archived = true`. Active wishlist holders notified once. Product 301-redirects to parent collection. |
 
-**BPMN — Inventory & Stock Replenishment:**
+**Inventory & Stock Replenishment:**
 
 ```mermaid
 flowchart TD
@@ -720,7 +720,7 @@ flowchart TD
 | 6 | Publication | Approved reviews appear on PDP within 60 seconds. Average product rating recalculated. |
 | 7 | Submission Window Closes | **TC-25: 180-day** window. 'Write a Review' option hidden after 180 days from delivery. |
 
-**BPMN — Review Moderation:**
+**Review Moderation:**
 
 ```mermaid
 flowchart TD
@@ -768,7 +768,7 @@ flowchart TD
 | 7 | Confirmation | Customer receives confirmation email within 30 days listing what was exported / erased and what was retained (and why — TC-32 financial retention). |
 | 8 | Audit Trail | All actions audit-logged (BC-40). Compliance can demonstrate 30-day adherence per regulator request. |
 
-**BPMN — GDPR DSAR & Erasure:**
+**GDPR DSAR & Erasure:**
 
 ```mermaid
 flowchart TD
@@ -820,7 +820,7 @@ flowchart TD
 | 7 | Stripe Webhook Watch | **TC-30 special case**: if `refund.succeeded` webhook not received within 24h of refund initiation, admin alert to verify in Stripe dashboard manually. |
 | 8 | Audit & Reporting | All escalations logged for compliance & operational reviews. Monthly SLA compliance report exported (BC-42). |
 
-**BPMN — SLA Monitoring & Escalation:**
+**SLA Monitoring & Escalation:**
 
 ```mermaid
 flowchart TD
@@ -866,7 +866,7 @@ flowchart TD
 | 7 | Manual Override Path | Admin Ops can reroute an allocation **before pick** if priorities change (e.g. local warehouse damaged item). Override is audit-logged. After pick, routing is immutable (BR-FUL-10). |
 | 8 | Customer Notification | If split shipment determined: E-04 (Order Confirmed) includes per-shipment ETA. Single combined shipping fee retained (BR-FUL-04). |
 
-**BPMN — Order Routing & Allocation:**
+**Order Routing & Allocation:**
 
 ```mermaid
 flowchart TD
@@ -909,7 +909,7 @@ flowchart TD
 | 7 | Mispick Recovery | If pack-verify fails repeatedly on the same wave: wave paused, Super Admin notified for root-cause check (system data error vs. picker error vs. mis-bin). |
 | 8 | Cycle Count Trigger | If a pick attempt fails because bin is empty (but system shows stock): emergency cycle count triggered for that SKU (BR-WHS-07 escalation). |
 
-**BPMN — Warehouse Pick Pack Ship:**
+**Warehouse Pick Pack Ship:**
 
 ```mermaid
 flowchart TD
@@ -962,7 +962,7 @@ flowchart TD
 | 7 | Stock Update | Physical Stock incremented atomically per SKU. ATP recomputed; if SKU transitioned OOS → InStock, TC-28 back-in-stock notification job queued. |
 | 8 | Audit & Reconciliation | GRN closed; variance report generated for Finance (PO qty vs. received qty). All events logged per BR-WHS-08. |
 
-**BPMN — Goods Receipt & Putaway:**
+**Goods Receipt & Putaway:**
 
 ```mermaid
 flowchart TD
