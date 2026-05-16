@@ -18,26 +18,26 @@
 ## Table of Contents
 
 1. [Document Revision History](#1-document-revision-history)
-2. [Executive Summary & Business Case](#3-executive-summary--business-case)
-3. [Business Objectives & Goals](#4-business-objectives--goals)
-4. [Platform Decision — Custom Web Application](#5-platform-decision--custom-web-application)
-5. [Target Market & User Personas](#6-target-market--user-personas)
-6. [User Roles](#7-user-roles)
-7. [Project Scope & Phase Roadmap](#8-project-scope--phase-roadmap)
-8. [Open Business Decisions](#9-open-business-decisions-pending-client-sign-off)
-9. [Client Responsibilities & Deliverables](#10-client-responsibilities--deliverables)
-10. [Business Assumptions & Constraints](#11-business-assumptions--constraints)
-11. [Key Business Processes](#12-key-business-processes)
-12. [Business Capabilities](#13-business-capabilities-high-level-requirements)
-13. [System Email & Notification Triggers](#14-system-email--notification-triggers)
-14. [Returns & Exchange Eligibility Rules](#15-returns--exchange-eligibility-rules)
-15. [Non-Functional Requirements](#16-non-functional-requirements)
-16. [Time Constraints & Validation Rules](#17-time-constraints--validation-rules)
-17. [Operational Domain Model & Business Rules](#18-operational-domain-model--business-rules)
-18. [Key Performance Indicators](#19-key-performance-indicators-kpis)
-19. [Stakeholder Register & RACI](#20-stakeholder-register--raci)
-20. [Warranty & Aftercare Specification (Phase 2)](#21-warranty--aftercare-specification-phase-2)
-21. [Approvals](#22-approvals)
+2. [Executive Summary & Business Case](#2-executive-summary--business-case)
+3. [Business Objectives & Goals](#3-business-objectives--goals)
+4. [Platform Decision — Custom Web Application](#4-platform-decision--custom-web-application)
+5. [Target Market & User Personas](#5-target-market--user-personas)
+6. [User Roles](#6-user-roles)
+7. [Project Scope & Phase Roadmap](#7-project-scope--phase-roadmap)
+8. [Open Business Decisions](#8-open-business-decisions-pending-client-sign-off)
+9. [Client Responsibilities & Deliverables](#9-client-responsibilities--deliverables)
+10. [Business Assumptions & Constraints](#10-business-assumptions--constraints)
+11. [Key Business Processes](#11-key-business-processes)
+12. [Business Capabilities](#12-business-capabilities-high-level-requirements)
+13. [System Email & Notification Triggers](#13-system-email--notification-triggers)
+14. [Returns & Exchange Eligibility Rules](#14-returns--exchange-eligibility-rules)
+15. [Non-Functional Requirements](#15-non-functional-requirements)
+16. [Time Constraints & Validation Rules](#16-time-constraints--validation-rules)
+17. [Operational Domain Model & Business Rules](#17-operational-domain-model--business-rules)
+18. [Key Performance Indicators](#18-key-performance-indicators-kpis)
+19. [Stakeholder Register & RACI](#19-stakeholder-register--raci)
+20. [Warranty & Aftercare Specification (Phase 2)](#20-warranty--aftercare-specification-phase-2)
+21. [Approvals](#21-approvals)
 
 ---
 
@@ -49,12 +49,13 @@
 | 2.0 | Apr 2026 | Full revision: GDPR gaps, Returns flow, Guest Checkout decision, Currency model, Phase roadmap | PO / BA |
 | 3.0 | Apr 2026 | Platform changed to custom-built web application. Tech stack section added. | PO / BA |
 | 4.0 | Apr 2026 | Domain repositioned to premium design furniture (B2C + B2B trade). Personas, product configuration model, shipping, pricing, and B2B portal scope updated. Time constraints fully integrated (TC-01 to TC-38). | PO / BA |
-| 4.1 | May 2026 | Section 13 Business Capabilities expanded from 14 to 53 BCs. Added subsections 13.4–13.11 covering Account & Identity, Trade Portal workflow detail, Notifications, Admin Catalogue / Orders / Security & Reporting, Compliance (GDPR/CCPA), and Platform Integrations. | PO / BA |
-| 4.2 | May 2026 | Section 12 expanded with 7 admin processes (12.4–12.10): Order Fulfillment & Dispatch, Made-to-Order Production, Product Catalogue & Configurator Management, Inventory & Stock Replenishment, Review Moderation, GDPR DSAR & Erasure Processing, and SLA Monitoring & Escalation. Each process includes a stage table and a Mermaid BPMN swim-lane diagram. | PO / BA |
-| 4.3 | May 2026 | Added Section 21 — Warranty & Aftercare Specification (Phase 2). Full BA spec: B2C + Trade warranty types, coverage rules, registration & claim BPMN flows, resolution matrix, service partner network, paid Extended Warranty plans, BR-W01–W13, TC-W01–W10, BC-54–65, E-13–21, KPIs, and Phase 2 client deliverables. Phase 2 roadmap updated to reference Warranty module. Approvals section renumbered to 22. | PO / BA |
-| 4.4 | May 2026 | Senior-BA refactor of catalogue and operations core (per e-commerce domain best practice). Section 18.1 refactored to 5-level catalogue hierarchy (Family → Product → Option Types → SKU → Bundle) with EAV attributes. Section 18.4 refactored to full inventory state machine with Physical/Reserved/ATP layers and Soft/Hard Lock distinction. New 18.5 Order Routing & Allocation, 18.6 WMS, 18.7 DIM Weight, 18.8 Overselling Prevention. New 18.9 consolidated Business Rules (BR-PRD-01..10, BR-INV-01..10, BR-FUL-01..10, BR-WHS-01..10). New processes 12.11 Order Routing, 12.12 Pick Pack Ship, 12.13 Goods Receipt & Putaway (each with BPMN). New capabilities BC-66..87 across 3 new subsections (13.12 Catalogue Hierarchy, 13.13 Inventory & Routing, 13.14 WMS). New TC values TC-INV-01..03, TC-FUL-01..02, TC-WHS-01..05 in Section 17.6. | PO / BA |
-| 4.5 | May 2026 | Added Mermaid BPMN swim-lane diagrams to processes 12.1 (Customer Purchase Journey), 12.2 (Trade Account Application & Approval), and 12.3 (Returns & Exchange). All 13 processes in Section 12 now have both a stage table and a BPMN diagram for stakeholder review consistency. | PO / BA |
-| 4.6 | May 2026 | Renamed Section 18 from "Domain-Specific Considerations" to "Operational Domain Model & Business Rules". Renamed Section 15 from "Returns & Exchange — Business Rules" to "Returns & Exchange Eligibility Rules" to disambiguate from the codified BR registry in Section 18.9. Added cross-reference note in Section 15. | PO / BA |
+| 4.1 | May 2026 | Section 12 Business Capabilities expanded from 14 to 53 BCs. Added subsections 12.4–12.11 covering Account & Identity, Trade Portal workflow detail, Notifications, Admin Catalogue / Orders / Security & Reporting, Compliance (GDPR/CCPA), and Platform Integrations. | PO / BA |
+| 4.2 | May 2026 | Section 11 expanded with 7 admin processes (11.4–11.10): Order Fulfillment & Dispatch, Made-to-Order Production, Product Catalogue & Configurator Management, Inventory & Stock Replenishment, Review Moderation, GDPR DSAR & Erasure Processing, and SLA Monitoring & Escalation. Each process includes a stage table and a Mermaid BPMN swim-lane diagram. | PO / BA |
+| 4.3 | May 2026 | Added Section 20 — Warranty & Aftercare Specification (Phase 2). Full BA spec: B2C + Trade warranty types, coverage rules, registration & claim BPMN flows, resolution matrix, service partner network, paid Extended Warranty plans, BR-W01–W13, TC-W01–W10, BC-54–65, E-13–21, KPIs, and Phase 2 client deliverables. Phase 2 roadmap updated to reference Warranty module. | PO / BA |
+| 4.4 | May 2026 | Senior-BA refactor of catalogue and operations core (per e-commerce domain best practice). Section 17.1 refactored to 5-level catalogue hierarchy (Family → Product → Option Types → SKU → Bundle) with EAV attributes. Section 17.4 refactored to full inventory state machine with Physical/Reserved/ATP layers and Soft/Hard Lock distinction. New 17.5 Order Routing & Allocation, 17.6 WMS, 17.7 DIM Weight, 17.8 Overselling Prevention. New 17.9 consolidated Business Rules (BR-PRD-01..10, BR-INV-01..10, BR-FUL-01..10, BR-WHS-01..10). New processes 11.11 Order Routing, 11.12 Pick Pack Ship, 11.13 Goods Receipt & Putaway (each with BPMN). New capabilities BC-66..87 across 3 new subsections (12.12 Catalogue Hierarchy, 12.13 Inventory & Routing, 12.14 WMS). New TC values TC-INV-01..03, TC-FUL-01..02, TC-WHS-01..05 in Section 16.6. | PO / BA |
+| 4.5 | May 2026 | Added Mermaid BPMN swim-lane diagrams to processes 11.1 (Customer Purchase Journey), 11.2 (Trade Account Application & Approval), and 11.3 (Returns & Exchange). All 13 processes in Section 11 now have both a stage table and a BPMN diagram for stakeholder review consistency. | PO / BA |
+| 4.6 | May 2026 | Renamed Section 17 from "Domain-Specific Considerations" to "Operational Domain Model & Business Rules". Renamed Section 14 from "Returns & Exchange — Business Rules" to "Returns & Exchange Eligibility Rules" to disambiguate from the codified BR registry in Section 17.9. Added cross-reference note in Section 14. | PO / BA |
+| 4.7 | May 2026 | **Numbering fix.** Renumbered all top-level sections from legacy 1, 3–22 (with a gap at 2) to sequential 1–21. All subsections (`N.M`), TOC anchor URLs, body cross-references to "Section N" / "Section N.M" / "Section N.M.K", and "Process N.M" references updated consistently. Revision history entries above updated to reflect current section numbers. | PO / BA |
 
 ---
 
@@ -66,7 +67,7 @@ The global premium furniture market is projected to exceed $50 billion by 2028, 
 
 HomeStyle occupies a strong position: an established catalogue of award-winning design pieces, a network of certified trade partners, and deep supplier relationships with European craftmakers. The missing layer is a modern, conversion-optimised digital platform that can serve both discerning end consumers and professional trade buyers at scale.
 
-### 3.2 Why Custom-Built
+### 2.2 Why Custom-Built
 
 | Dimension | Platform (e.g. Shopify) | Custom Web Application |
 |---|---|---|
@@ -76,7 +77,7 @@ HomeStyle occupies a strong position: an established catalogue of award-winning 
 | Data Ownership | Data stored on platform; limited export control | All data owned and controlled by the client |
 | Future Roadmap | Phase 2+ features constrained by platform | Phase 2/3 features fully buildable as planned |
 
-### 3.3 Business Impact & ROI Narrative
+### 2.3 Business Impact & ROI Narrative
 
 | Metric | Current State (Offline / Showroom) | Target State (12 Months Post-Launch) |
 |---|---|---|
@@ -86,7 +87,7 @@ HomeStyle occupies a strong position: an established catalogue of award-winning 
 | Product Configuration | Configured in showroom with sales rep | Self-serve digital configurator for all variant combinations |
 | Customer Data | Fragmented / unstructured across reps | Unified in proprietary database — client-owned |
 
-### 3.4 Proposed Solution
+### 2.4 Proposed Solution
 
 A two-sided custom web application built to serve premium design furniture at scale:
 
@@ -97,7 +98,7 @@ A two-sided custom web application built to serve premium design furniture at sc
 
 ---
 
-## 4. Business Objectives & Goals
+## 3. Business Objectives & Goals
 
 | # | Objective | Success Metric |
 |---|---|---|
@@ -112,15 +113,15 @@ A two-sided custom web application built to serve premium design furniture at sc
 
 ---
 
-## 5. Platform Decision — Custom Web Application
+## 4. Platform Decision — Custom Web Application
 
-### 5.1 Decision Summary
+### 4.1 Decision Summary
 
 Following evaluation of available e-commerce platforms, the client has selected a fully custom web application. All functionality will be designed, developed, tested, and deployed as proprietary software. There is no dependency on any e-commerce SaaS platform.
 
 > **DECISION CONFIRMED:** Fully custom-built web application. Final and approved by Project Sponsor. All downstream documents (SRS, API Spec, Architecture Diagram, Database Schema) reflect a custom-build approach.
 
-### 5.2 Recommended Technology Stack
+### 4.2 Recommended Technology Stack
 
 | Layer | Recommended Technology | Rationale |
 |---|---|---|
@@ -140,9 +141,9 @@ Following evaluation of available e-commerce platforms, the client has selected 
 
 ---
 
-## 6. Target Market & User Personas
+## 5. Target Market & User Personas
 
-### 6.1 Target Market
+### 5.1 Target Market
 
 | Dimension | United States | Europe (EU + UK) |
 |---|---|---|
@@ -152,7 +153,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 | Payment Methods | Visa, MC, Amex, Apple Pay, Google Pay | Visa, MC, iDEAL (NL), SEPA Direct Debit, Apple Pay |
 | B2B Buyers | Interior designers, corporate workspace buyers, architects | Interior architects, contract furniture specifiers, hospitality buyers |
 
-### 6.2 Persona 1 — The Design Enthusiast (Primary B2C, US)
+### 5.2 Persona 1 — The Design Enthusiast (Primary B2C, US)
 
 > **Alexandra, 38 — Creative Director, New York, NY**
 > Purchase frequency: 1–3×/year | Budget: $2,000–$10,000/order | Channel: Design publications, Instagram, direct referral
@@ -161,7 +162,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 - **Pain Points:** Fears receiving a piece that looks different in person. Frustrated by vague lead times on made-to-order items. Expects white-glove delivery as standard, not an upsell.
 - **Key Needs:** High-fidelity material swatches, deep product configurator, confirmed lead time at checkout, white-glove delivery, verified reviews from design professionals.
 
-### 6.3 Persona 2 — The Interior Architect (Primary B2B, EU)
+### 5.3 Persona 2 — The Interior Architect (Primary B2B, EU)
 
 > **Pieter, 44 — Interior Architect, Amsterdam, Netherlands**
 > Purchase frequency: 8–15 orders/year | Budget: €5,000–€80,000/project | Channel: Trade network, direct relationship
@@ -170,7 +171,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 - **Pain Points:** Wastes time managing orders across email and phone. Cannot get VAT-exempt invoices without contacting a rep. Needs reliable lead times to coordinate with construction schedules.
 - **Key Needs:** Verified trade account, project wishlist management, trade pricing, VAT-exempt checkout, specification PDF download, account manager contact, reliable lead time display.
 
-### 6.4 Persona 3 — The Corporate Workspace Buyer (B2B, US)
+### 5.4 Persona 3 — The Corporate Workspace Buyer (B2B, US)
 
 > **Marcus, 51 — Head of Real Estate & Facilities, San Francisco, CA**
 > Purchase frequency: 2–4 large projects/year | Budget: $50,000–$500,000/project | Channel: Trade referral, direct outreach
@@ -180,7 +181,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 
 ---
 
-## 7. User Roles
+## 6. User Roles
 
 | Role | Description & Permissions |
 |---|---|
@@ -194,19 +195,19 @@ Following evaluation of available e-commerce platforms, the client has selected 
 
 ---
 
-## 8. Project Scope & Phase Roadmap
+## 7. Project Scope & Phase Roadmap
 
-### 8.1 Phase Delivery Roadmap
+### 7.1 Phase Delivery Roadmap
 
 > **SCOPE BOUNDARY:** Features not listed under Phase 1 are explicitly deferred. Any request to include deferred features requires a formal Change Request (CR) and re-estimation.
 
 | Phase | Timeline | Features Included | Status |
 |---|---|---|---|
 | Phase 1 — MVP | Months 1–6 | Full custom storefront + admin panel, product catalogue, deep product configurator, cart with time-enforced inventory holds, checkout with SLA timers, Stripe payments, multi-currency, trade portal (verified trade accounts, trade pricing, VAT exemption, project wishlists, spec PDF download), order management with SLA tracking, customer accounts (JWT auth), wishlist, ratings & reviews, returns & exchange portal, shipping config, discount codes, CMS pages, GDPR consent, system email notifications, admin dashboard & reports, role-based access. | In Scope |
-| Phase 2 — Growth | Months 7–12 | **Warranty & Aftercare module** (see Section 21 for full spec): auto-registration, self-service claim portal, admin review queue with SLA, service partner network, paid Extended Warranty plans, DOA fast-track, trade extended terms. Plus: WebAR / 3D room visualiser, loyalty program, multi-language (DE, FR, IT), AI product recommendations, live chat with trade account managers, CAD file download (DWG/DXF). | Deferred |
+| Phase 2 — Growth | Months 7–12 | **Warranty & Aftercare module** (see Section 20 for full spec): auto-registration, self-service claim portal, admin review queue with SLA, service partner network, paid Extended Warranty plans, DOA fast-track, trade extended terms. Plus: WebAR / 3D room visualiser, loyalty program, multi-language (DE, FR, IT), AI product recommendations, live chat with trade account managers, CAD file download (DWG/DXF). | Deferred |
 | Phase 3 — Scale | Year 2+ | Native mobile app, multi-vendor marketplace, BNPL payments, ERP integration, advanced trade analytics, custom project mood boards. | Future |
 
-### 8.2 Phase 1 — In-Scope: Customer Storefront
+### 7.2 Phase 1 — In-Scope: Customer Storefront
 
 - User registration and login (email/password + social OAuth via Google and Facebook)
 - Email verification flow and password reset
@@ -231,7 +232,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 - GDPR cookie consent banner and preference centre
 - CMS-managed pages: About Us, Designer Profiles, FAQ, Delivery Info, Returns Policy, Privacy Policy, Terms & Conditions
 
-### 8.3 Phase 1 — In-Scope: Trade Portal
+### 7.3 Phase 1 — In-Scope: Trade Portal
 
 - Trade account application form (company name, profession, tax/VAT registration number, portfolio URL)
 - Admin-reviewed trade account approval workflow (TC-TRA-01: review within 2 business days)
@@ -242,7 +243,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 - Formal invoice generation with company name, VAT number, and purchase order reference
 - Account manager contact details visible in trade account dashboard
 
-### 8.4 Phase 1 — In-Scope: Admin Panel
+### 7.4 Phase 1 — In-Scope: Admin Panel
 
 - Secure admin login with mandatory 2FA (TOTP)
 - Dashboard: real-time KPI cards (today's revenue, order count, new customers, low-stock alerts, pending trade applications), sales trend chart
@@ -256,7 +257,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 - Review moderation: approve, reject, flag, or respond to reviews before storefront publication
 - Reports: revenue by date range/product/category, trade vs consumer split, top-selling configurations — exportable to PDF and Excel
 
-### 8.5 Out of Scope — Phase 1
+### 7.5 Out of Scope — Phase 1
 
 - WebAR / 3D room placement (Phase 2)
 - CAD file download — DWG/DXF (Phase 2)
@@ -268,7 +269,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 
 ---
 
-## 9. Open Business Decisions (Pending Client Sign-Off)
+## 8. Open Business Decisions (Pending Client Sign-Off)
 
 > **ACTION REQUIRED:** All items below must be confirmed by the client within 2 weeks of BRD approval. Unresolved decisions will block SRS sign-off.
 
@@ -287,7 +288,7 @@ Following evaluation of available e-commerce platforms, the client has selected 
 
 ---
 
-## 10. Client Responsibilities & Deliverables
+## 9. Client Responsibilities & Deliverables
 
 | # | Deliverable | Specification | Required By |
 |---|---|---|---|
@@ -307,9 +308,9 @@ Following evaluation of available e-commerce platforms, the client has selected 
 
 ---
 
-## 11. Business Assumptions & Constraints
+## 10. Business Assumptions & Constraints
 
-### 11.1 Assumptions
+### 10.1 Assumptions
 
 - Physical warehouse, inventory management, and supplier relationships are pre-established and operational before launch.
 - Products are managed with unique SKU codes that incorporate configuration variant codes (e.g. `HS-CHAIR-001-WAL-BLK` for walnut base, black fabric).
@@ -318,9 +319,9 @@ Following evaluation of available e-commerce platforms, the client has selected 
 - AWS will be used as the primary cloud infrastructure provider.
 - Lead times for made-to-order items are confirmed by operations and stored in the product DB at launch.
 - Trade account verification is a manual admin process in Phase 1 (no automated VIES API unless OD-06 confirmed).
-- All time constraint default values in Section 17 are working defaults pending client confirmation per OD-10.
+- All time constraint default values in Section 16 are working defaults pending client confirmation per OD-10.
 
-### 11.2 Constraints
+### 10.2 Constraints
 
 - **Timeline:** Phase 1 (MVP) launch target is 6 months from project kickoff.
 - **Compliance:** GDPR and CCPA compliance are non-negotiable prerequisites for EU and California customer data processing.
@@ -328,12 +329,12 @@ Following evaluation of available e-commerce platforms, the client has selected 
 - **Accessibility:** WCAG 2.1 Level AA required across all customer-facing pages.
 - **API Design:** REST API versioned from day one (`/api/v1/`) for future mobile app and third-party integrations.
 
-### 11.3 Risk Register
+### 10.3 Risk Register
 
 | Risk | Likelihood | Impact | Mitigation Strategy | Owner |
 |---|---|---|---|---|
 | Scope creep delaying Phase 1 MVP | High | High | Formal CR process; all new requests go to Phase 2 backlog. | PO / BA |
-| Client delays providing product assets (swatches, spec PDFs, lead time data) | High | High | Hard deadlines in Section 10; block dependent sprints until assets confirmed. | PO / BA |
+| Client delays providing product assets (swatches, spec PDFs, lead time data) | High | High | Hard deadlines in Section 9; block dependent sprints until assets confirmed. | PO / BA |
 | Made-to-order lead time data inaccurate at launch | Medium | High | CR-07 hard deadline; ops team sign-off on lead times before go-live. | Ops Team |
 | Trade account verification volume exceeds admin capacity | Medium | Medium | TC-TRA-01: 2-day SLA; auto-escalation to Super Admin. Batch approval UI for admin. | Admin — Trade |
 | Inventory oversell during high-traffic checkout | Medium | High | TC-13: Redis TTL inventory hold enforced server-side. Load tested pre-launch. | Dev Lead |
@@ -342,9 +343,9 @@ Following evaluation of available e-commerce platforms, the client has selected 
 
 ---
 
-## 12. Key Business Processes
+## 11. Key Business Processes
 
-### 12.1 Customer Purchase Journey (To-Be — with Timer Events)
+### 11.1 Customer Purchase Journey (To-Be — with Timer Events)
 
 | # | Stage | Process Detail + Time Constraints |
 |---|---|---|
@@ -391,8 +392,8 @@ flowchart TD
     end
     subgraph Admin_System[Admin Ops / System]
         R --> S{All in-stock?}
-        S -- Yes --> T[Process 12.4<br/>Fulfillment TC-17/18]
-        S -- Made-to-order --> U[Process 12.5<br/>Production TC-18]
+        S -- Yes --> T[Process 11.4<br/>Fulfillment TC-17/18]
+        S -- Made-to-order --> U[Process 11.5<br/>Production TC-18]
         T --> V[Carrier dispatch<br/>send E-05]
         U --> V
     end
@@ -406,7 +407,7 @@ flowchart TD
     AA --> Z
 ```
 
-### 12.2 Trade Account Application & Approval Process
+### 11.2 Trade Account Application & Approval Process
 
 - Prospective trade buyer submits application: company name, profession type, tax/VAT registration number, portfolio or company website URL, intended use.
 - System creates trade application record with status `pending_review`. Admin — Trade receives dashboard alert and email.
@@ -450,14 +451,14 @@ flowchart TD
     end
     subgraph SLA_Monitor[System — SLA Monitor]
         J --> S{Breach<br/>TC-TRA-01?}
-        S -- Yes --> T[Flag 'Overdue Review'<br/>escalate Super Admin<br/>Process 12.10]
+        S -- Yes --> T[Flag 'Overdue Review'<br/>escalate Super Admin<br/>Process 11.10]
         T --> J
     end
     Q --> U([Trade pricing visible<br/>on next login<br/>BC-09])
     R --> V([End — eligible<br/>to re-apply])
 ```
 
-### 12.3 Returns & Exchange Process (with Timer Events)
+### 11.3 Returns & Exchange Process (with Timer Events)
 
 - Customer navigates to 'My Orders'. 'Request Return' button visible only if within TC-19: 30-day window from delivery (server-side validated, not just UI-gated). Made-to-order items subject to OD-08 policy.
 - Customer selects return reason and uploads photos. Eligibility re-validated server-side at submission.
@@ -501,7 +502,7 @@ flowchart TD
     subgraph Admin_Ops2[Admin — Operations]
         R --> S[Inspect condition<br/>at goods inwards]
         S --> T{Condition?}
-        T -- Unassembled<br/>original packaging --> U[Full refund eligible<br/>Section 15.1]
+        T -- Unassembled<br/>original packaging --> U[Full refund eligible<br/>Section 14.1]
         T -- Assembled --> V[Exchange or<br/>store credit only]
         T -- Damaged on arrival --> W[Full refund<br/>regardless]
         T -- Damaged by customer --> X[No refund<br/>contact customer]
@@ -524,7 +525,7 @@ flowchart TD
     X --> Z
 ```
 
-### 12.4 Order Fulfillment & Dispatch (Admin Process)
+### 11.4 Order Fulfillment & Dispatch (Admin Process)
 
 > **Actor:** Admin — Operations (Super Admin oversight). **Trigger:** Stripe `payment_intent.succeeded` webhook → order status `Paid`.
 
@@ -532,12 +533,12 @@ flowchart TD
 |---|---|---|
 | 1 | New Order Arrives | Order lands in admin queue with status `Paid`. **TC-17 starts** (4 biz-hr confirmation SLA). Dashboard counter increments. |
 | 2 | Order Review & Confirmation | Admin Ops opens order, validates configuration, address, lead time. Clicks **Confirm**. System dispatches E-04 (Order Confirmed). |
-| 3 | Routing Decision | If all items In Stock → Pick & Pack (step 4). If any item is Made-to-Order → Production queue (Process 12.5). |
+| 3 | Routing Decision | If all items In Stock → Pick & Pack (step 4). If any item is Made-to-Order → Production queue (Process 11.5). |
 | 4 | Pick, Pack & Quality Check | Warehouse picks items per packing slip; inspects condition; prepares packaging suitable for white-glove or parcel. |
 | 5 | Carrier Booking | Admin generates shipping label via carrier API (EasyPost / ShipEngine). For large items: notify white-glove partner with delivery window. **TC-18 deadline**: 48 biz-hrs from confirmation. |
 | 6 | Mark as Shipped | Admin updates status `Shipped`; tracking number recorded; E-05 (Shipping Confirmation with carrier link & white-glove window) dispatched immediately. |
 | 7 | Delivery Confirmation | Carrier delivery webhook OR admin manual mark → status `Delivered`. Triggers BullMQ job for 7-day review prompt (TC-24, E-06). |
-| 8 | Returns Window Opens | TC-19 30-day return window starts from delivery confirmation. Order eligible for Returns Portal (Process 12.3). |
+| 8 | Returns Window Opens | TC-19 30-day return window starts from delivery confirmation. Order eligible for Returns Portal (Process 11.3). |
 
 **BPMN — Order Fulfillment & Dispatch:**
 
@@ -551,7 +552,7 @@ flowchart TD
     end
     subgraph Admin_Operations[Admin — Operations]
         B --> C{All items<br/>in stock?}
-        C -- No --> D[Route to<br/>Production Queue<br/>Process 12.5]
+        C -- No --> D[Route to<br/>Production Queue<br/>Process 11.5]
         C -- Yes --> E[Confirm order]
         E --> I
         I --> F[Pick & Pack]
@@ -573,18 +574,18 @@ flowchart TD
     N --> Z([Order closes<br/>TC-19 returns window opens])
 ```
 
-### 12.5 Made-to-Order Production Tracking (Admin Process)
+### 11.5 Made-to-Order Production Tracking (Admin Process)
 
 > **Actor:** Admin — Operations + Supplier (external). **Trigger:** Order confirmed containing at least one made-to-order configuration. Per **OD-03** Option A.
 
 | # | Stage | Process Detail + Time Constraints |
 |---|---|---|
-| 1 | Route to Production | After admin confirms order (Process 12.4 step 3), made-to-order line items routed to Production module. Lead time clock starts from order date. |
+| 1 | Route to Production | After admin confirms order (Process 11.4 step 3), made-to-order line items routed to Production module. Lead time clock starts from order date. |
 | 2 | Supplier PO Placement | Admin Ops generates supplier purchase order (manual export to supplier system or email). PO reference linked to HomeStyle order. |
 | 3 | Production In Progress | Status `In Production` displayed in customer Order Tracking. Lead time visible per item (per OD-03 / OD-09). |
 | 4 | Production Status Updates | Admin updates intermediate states: `Materials Ordered` → `In Build` → `Finishing` → `Quality Check`. Optional but improves customer trust. |
 | 5 | Production Complete | Admin marks `Ready for Dispatch`. **TC-18 dispatch SLA begins** (48 biz-hrs) — not from order date. |
-| 6 | Hand-off to Dispatch | Item enters standard fulfillment flow at Process 12.4 step 4 (Pick & Pack). |
+| 6 | Hand-off to Dispatch | Item enters standard fulfillment flow at Process 11.4 step 4 (Pick & Pack). |
 | 7 | Lead Time Breach Path | If actual production exceeds confirmed lead time: system flags overdue; admin notifies customer; eligibility for OD-08 return policy revisited. |
 
 **BPMN — Made-to-Order Production:**
@@ -610,12 +611,12 @@ flowchart TD
         K -- No --> L[Flag overdue<br/>Notify customer]
         K -- Yes --> M[Mark Ready<br/>TC-18 starts]
         L --> M
-        M --> N[Hand-off to<br/>Process 12.4 step 4]
+        M --> N[Hand-off to<br/>Process 11.4 step 4]
     end
     N --> Z([Continue Fulfillment])
 ```
 
-### 12.6 Product Catalogue & Configurator Management (Admin Process)
+### 11.6 Product Catalogue & Configurator Management (Admin Process)
 
 > **Actor:** Admin — Content (Super Admin gate optional). **Trigger:** New product launch, catalogue refresh, or supplier-driven configuration change.
 
@@ -623,7 +624,7 @@ flowchart TD
 |---|---|---|
 | 1 | Draft Product Record | Admin creates product shell: name, designer credit, category, collection assignments. Status `Draft` — not searchable, not purchasable. |
 | 2 | Media Upload | Multi-image upload to S3 (min. 8 images per CR-01). Material swatches per CR-02. Specification PDF per CR-03 (filename = SKU). |
-| 3 | Configurator Build | Admin defines variant dimensions: materials, finishes, fabric grades, base, size. System auto-generates SKU variants. Out-of-production options flagged at configurator level (per Section 18.1). |
+| 3 | Configurator Build | Admin defines variant dimensions: materials, finishes, fabric grades, base, size. System auto-generates SKU variants. Out-of-production options flagged at configurator level (per Section 17.1). |
 | 4 | Pricing & Lead Time | Admin sets per-currency price (USD/EUR/GBP) per SKU variant. Sets lead time per configuration (e.g. fabric A: 6–8 weeks; fabric B: 12–16 weeks). |
 | 5 | Stock & Trade Pricing | Admin Ops sets initial stock_qty per SKU. Admin Trade sets trade pricing tier per OD-05. Trade prices never exposed to non-trade roles (BR-003). |
 | 6 | Designer Credits & SEO | Admin Content adds designer biography, structured data (JSON-LD), meta description, OG image. |
@@ -662,7 +663,7 @@ flowchart TD
     P --> Z([End])
 ```
 
-### 12.7 Inventory & Stock Replenishment (Admin Process)
+### 11.7 Inventory & Stock Replenishment (Admin Process)
 
 > **Actor:** Admin — Operations + System (auto-alerts). **Trigger:** Stock adjustment, supplier delivery, scheduled audit, or low-stock threshold breach.
 
@@ -707,7 +708,7 @@ flowchart TD
     O --> Z
 ```
 
-### 12.8 Review Moderation (Admin Process)
+### 11.8 Review Moderation (Admin Process)
 
 > **Actor:** Admin — Content (Super Admin escalation). **Trigger:** Customer submits review post-delivery via E-06 prompt link.
 
@@ -754,7 +755,7 @@ flowchart TD
     N --> Z([Review live])
 ```
 
-### 12.9 GDPR DSAR & Erasure Processing (Admin Process)
+### 11.9 GDPR DSAR & Erasure Processing (Admin Process)
 
 > **Actor:** Customer (initiator), Admin — Compliance / Super Admin, System. **Trigger:** Customer submits DSAR or erasure request via 'My Account → Privacy' or support email.
 
@@ -806,7 +807,7 @@ flowchart TD
     S --> Z([Complete])
 ```
 
-### 12.10 SLA Monitoring & Escalation (Cross-Cutting Process)
+### 11.10 SLA Monitoring & Escalation (Cross-Cutting Process)
 
 > **Actor:** System (continuous monitor), Super Admin (escalation receiver), assigned admin role (action owner). **Trigger:** Continuous evaluation of timed actions against TC thresholds.
 
@@ -817,7 +818,7 @@ flowchart TD
 | 3 | Approaching Threshold | At 75% of SLA window: dashboard badge turns amber for the responsible admin role. No customer-facing impact. |
 | 4 | SLA Breach | At 100%: badge turns red. Status flagged 'Overdue'. Auto-email to Super Admin (and responsible admin) listing the breached item. |
 | 5 | Escalation | If still unactioned after 1 additional business day: escalation tier 2 (e.g. Operations Manager email). Dashboard counter increments. |
-| 6 | KPI Tracking | All breaches recorded for KPI reporting (Section 19): Order Confirmation SLA Compliance, Dispatch SLA Compliance, Trade Application Review SLA. |
+| 6 | KPI Tracking | All breaches recorded for KPI reporting (Section 18): Order Confirmation SLA Compliance, Dispatch SLA Compliance, Trade Application Review SLA. |
 | 7 | Stripe Webhook Watch | **TC-30 special case**: if `refund.succeeded` webhook not received within 24h of refund initiation, admin alert to verify in Stripe dashboard manually. |
 | 8 | Audit & Reporting | All escalations logged for compliance & operational reviews. Monthly SLA compliance report exported (BC-42). |
 
@@ -852,9 +853,9 @@ flowchart TD
     O --> Z([BC-42 dashboard])
 ```
 
-### 12.11 Order Routing & Allocation (System + Admin Process)
+### 11.11 Order Routing & Allocation (System + Admin Process)
 
-> **Actor:** System (routing engine), Admin — Operations (manual override). **Trigger:** Order confirmed (Process 12.4 step 2). Routes order line items to source warehouse(s) and creates allocation records (hard locks).
+> **Actor:** System (routing engine), Admin — Operations (manual override). **Trigger:** Order confirmed (Process 11.4 step 2). Routes order line items to source warehouse(s) and creates allocation records (hard locks).
 
 | # | Stage | Process Detail + Time Constraints |
 |---|---|---|
@@ -863,7 +864,7 @@ flowchart TD
 | 3 | Multi-Warehouse Decision | If no single warehouse can fulfill: optimise by (a) nearest-to-customer per line, (b) oldest-stock-first as tiebreaker, (c) load balancing as final tiebreaker. |
 | 4 | Hard Lock Creation | For each allocation: create `order_allocation` row (BR-INV-04). Physical Stock unchanged at this stage; Reserved increased. Atomic DB transaction prevents concurrent over-allocation. |
 | 5 | Shipment Records | Create one Shipment ID per origin warehouse + carrier service class. One Order ID owns N Shipment IDs (BR-FUL-02). |
-| 6 | Made-to-Order Routing | Made-to-order lines bypass routing — they go directly to Process 12.5 (Production). Their hard lock is created on `Ready for Dispatch` (Process 12.5 step 5), at which point standard routing runs against the receiving warehouse. |
+| 6 | Made-to-Order Routing | Made-to-order lines bypass routing — they go directly to Process 11.5 (Production). Their hard lock is created on `Ready for Dispatch` (Process 11.5 step 5), at which point standard routing runs against the receiving warehouse. |
 | 7 | Manual Override Path | Admin Ops can reroute an allocation **before pick** if priorities change (e.g. local warehouse damaged item). Override is audit-logged. After pick, routing is immutable (BR-FUL-10). |
 | 8 | Customer Notification | If split shipment determined: E-04 (Order Confirmed) includes per-shipment ETA. Single combined shipping fee retained (BR-FUL-04). |
 
@@ -871,10 +872,10 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A([Order Confirmed<br/>Process 12.4]) --> B[Read order lines<br/>+ warehouse inventory<br/>+ delivery zone]
+    A([Order Confirmed<br/>Process 11.4]) --> B[Read order lines<br/>+ warehouse inventory<br/>+ delivery zone]
     subgraph System_Routing[System — Routing Engine]
         B --> C{Any MTO<br/>lines?}
-        C -- Yes --> D[Route MTO to<br/>Production Queue<br/>Process 12.5]
+        C -- Yes --> D[Route MTO to<br/>Production Queue<br/>Process 11.5]
         C -- No --> E
         D --> E{Any in-stock<br/>lines remain?}
         E -- No --> F([Wait for production])
@@ -892,12 +893,12 @@ flowchart TD
         M --> N
     end
     N --> O[Send E-04<br/>with per-shipment ETA]
-    O --> Z([Hand-off to Process 12.12<br/>Pick Pack Ship])
+    O --> Z([Hand-off to Process 11.12<br/>Pick Pack Ship])
 ```
 
-### 12.12 Warehouse Pick, Pack & Ship (Admin Process)
+### 11.12 Warehouse Pick, Pack & Ship (Admin Process)
 
-> **Actor:** Admin — Operations (planner), Warehouse Staff (pickers/packers). **Trigger:** Allocation confirmed (Process 12.11 step 8) or made-to-order item marked Ready for Dispatch (Process 12.5).
+> **Actor:** Admin — Operations (planner), Warehouse Staff (pickers/packers). **Trigger:** Allocation confirmed (Process 11.11 step 8) or made-to-order item marked Ready for Dispatch (Process 11.5).
 
 | # | Stage | Process Detail + Time Constraints |
 |---|---|---|
@@ -906,7 +907,7 @@ flowchart TD
 | 3 | Pick & Scan | Picker scans each SKU at the bin. System validates SKU code, wave, and qty. Wrong scan → audible alert; cannot proceed until correct SKU scanned. |
 | 4 | Pick Completion | Wave returned to pack zone with a tote per order. Physical Stock NOT yet decremented (still on the cart). |
 | 5 | Pack-Verify | At pack station: Scan SKU → Scan Shipping Label → system **must match** (BR-WHS-05). Mismatch blocks the pack. On match: system prints carrier label + packing slip. **Physical Stock decremented atomically; Hard Lock released.** |
-| 6 | Dispatch | Packed cartons staged at carrier dock. Carrier scan-out updates Shipment to `Shipped`; E-05 dispatched (Process 12.4 step 6). |
+| 6 | Dispatch | Packed cartons staged at carrier dock. Carrier scan-out updates Shipment to `Shipped`; E-05 dispatched (Process 11.4 step 6). |
 | 7 | Mispick Recovery | If pack-verify fails repeatedly on the same wave: wave paused, Super Admin notified for root-cause check (system data error vs. picker error vs. mis-bin). |
 | 8 | Cycle Count Trigger | If a pick attempt fails because bin is empty (but system shows stock): emergency cycle count triggered for that SKU (BR-WHS-07 escalation). |
 
@@ -914,7 +915,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A([Allocation confirmed<br/>Process 12.11]) --> B{White-glove<br/>or parcel?}
+    A([Allocation confirmed<br/>Process 11.11]) --> B{White-glove<br/>or parcel?}
     B -- White-glove --> C[Single-order pick<br/>BR-FUL-09]
     B -- Parcel --> D[Add to next Wave<br/>TC-WHS-01 cadence]
     subgraph Warehouse_Pick[Warehouse — Pickers]
@@ -945,12 +946,12 @@ flowchart TD
         T --> U[Carrier scan-out]
         U --> V[Shipment=Shipped<br/>send E-05]
     end
-    V --> Z([Hand back to Process 12.4 step 6])
+    V --> Z([Hand back to Process 11.4 step 6])
 ```
 
-### 12.13 Goods Receipt & Putaway (Admin Process)
+### 11.13 Goods Receipt & Putaway (Admin Process)
 
-> **Actor:** Admin — Operations (Goods Receipt Note creator), Warehouse Staff (inbound team). **Trigger:** Supplier delivery against an open PO, or production batch ready from Process 12.5.
+> **Actor:** Admin — Operations (Goods Receipt Note creator), Warehouse Staff (inbound team). **Trigger:** Supplier delivery against an open PO, or production batch ready from Process 11.5.
 
 | # | Stage | Process Detail + Time Constraints |
 |---|---|---|
@@ -1003,11 +1004,11 @@ flowchart TD
 
 ---
 
-## 13. Business Capabilities (High-Level Requirements)
+## 12. Business Capabilities (High-Level Requirements)
 
-> **COVERAGE NOTE (v4.0):** Section 13 covers all Phase 1 modules: B2C storefront, Trade portal, Admin panel (7 modules), Compliance (GDPR/CCPA), Notifications, CMS, and Platform Integrations. Each capability is traceable to scope (Section 8), TC values (Section 17), and Open Decisions (Section 9).
+> **COVERAGE NOTE (v4.0):** Section 12 covers all Phase 1 modules: B2C storefront, Trade portal, Admin panel (7 modules), Compliance (GDPR/CCPA), Notifications, CMS, and Platform Integrations. Each capability is traceable to scope (Section 7), TC values (Section 16), and Open Decisions (Section 8).
 
-### 13.1 Product Discovery & Browsing
+### 12.1 Product Discovery & Browsing
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1017,7 +1018,7 @@ flowchart TD
 | BC-04 | Delivery availability checker | Reduces checkout abandonment by confirming delivery feasibility (incl. white-glove zones) upfront. | High |
 | BC-05 | Designer profile and collection pages | Communicates brand heritage and design provenance — critical for premium positioning. | High |
 
-### 13.2 Purchase Experience
+### 12.2 Purchase Experience
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1027,7 +1028,7 @@ flowchart TD
 | BC-09 | Trade portal — pricing, VAT exemption, project wishlists | Direct B2B revenue channel. Trade pricing visible post-authentication. VAT-exempt checkout for eligible accounts. | Critical |
 | BC-10 | Discount code application | Server-side re-validation at checkout submission prevents race condition exploits. Trade-only codes supported. | High |
 
-### 13.3 Order, Returns & Post-Purchase
+### 12.3 Order, Returns & Post-Purchase
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1036,7 +1037,7 @@ flowchart TD
 | BC-13 | Returns & exchange request portal | TC-19: 30-day window enforced server-side. TC-20: 14-day ship-back deadline. TC-21: 2-day admin review SLA. Made-to-order policy per OD-08. | Critical |
 | BC-14 | Verified post-purchase review system | TC-24: Prompt sent 7 days post-delivery. TC-25: 180-day submission window. TC-26: 48-hr moderation SLA. | High |
 
-### 13.4 Account, Identity & Personalisation
+### 12.4 Account, Identity & Personalisation
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1047,7 +1048,7 @@ flowchart TD
 | BC-19 | Profile, address book & saved payment methods management | Customers manage addresses, communication preferences, and Stripe-vaulted payment methods (token-only, no PAN stored). | High |
 | BC-20 | Guest checkout & guest-to-registered cart merge | Per OD-01. Reduces friction for one-time buyers; BR-002: cart merge on login sums quantities up to stock limits without data loss. TC-12: 30-day guest session TTL. | Critical |
 
-### 13.5 Trade Portal — Workflow & B2B Operations
+### 12.5 Trade Portal — Workflow & B2B Operations
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1056,26 +1057,26 @@ flowchart TD
 | BC-23 | Formal invoicing with PO reference & VAT number | Required by corporate procurement & EU B2B accounting. Invoice includes company name, VAT number, PO reference; supports B2B reverse-charge per OD-06. | Critical |
 | BC-24 | Made-to-order & pre-order handling | Per OD-03. Confirmed lead time displayed and locked at checkout; supplier order placed on payment; TC-18 dispatch SLA starts from production completion (not order date). | Critical |
 
-### 13.6 Notifications & Communications
+### 12.6 Notifications & Communications
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
-| BC-25 | Transactional email delivery with retry policy | Drives trust at every order milestone. TC-29: 3 retries at 1 min + 1 at 15 min; admin alert if all fail. Covers E-01 to E-12 in Section 14. | Critical |
+| BC-25 | Transactional email delivery with retry policy | Drives trust at every order milestone. TC-29: 3 retries at 1 min + 1 at 15 min; admin alert if all fail. Covers E-01 to E-12 in Section 13. | Critical |
 | BC-26 | SLA breach alerts & admin escalations | Protects operational KPIs. Auto-alerts on TC-17 (order confirmation), TC-18 (dispatch), TC-21 (return review), TC-22 (refund initiation), TC-TRA-01 (trade review) breaches. | High |
 
-### 13.7 Admin — Catalogue, Inventory & Merchandising
+### 12.7 Admin — Catalogue, Inventory & Merchandising
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
 | BC-27 | Product & configurator catalogue management | Admin Content/Super CRUD: products, multi-image upload to S3, configurator options (materials, finishes, fabric grades, base, size), per-currency pricing, lead time per configuration, specification PDF upload. | Critical |
-| BC-28 | Inventory management with stock state machine | Per Section 18.4 states (In Stock / Low Stock / OOS / Held / Made-to-Order / Discontinued). TC-27: 24-hr low-stock alert cooldown per product. | Critical |
+| BC-28 | Inventory management with stock state machine | Per Section 17.4 states (In Stock / Low Stock / OOS / Held / Made-to-Order / Discontinued). TC-27: 24-hr low-stock alert cooldown per product. | Critical |
 | BC-29 | Trade pricing tier management | Per OD-05. Admin Trade/Super maintains pricing tiers (single or designer/architect/corporate); tier assignment at trade approval. Trade prices stored as a tier, never visible to non-trade roles (BR-003). | Critical |
 | BC-30 | Promotions & discount code management | Admin Content/Super CRUD: percentage and fixed codes, trade-only codes, usage limits, expiry, stacking rules per OD-04. | High |
 | BC-31 | Shipping zones, rates & white-glove partner management | Admin Ops/Super configures shipping zones, flat-rate and weight-based rates, white-glove service zones by ZIP/postal code, and carrier API credentials. | Critical |
 | BC-32 | CMS-managed pages & email template management | Admin Content/Super manages About, Designer Profiles, FAQ, Delivery Info, Returns Policy, Privacy Policy, T&Cs, and all transactional email templates. | High |
 | BC-33 | Review moderation workflow | Protects brand quality. TC-26: 48-hr review SLA; auto-approve at 72h by default. Admin Content can approve, reject, flag, or respond. | High |
 
-### 13.8 Admin — Orders, Fulfillment & Returns Operations
+### 12.8 Admin — Orders, Fulfillment & Returns Operations
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1084,17 +1085,17 @@ flowchart TD
 | BC-36 | Trade account application review queue | Admin Trade/Super reviews applications, approves with tier assignment and account manager, or rejects with reason. TC-TRA-01: 2-biz-day SLA enforced. | Critical |
 | BC-37 | Customer management & account lifecycle | Admin Ops/Super views/searches customers, order history, activates/deactivates, manages trade account status. Read-only for Admin Content. | High |
 
-### 13.9 Admin — Security, RBAC, System Settings & Reporting
+### 12.9 Admin — Security, RBAC, System Settings & Reporting
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
 | BC-38 | Admin secure login with mandatory 2FA & inactivity timeout | TC-11: 3-fail / 30-min lockout with Super Admin email + manual unlock. TC-05: 30-min inactivity timeout with 5-min countdown warning. TOTP-based 2FA mandatory for all admin roles. | Critical |
-| BC-39 | Role-based admin access control (Super / Ops / Content / Trade) | Enforces least privilege per Section 7. BR-009 to BR-011: only Super Admin manages roles & permissions; module-scoped access per Section 18 / domain-rules. | Critical |
+| BC-39 | Role-based admin access control (Super / Ops / Content / Trade) | Enforces least privilege per Section 6. BR-009 to BR-011: only Super Admin manages roles & permissions; module-scoped access per Section 17 / domain-rules. | Critical |
 | BC-40 | Admin audit logging of all sensitive actions | Compliance & forensic readiness. All admin actions logged (actor, action, timestamp, affected entity ID). Bulk operations require confirmation step. | Critical |
-| BC-41 | System Settings module for configurable TC values | Per OD-10. Super Admin configures TC values marked "Yes — Admin" in Section 17 (e.g. TC-17, TC-18, TC-19, TC-21, TC-22, TC-24, TC-25, TC-26, TC-27, TC-TRA-01). | High |
+| BC-41 | System Settings module for configurable TC values | Per OD-10. Super Admin configures TC values marked "Yes — Admin" in Section 16 (e.g. TC-17, TC-18, TC-19, TC-21, TC-22, TC-24, TC-25, TC-26, TC-27, TC-TRA-01). | High |
 | BC-42 | Real-time KPI dashboard & operational reporting with exports | Admin dashboard shows today's revenue, order count, new customers, low-stock alerts, pending trade applications, SLA compliance, sales trend. Reports exportable to PDF & Excel; trade vs B2C split; top-selling configurations. | Critical |
 
-### 13.10 Compliance & Data Privacy
+### 12.10 Compliance & Data Privacy
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1105,7 +1106,7 @@ flowchart TD
 | BC-47 | Data retention policy enforcement | TC-31: customer PII 3 years from last activity (30-day warning email before deletion). TC-32: financial records 7 years (cannot be deleted on erasure, PII anonymised). TC-33: server logs 90-day rolling auto-purge. | Critical |
 | BC-48 | Marketing unsubscribe with suppression list | TC-38: unsubscribe processed within 10 business days. Email address blocked from re-addition. One-click unsubscribe link in all marketing emails. | High |
 
-### 13.11 Platform Integrations & Payments
+### 12.11 Platform Integrations & Payments
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1115,18 +1116,18 @@ flowchart TD
 | BC-52 | FX rate sync provider | Per OD-02. If Option A confirmed: scheduled BullMQ job syncs FX rates every 24 hours. If Option B: admin manually maintains per-currency prices via System Settings. | High |
 | BC-53 | EU VIES VAT validation (optional per OD-06) | Automated validation of EU VAT numbers at trade account application; eliminates manual verification overhead. Conditional on OD-06 Option B approval. | Medium |
 
-### 13.12 Catalogue Hierarchy & SKU Management
+### 12.12 Catalogue Hierarchy & SKU Management
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
-| BC-66 | Five-level catalogue hierarchy (Family → Product → Option Types → SKU → Bundle) | Foundation for accurate pricing, inventory, and merchandising at scale. Per Section 18.1 / BR-PRD-01. Enables flash sales, combos, and Phase 2 lighting / accessories expansion without re-platform. | Critical |
+| BC-66 | Five-level catalogue hierarchy (Family → Product → Option Types → SKU → Bundle) | Foundation for accurate pricing, inventory, and merchandising at scale. Per Section 17.1 / BR-PRD-01. Enables flash sales, combos, and Phase 2 lighting / accessories expansion without re-platform. | Critical |
 | BC-67 | EAV (Entity-Attribute-Value) attribute model | Category-specific attributes (chairs need base/fabric grade; lamps need wattage/bulb type) without schema changes. BR-PRD-08. | Critical |
 | BC-68 | SKU-level pricing, stock, weight, dimensions, lead time | Per-variant accuracy: Walnut base costs ≠ Lacquered Steel; Size XL ≠ Size M. Foundation for accurate ATP and shipping rate quotes. BR-PRD-01 / BR-PRD-04. | Critical |
 | BC-69 | Bundle / Virtual SKU support | "Aria Lounge + Ottoman Set" sold as one item; inventory computed as `MIN(component_ATP)`; decrements each component on sale. BR-PRD-05 / BR-PRD-06. | High |
 | BC-70 | Configurator combination validity enforcement | Customers cannot build configurations that aren't producible. Out-of-production options flagged at configurator level, not at cart (BR-PRD-03). Prevents support tickets. | Critical |
-| BC-71 | Mandatory dimension & gross-weight validation at catalogue save | Catalogue save blocked on null/zero L/W/H/Weight. Without this, BC-51 shipping rate API fails at checkout — direct conversion killer. BR-PRD-04 / Process 12.6. | Critical |
+| BC-71 | Mandatory dimension & gross-weight validation at catalogue save | Catalogue save blocked on null/zero L/W/H/Weight. Without this, BC-51 shipping rate API fails at checkout — direct conversion killer. BR-PRD-04 / Process 11.6. | Critical |
 
-### 13.13 Inventory, Allocation & Order Routing
+### 12.13 Inventory, Allocation & Order Routing
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1136,10 +1137,10 @@ flowchart TD
 | BC-75 | Multi-warehouse order routing engine | Per-line allocation across warehouses by priority: whole-order completeness → nearest-to-customer → oldest-stock → load balance. **TC-FUL-01: 30-sec routing decision**. BR-FUL-01 / BR-FUL-02. | Critical |
 | BC-76 | Split shipment handling with derived order status | One Order ID, N Shipment IDs. Order status derived from shipment statuses (e.g. `Partially Delivered`). Single combined shipping fee charged to customer. BR-FUL-03 / BR-FUL-04. | Critical |
 | BC-77 | Chargeable weight (DIM / volumetric) calculation for rate quotes | `MAX(gross_weight, (L×W×H)/DIM_divisor)`. Used by BC-51 for accurate carrier quotes. Trade pricing tier can override DIM divisor per carrier contract. BR-FUL-07. | Critical |
-| BC-78 | Overselling prevention with auto-incident response | Defense-in-depth (5 control layers per Section 18.8); auto-detection at pick; auto-apology + voucher + Stripe refund without CSR intervention. KPI Oversell Rate ≤0.05%. BR-INV-09. | Critical |
+| BC-78 | Overselling prevention with auto-incident response | Defense-in-depth (5 control layers per Section 17.8); auto-detection at pick; auto-apology + voucher + Stripe refund without CSR intervention. KPI Oversell Rate ≤0.05%. BR-INV-09. | Critical |
 | BC-79 | Channel buffer stock (Phase 3 marketplace prep) | Withholds N units from each external channel's ATP feed to absorb sync lag. Architecture in Phase 1; activated in Phase 3 when marketplaces are integrated. BR-WHS-10. | Medium |
 
-### 13.14 Warehouse Operations (WMS)
+### 12.14 Warehouse Operations (WMS)
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
@@ -1154,9 +1155,9 @@ flowchart TD
 
 ---
 
-## 14. System Email & Notification Triggers
+## 13. System Email & Notification Triggers
 
-### 14.1 Customer-Facing Emails
+### 13.1 Customer-Facing Emails
 
 | # | Trigger | Content Summary | TC Ref | Retry / Timing |
 |---|---|---|---|---|
@@ -1175,13 +1176,13 @@ flowchart TD
 
 ---
 
-## 15. Returns & Exchange Eligibility Rules
+## 14. Returns & Exchange Eligibility Rules
 
 > **PENDING DECISION:** Return window duration (default TC-19: 30 days) subject to client Legal confirmation per OD-07. Made-to-order return policy subject to OD-08. All values below use 30 days as the working default for standard items.
 
-> **NOTE:** This section covers returns-specific eligibility, return reasons, and the state machine. For the codified business-rules registry (BR-PRD / BR-INV / BR-FUL / BR-WHS), see Section 18.9.
+> **NOTE:** This section covers returns-specific eligibility, return reasons, and the state machine. For the codified business-rules registry (BR-PRD / BR-INV / BR-FUL / BR-WHS), see Section 17.9.
 
-### 15.1 Eligibility Rules
+### 14.1 Eligibility Rules
 
 - **TC-19:** Return window is 30 days from confirmed delivery date. 'Request Return' button hidden (not disabled) after window closes. Server-side validation re-checks window at submission to prevent race conditions.
 - Standard in-stock items: eligible for full cash refund if unassembled and in original packaging.
@@ -1190,7 +1191,7 @@ flowchart TD
 - Made-to-order / configured items: subject to OD-08 decision. Default working assumption: exchange or store credit only (no cash refund) unless item is faulty or does not match specification.
 - Bespoke items (custom dimensions or custom fabric not in standard range): non-returnable unless faulty.
 
-### 15.2 Return Reasons (Customer-Selectable)
+### 14.2 Return Reasons (Customer-Selectable)
 
 - Damaged on arrival
 - Wrong item or configuration received
@@ -1199,7 +1200,7 @@ flowchart TD
 - Item arrived outside confirmed lead time window
 - Other (free text field, required)
 
-### 15.3 Return Status State Machine
+### 14.3 Return Status State Machine
 
 | Status | Definition | Time Trigger |
 |---|---|---|
@@ -1214,7 +1215,7 @@ flowchart TD
 
 ---
 
-## 16. Non-Functional Requirements
+## 15. Non-Functional Requirements
 
 | ID | Category | Requirement | Priority |
 |---|---|---|---|
@@ -1234,11 +1235,11 @@ flowchart TD
 
 ---
 
-## 17. Time Constraints & Validation Rules
+## 16. Time Constraints & Validation Rules
 
 > **CONFIGURABLE VALUES:** Values marked "Yes — Admin" must be exposed as configurable settings in the admin System Settings panel. The Development Lead must confirm which values are hard-coded vs. configurable per OD-10.
 
-### 17.1 Authentication & Session
+### 16.1 Authentication & Session
 
 | TC Ref | Constraint | Value | Configurable? | Behaviour on Expiry / Breach |
 |---|---|---|---|---|
@@ -1254,7 +1255,7 @@ flowchart TD
 | TC-10 | Customer login lockout | 5 failed → 15-min lockout | No | 'Too many attempts. Try again in X minutes.' Counter resets after successful login. |
 | TC-11 | Admin login lockout | 3 failed → 30-min lockout | No | Super Admin receives email notification. Super Admin can manually unlock via admin panel. |
 
-### 17.2 Cart & Checkout
+### 16.2 Cart & Checkout
 
 | TC Ref | Constraint | Value | Configurable? | Behaviour on Expiry / Breach |
 |---|---|---|---|---|
@@ -1264,7 +1265,7 @@ flowchart TD
 | TC-15 | Stripe API confirmation timeout | 30 seconds | No | Show: 'Payment confirmation taking longer than expected. Check order history before retrying.' Prevents duplicate charges. |
 | TC-16 | Stripe idempotency key window | 24 hours | No (Stripe default) | Same key within 24h returns original result — prevents duplicate charges on browser retry. |
 
-### 17.3 Orders & Fulfillment
+### 16.3 Orders & Fulfillment
 
 | TC Ref | Constraint | Value | Configurable? | Behaviour on Expiry / Breach |
 |---|---|---|---|---|
@@ -1272,7 +1273,7 @@ flowchart TD
 | TC-18 | Order dispatch SLA (in-stock items) | 48 business hours from confirmation | Yes — Admin | Order flagged 'SLA Breached' with red badge. Super Admin receives email alert. |
 | TC-TRA-01 | Trade account application review SLA | 2 business days from submission | Yes — Admin | Application flagged 'Overdue Review'. Super Admin receives email escalation. |
 
-### 17.4 Returns & Refunds
+### 16.4 Returns & Refunds
 
 | TC Ref | Constraint | Value | Configurable? | Behaviour on Expiry / Breach |
 |---|---|---|---|---|
@@ -1283,7 +1284,7 @@ flowchart TD
 | TC-23 | Total refund resolution target | ≤12 business days | Informational | Business benchmark only. Not a hard system enforced timer. |
 | TC-30 | Stripe webhook expected receipt | Alert if not received within 24h | No | Admin alerted to verify refund status in Stripe dashboard. |
 
-### 17.5 Reviews, Notifications & Compliance
+### 16.5 Reviews, Notifications & Compliance
 
 | TC Ref | Constraint | Value | Configurable? | Behaviour on Expiry / Breach |
 |---|---|---|---|---|
@@ -1301,11 +1302,11 @@ flowchart TD
 | TC-37 | CCPA opt-out effect | Immediate (same page load) | No (legal requirement) | Tracking pixels (GA4) disabled within same page load on opt-out. |
 | TC-38 | Marketing unsubscribe processing | Within 10 business days | No (legal maximum) | Suppression list maintained. Email address blocked from re-addition. |
 
-### 17.6 Inventory, Fulfillment & Warehouse Operations
+### 16.6 Inventory, Fulfillment & Warehouse Operations
 
 | TC Ref | Constraint | Value | Configurable? | Behaviour on Expiry / Breach |
 |---|---|---|---|---|
-| TC-INV-01 | Soft-lock TTL at checkout initiation | 15 minutes (alias of TC-13) | No | Hold released on TTL expiry. Other shoppers' ATP recovers. See Section 18.4.3. |
+| TC-INV-01 | Soft-lock TTL at checkout initiation | 15 minutes (alias of TC-13) | No | Hold released on TTL expiry. Other shoppers' ATP recovers. See Section 17.4.3. |
 | TC-INV-02 | Hard-lock auto-release on order cancellation before pick | Immediate | No | Reserved decremented; ATP recomputed; if SKU was OOS due to lock: TC-28 back-in-stock job queued. |
 | TC-INV-03 | Safety Stock review cadence | Quarterly (per SKU) | Yes — Admin | Admin Ops reviews safety-stock values quarterly using oversell incidents + carrier delay data. Adjustments audit-logged. |
 | TC-FUL-01 | Order routing decision time | 30 seconds | No | If routing engine cannot decide within 30 sec: order queued for Super Admin manual allocation. Alerts dashboard. |
@@ -1318,9 +1319,9 @@ flowchart TD
 
 ---
 
-## 18. Operational Domain Model & Business Rules
+## 17. Operational Domain Model & Business Rules
 
-### 18.1 Product Hierarchy & Catalogue Model
+### 17.1 Product Hierarchy & Catalogue Model
 
 > Premium design furniture has complex multi-dimensional variants. Designing the data model correctly at the catalogue level is foundational — flat product tables break the moment we introduce bundles, flash sales, or trade-only SKUs.
 
@@ -1331,7 +1332,7 @@ flowchart TD
 | 1 | **Product Family / Collection** | Marketing & merchandising grouping. Drives navigation (BC-01) and designer/collection pages (BC-05). | "Lounge Seating", "Aria by Marco Vitti Collection" |
 | 2 | **Product (Parent)** | Shared metadata: brand/designer, description, category, dimensions schema, materials list, base specification PDF. **No price or stock here.** | "Aria Lounge Chair" |
 | 3 | **Option Types (Attributes — EAV model)** | Variant dimensions: material, finish, fabric grade, base type, size. Stored using **Entity–Attribute–Value (EAV)** to support category-specific attributes without altering schema. | Material = {Walnut, Oak, Lacquered Steel}; Fabric Grade = {A, B, C}; Base = {4-star, sled, solid wood} |
-| 4 | **Variant / SKU** | Smallest orderable unit. **All price and inventory are stored here, not on the parent.** Unique SKU code embeds option codes (per Section 11.1 assumption). | `HS-CHAIR-001-WAL-BLK-FABA` for Aria Lounge in Walnut base, Black Fabric Grade A |
+| 4 | **Variant / SKU** | Smallest orderable unit. **All price and inventory are stored here, not on the parent.** Unique SKU code embeds option codes (per Section 10.1 assumption). | `HS-CHAIR-001-WAL-BLK-FABA` for Aria Lounge in Walnut base, Black Fabric Grade A |
 | 5 | **Bundle / Virtual SKU** | Composite product sold as one item, composed of multiple child SKUs. Stock decremented on each component when bundle sells. | "Aria Lounge + Ottoman Set" = 1× `HS-CHAIR-001-WAL-BLK-FABA` + 1× `HS-OTTO-001-WAL-BLK-FABA` |
 
 **Key data-model rules (referenced by BR-PRD-XX below):**
@@ -1342,7 +1343,7 @@ flowchart TD
 - Bundles are first-class catalogue entities with their own SKU code, marketing copy, and discounted bundle price, but **inventory is computed from their components** at cart-add time: `bundle_available = MIN(component_available_qty)` across all bundle components.
 - Specification PDFs are associated to parent product model via a `product_assets` table; served via TC-09: 15-minute S3 presigned URLs. Full-resolution versions available to verified trade accounts only.
 
-### 18.2 Shipping & White-Glove Complexity
+### 17.2 Shipping & White-Glove Complexity
 
 - **Small accessories** (<15 lbs): standard parcel carriers (FedEx/UPS for US; DHL/DPD for EU). 3–7 business day delivery.
 - **Medium furniture** (15–80 lbs, e.g. chairs, side tables): threshold carriers with 2-person delivery. 5–10 business day delivery.
@@ -1350,13 +1351,13 @@ flowchart TD
 - White-glove service zone eligibility checked by ZIP/postal code at product page and at checkout address step. Customers outside zone offered 'threshold delivery' or 'contact us' for bespoke logistics.
 - Made-to-order items have a production lead time before dispatch SLA (TC-18) begins. Lead time and estimated delivery date displayed and locked at checkout.
 
-### 18.3 Tax Handling
+### 17.3 Tax Handling
 
 - **United States:** Sales tax calculated at checkout by state/county via Stripe Tax or TaxJar. Nexus states confirmed per CR-10. Design services and trade purchases may have different tax treatment — legal confirmation required.
 - **European Union:** VAT included in displayed price. Per-country VAT rates in DB. Trade accounts with valid VAT registration numbers: VAT-exempt invoice generated at checkout (B2B reverse charge mechanism applies in some EU jurisdictions — legal confirmation required).
 - **United Kingdom:** Standard UK VAT (20%). Separate market with GBP pricing and UK shipping zones. Post-Brexit import duty considerations for EU→UK shipments to be confirmed by legal.
 
-### 18.4 Inventory State Machine, Layers & Locks
+### 17.4 Inventory State Machine, Layers & Locks
 
 > Stock ≠ "Inbound minus Outbound". Inventory is a multi-layered state machine. Treating it as a single counter is the single biggest cause of overselling on flash sales and high-traffic launches.
 
@@ -1379,14 +1380,14 @@ flowchart TD
 | Out of Stock | `ATP = 0`, no active hold, no pre-order | 'Notify Me' button. TC-28: back-in-stock email within 1 hour of restock. |
 | Soft Locked (Checkout) | `Physical > 0` but `Reserved` increased by an active checkout hold (TC-13). | See 18.4.3 below. Hold expires after 15 min. Other checkout attempts see reduced ATP. |
 | Hard Locked (Paid) | Stock attached to a confirmed paid order awaiting pick. | Locked until pick-confirmation or order cancellation. Cannot be reallocated to another order. |
-| Made to Order | `Physical = 0` for the SKU but configuration is producible to order (per OD-03) | Lead time displayed per configuration. Supplier PO placed on payment confirmation. TC-18 dispatch SLA starts from production completion (Process 12.5). |
+| Made to Order | `Physical = 0` for the SKU but configuration is producible to order (per OD-03) | Lead time displayed per configuration. Supplier PO placed on payment confirmation. TC-18 dispatch SLA starts from production completion (Process 11.5). |
 | Discontinued | `is_archived = true` in DB | Product page 301-redirects to parent collection immediately on archive. Not purchasable or searchable. Active wishlist holders notified once. |
 
 **18.4.3 Soft Lock vs Hard Lock (critical distinction)**
 
 | Aspect | Soft Lock | Hard Lock |
 |---|---|---|
-| Trigger | Customer initiates checkout (Process 12.1 step 5) | Stripe `payment_intent.succeeded` webhook (Process 12.4 step 1) |
+| Trigger | Customer initiates checkout (Process 11.1 step 5) | Stripe `payment_intent.succeeded` webhook (Process 11.4 step 1) |
 | TTL | TC-13: 15 minutes (Redis SETNX with TTL); TC-14: 30-min hard expiry on whole checkout session | None — held until pick-confirmation, cancellation, or admin manual release |
 | Released by | Timer expiry, customer abandoning checkout, payment failure | Successful pick (decrements Physical), order cancellation (auto-refund + release), admin manual override (audit-logged BC-40) |
 | Visible to other shoppers | Reduces ATP shown on PDP | Reduces ATP and removes from "Available" reports |
@@ -1404,7 +1405,7 @@ stateDiagram-v2
     HardLocked --> Picked: Pick confirmed<br/>Physical decremented
     Picked --> Shipped: Packed and dispatched
     Shipped --> Delivered: Carrier confirmation
-    Delivered --> Returned: Return approved Process 12.3
+    Delivered --> Returned: Return approved Process 11.3
     Returned --> InStock: QC pass<br/>restocked
     Returned --> Discontinued: QC fail<br/>scrap or refurb
     InStock --> LowStock: ATP <= threshold
@@ -1413,9 +1414,9 @@ stateDiagram-v2
     InStock --> Discontinued: Admin archive
 ```
 
-> **TC values referenced:** TC-13 (soft lock 15 min), TC-14 (checkout hard expiry 30 min), TC-27 (low-stock cooldown 24h), TC-28 (back-in-stock hourly job), TC-INV-01 to TC-INV-03 (Section 17.6 new).
+> **TC values referenced:** TC-13 (soft lock 15 min), TC-14 (checkout hard expiry 30 min), TC-27 (low-stock cooldown 24h), TC-28 (back-in-stock hourly job), TC-INV-01 to TC-INV-03 (Section 16.6 new).
 
-### 18.5 Order Routing & Allocation
+### 17.5 Order Routing & Allocation
 
 > When HomeStyle expands to multi-warehouse (Phase 2 EU expansion), order routing logic becomes critical. Even in Phase 1 single-warehouse operations, allocation rules govern split-shipment behaviour when a multi-line order combines in-stock and made-to-order items.
 
@@ -1428,14 +1429,14 @@ stateDiagram-v2
 | 3 | **Oldest-stock-first (FEFO/FIFO)** — prefer warehouse with older receipt dates | Inventory turnover; reduces aging stock; important for upholstery (fabric ages) |
 | 4 | **Load balancing** — avoid overloading any single warehouse's pick queue | Smoother operations; prevents SLA breaches on TC-18 |
 
-**Split Shipment Handling (BR-FUL-04, see Section 18.9):**
+**Split Shipment Handling (BR-FUL-04, see Section 17.9):**
 
 - One **Order ID** (customer-facing — used for support, tracking, returns eligibility).
 - Multiple **Shipment / Package IDs** (operations-facing — one per warehouse origin or one per carrier service class).
 - Order Status is **derived** from child shipment statuses: e.g. one parcel Delivered + one in production → `Partially Delivered`.
 - **Cost allocation rule (BR-FUL-05):** Customer pays a single combined shipping fee at checkout. Internal accounting splits cost across shipments for P&L purposes — this is not visible to the customer.
 
-### 18.6 Warehouse Operations (WMS)
+### 17.6 Warehouse Operations (WMS)
 
 > Phase 1 ships from a single warehouse; the WMS module exists from day one because the operations principles still apply at small scale and adding warehouses later should be a configuration change, not a re-build.
 
@@ -1443,7 +1444,7 @@ stateDiagram-v2
 
 | Step | Detail |
 |---|---|
-| Pre-receipt | Admin Ops creates Goods Receipt Note (GRN) against an open supplier PO (or made-to-order PO from Process 12.5). |
+| Pre-receipt | Admin Ops creates Goods Receipt Note (GRN) against an open supplier PO (or made-to-order PO from Process 11.5). |
 | Scan-in | Warehouse staff scan barcode (or generated SKU label) on each carton. System validates against PO line quantity. Discrepancies flagged immediately. |
 | QC inspection | Visual + dimensional check. Photo upload for damaged items. Rejected units routed to `QC-Hold` location (does not increment Physical Stock until resolved). |
 | Putaway | System suggests bin location (zone routing — heavy items lower racks, fast-movers near pack stations). Staff scan bin barcode to confirm. |
@@ -1464,11 +1465,11 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 
 | Aspect | Rule |
 |---|---|
-| Frequency | Per TC-WHS-03 (Section 17.6). Default: A-class SKUs (top 20% revenue) counted monthly; B-class quarterly; C-class biannually. |
+| Frequency | Per TC-WHS-03 (Section 16.6). Default: A-class SKUs (top 20% revenue) counted monthly; B-class quarterly; C-class biannually. |
 | Method | Blind count — picker enters count without seeing system quantity. System computes variance and routes >2% variance to Super Admin for investigation. |
 | Adjustment | All cycle-count adjustments audit-logged (BC-40). Persistent variance investigated as potential shrinkage. |
 
-### 18.7 Shipping Cost & DIM (Volumetric) Weight
+### 17.7 Shipping Cost & DIM (Volumetric) Weight
 
 > Carriers do not charge by physical weight alone for low-density, bulky items. Premium furniture — particularly upholstered pieces — is almost always priced on volumetric weight.
 
@@ -1480,11 +1481,11 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 
 **BA-action consequences (BR-PRD-04):**
 
-- Length, Width, Height, and Gross Weight are **mandatory non-zero** fields on the product/SKU record. Catalogue management (Process 12.6) must validate and block save on zero or null values. Without these, the rate-quote API call to BC-51 fails and the customer sees a generic "shipping unavailable" error — a guaranteed conversion killer.
+- Length, Width, Height, and Gross Weight are **mandatory non-zero** fields on the product/SKU record. Catalogue management (Process 11.6) must validate and block save on zero or null values. Without these, the rate-quote API call to BC-51 fails and the customer sees a generic "shipping unavailable" error — a guaranteed conversion killer.
 - Shipping rate quotes at checkout (BC-08, BC-51) must use chargeable weight, not just gross.
 - Trade bulk orders may negotiate carrier-specific divisors; trade pricing tier (OD-05) can carry a custom DIM divisor override.
 
-### 18.8 Overselling Prevention & Incident Response
+### 17.8 Overselling Prevention & Incident Response
 
 > Oversell happens when concurrency exceeds the atomicity of the reservation. Flash Sale: 100 units, 1000 simultaneous Add-to-Cart presses. Without server-side atomic reservation, 150 orders confirm — 50 customers receive an apology email instead of furniture.
 
@@ -1509,7 +1510,7 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 | 5 | All oversell incidents logged to a dedicated dashboard for root-cause analysis (race condition? safety stock too low? supplier shortage?). |
 | 6 | KPI tracked: **Oversell Rate** = oversold units / total units sold. Target ≤0.05%. Any month >0.2% triggers a postmortem.
 
-### 18.9 Business Rules — Product, Inventory, Fulfillment & Warehouse
+### 17.9 Business Rules — Product, Inventory, Fulfillment & Warehouse
 
 > Consolidated business rules referenced by Capabilities (BC-66+), Processes (12.4–12.13), and the Domain sections above. Rules are codified for traceability in SRS and acceptance tests.
 
@@ -1518,7 +1519,7 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 | ID | Rule |
 |---|---|
 | BR-PRD-01 | Price, stock quantity, weight, dimensions, and lead time are stored at the **SKU (variant) level** — never at the parent product. Aggregation up to parent is for display only. |
-| BR-PRD-02 | Every SKU must have a unique system-generated SKU code that incorporates option-value codes (per Section 11.1). |
+| BR-PRD-02 | Every SKU must have a unique system-generated SKU code that incorporates option-value codes (per Section 10.1). |
 | BR-PRD-03 | The product configurator must enforce **valid combinations only**. Out-of-production option values must be flagged at configurator level — customers cannot build configurations that are unavailable. |
 | BR-PRD-04 | Length, Width, Height (cm or inches with stored unit), and Gross Weight (kg) are **mandatory non-zero** fields on every sellable SKU. Catalogue save is blocked on zero / null (BC-27 validation). |
 | BR-PRD-05 | Bundle (Virtual SKU) availability is computed as `MIN(component_ATP)` across all bundle components at every reservation event. A bundle becomes Out-of-Stock the moment any single component is OOS. |
@@ -1575,9 +1576,9 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 
 ---
 
-## 19. Key Performance Indicators (KPIs)
+## 18. Key Performance Indicators (KPIs)
 
-### 19.1 Business KPIs
+### 18.1 Business KPIs
 
 | KPI | Definition | Target (6 Months) | Source |
 |---|---|---|---|
@@ -1587,7 +1588,7 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 | Trade Account Growth | Number of active verified trade accounts | ≥ 500 by Month 6 | Admin Reports |
 | New vs. Returning Customer Ratio | % of orders from new vs. returning buyers | Track baseline Month 2 | Admin / GA4 |
 
-### 19.2 Product & Operational KPIs
+### 18.2 Product & Operational KPIs
 
 | KPI | Definition | Target (6 Months) | Source |
 |---|---|---|---|
@@ -1602,9 +1603,9 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 
 ---
 
-## 20. Stakeholder Register & RACI
+## 19. Stakeholder Register & RACI
 
-### 20.1 Stakeholder Register
+### 19.1 Stakeholder Register
 
 | Stakeholder | Role | Key Responsibilities | Influence | Interest |
 |---|---|---|---|---|
@@ -1618,7 +1619,7 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 | Legal / Compliance | Compliance Advisory | GDPR, CCPA, returns policy (OD-07, OD-08), VAT exemption legal basis (OD-06), data retention values TC-31 to TC-38. | Medium | High |
 | Finance | Financial Oversight | Currency model (OD-02), trade pricing tiers, tax nexus, 7-year financial record retention (TC-32). | Medium | Medium |
 
-### 20.2 RACI Matrix — Key Project Activities
+### 19.2 RACI Matrix — Key Project Activities
 
 | Activity | Biz Owner | PO/BA | Dev Lead | UX/UI | QA | Trade Mgr | Legal | Finance |
 |---|---|---|---|---|---|---|---|---|
@@ -1637,11 +1638,11 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 
 ---
 
-## 21. Warranty & Aftercare Specification (Phase 2)
+## 20. Warranty & Aftercare Specification (Phase 2)
 
 > **PHASE:** Months 7–12 (Phase 2 — Growth). **STATUS:** Specification draft. Full SRS to follow on Phase 2 kickoff. This section establishes the BA-level scope and rules so the Phase 2 backlog can be estimated and prioritised at MVP go-live.
 
-### 21.1 Overview & Business Value
+### 20.1 Overview & Business Value
 
 Premium design furniture is a multi-year purchase. Buyers expect manufacturer-backed warranty as a hallmark of quality, and trade clients (hospitality, contract, corporate) typically require commercial warranty terms in their procurement contracts. HomeStyle's current offline business handles warranty via account managers and email — the goal of Phase 2 is to bring this in-house with a self-service portal, defined SLAs, and a service partner network.
 
@@ -1653,7 +1654,7 @@ Premium design furniture is a multi-year purchase. Buyers expect manufacturer-ba
 | Brand trust | Visible warranty status + transparent resolution timelines reinforce premium positioning (NFR target: post-claim CSAT ≥4.5). |
 | Inventory recovery | Returned-for-warranty items refurbished and re-routed to outlet channel (Phase 3 enabler). |
 
-### 21.2 Warranty Types & Coverage Periods
+### 20.2 Warranty Types & Coverage Periods
 
 > Warranty period **starts on confirmed delivery date** (BR-W01). Made-to-order items inherit standard warranty unless flagged "bespoke" (BR-W02 / BR-W04).
 
@@ -1670,7 +1671,7 @@ Premium design furniture is a multi-year purchase. Buyers expect manufacturer-ba
 
 > **B2C → Trade Crossover (BR-W04):** Furniture installed in commercial premises (hotels, offices, restaurants, hospitality) under a B2C order is **not** covered under the B2C warranty. Customer must purchase via Trade account for commercial use.
 
-### 21.3 Coverage — Inclusions & Exclusions
+### 20.3 Coverage — Inclusions & Exclusions
 
 | Covered (eligible for claim) | Excluded (claim will be rejected) |
 |---|---|
@@ -1684,19 +1685,19 @@ Premium design furniture is a multi-year purchase. Buyers expect manufacturer-ba
 | | Damage from improper assembly by customer (when self-assembly is optional) |
 | | Bespoke / custom items unless faulty per spec |
 
-### 21.4 Warranty Registration & Activation
+### 20.4 Warranty Registration & Activation
 
 Standard warranty is **auto-activated on delivery confirmation** for registered customers — no manual action required. Guest-checkout customers must register within **TC-W01** to retain warranty.
 
 | # | Stage | Detail |
 |---|---|---|
-| 1 | Auto-Activation (Registered) | On `Delivered` status, system creates warranty record linked to order item. Warranty period calculated per component class (Section 21.2). Customer receives E-13 with digital warranty certificate (PDF). |
+| 1 | Auto-Activation (Registered) | On `Delivered` status, system creates warranty record linked to order item. Warranty period calculated per component class (Section 20.2). Customer receives E-13 with digital warranty certificate (PDF). |
 | 2 | Manual Registration (Guest) | Guest customer receives E-13 with registration link. Must register within **TC-W01: 30 days** of delivery. Order ID + email + last 4 of delivery postcode verify the link. |
 | 3 | Trade Customers | Auto-activated with extended terms. Trade pricing tier (OD-05) determines commercial warranty scope. |
 | 4 | Extended Warranty Purchase | Optional paid add-on. Available at checkout AND for **TC-W08: 90 days** post-delivery via account dashboard. Extends component-class periods by 1–3 additional years (tier-priced). |
 | 5 | Warranty Card | PDF certificate generated with warranty ID, order ID, items covered, period per component, terms. Downloadable from order history; accessible to trade buyers' clients via project share link (BC-22). |
 
-### 21.5 Customer Warranty Claim Process
+### 20.5 Customer Warranty Claim Process
 
 > **Actor:** Registered Customer or Verified Trade Account. **Trigger:** Customer files claim via 'My Orders → Warranty' or trade portal.
 
@@ -1728,10 +1729,10 @@ flowchart TD
         G --> K[Send E-14<br/>Claim Received]
         K --> L[Queue for admin<br/>TC-W03 5-biz-day SLA starts]
     end
-    L --> Z([Hand-off to<br/>Admin Review<br/>Process 21.6])
+    L --> Z([Hand-off to<br/>Admin Review<br/>Process 20.6])
 ```
 
-### 21.6 Admin Claim Review & Resolution Process
+### 20.6 Admin Claim Review & Resolution Process
 
 > **Actor:** Admin — Operations (Warranty role extension), Service Partner (external), Super Admin (escalation). **Trigger:** Claim submitted by customer enters admin queue.
 
@@ -1739,13 +1740,13 @@ flowchart TD
 |---|---|---|
 | 1 | Triage | Admin opens claim, reviews evidence, validates eligibility against business rules. **TC-W03: 5 biz-day review SLA.** |
 | 2 | Decision | Admin chooses: **Approve**, **Reject** (with reason), or **Request More Info** (pauses TC-W03, restarts on customer response). |
-| 3 | Approved → Resolution Selection | Admin selects resolution path: **Repair**, **Replace** (component or full item), **Partial Refund**, **Store Credit**. Defined by Section 21.7 matrix. |
+| 3 | Approved → Resolution Selection | Admin selects resolution path: **Repair**, **Replace** (component or full item), **Partial Refund**, **Store Credit**. Defined by Section 20.7 matrix. |
 | 4a | Repair Path | Admin dispatches service partner request via partner portal. **TC-W04: 10 biz-day** scheduling SLA. Customer receives E-17 with appointment slot. **TC-W07: 3 biz-day** partner response. |
 | 4b | Replace Path | Admin generates replacement order linked to original. Replacement dispatched within **TC-W05: 21 biz-days** (incl. made-to-order lead time). E-18 with tracking. |
-| 4c | Partial Refund Path | Admin selects refund tier (Section 21.7) → Stripe refund via existing returns engine (BC-35). E-19 dispatched. |
+| 4c | Partial Refund Path | Admin selects refund tier (Section 20.7) → Stripe refund via existing returns engine (BC-35). E-19 dispatched. |
 | 4d | Store Credit Path | Admin issues credit to customer account (Phase 2 dependency on loyalty/credit module). E-19 with credit amount. |
 | 5 | Closure | Admin marks claim `Resolved`. Customer survey (post-claim CSAT) auto-sent 3 days later. **TC-W06: 30 biz-day** total resolution target. |
-| 6 | Escalation | If TC-W03 / W04 / W05 breached → Super Admin alerted (per SLA Monitoring Process 12.10 extended). |
+| 6 | Escalation | If TC-W03 / W04 / W05 breached → Super Admin alerted (per SLA Monitoring Process 11.10 extended). |
 | 7 | Fraud Watch | If customer has >3 claims in 12 months OR claim count > order count: flag for Super Admin manual review (risk BR-W11). |
 
 **BPMN — Admin Claim Review & Resolution:**
@@ -1777,7 +1778,7 @@ flowchart TD
         N --> O[Dispatch within<br/>TC-W05 21 days]
     end
     subgraph System_Refund[System / Finance]
-        G -- Partial Refund --> P[Tier per Section 21.7]
+        G -- Partial Refund --> P[Tier per Section 20.7]
         P --> Q[Stripe refund<br/>via BC-35]
         G -- Store Credit --> R[Issue credit<br/>to account]
     end
@@ -1790,7 +1791,7 @@ flowchart TD
     T --> Z
 ```
 
-### 21.7 Resolution Options Matrix
+### 20.7 Resolution Options Matrix
 
 | Resolution | When Used | Customer Cost | Operational Cost | SLA |
 |---|---|---|---|---|
@@ -1802,7 +1803,7 @@ flowchart TD
 | Store Credit (110%) | Customer prefers credit over refund; bonus 10% to retain | Credit issued | Future order discount | Immediate |
 | Out-of-Warranty Repair | Component class period expired but customer wants paid repair | Quoted | Quote + partner fee | TC-W07 + scheduling |
 
-### 21.8 Trade-Specific Warranty Terms
+### 20.8 Trade-Specific Warranty Terms
 
 | Aspect | Trade Provision |
 |---|---|
@@ -1813,7 +1814,7 @@ flowchart TD
 | On-site repair | Available for projects ≥$25,000. Standard for hospitality / contract orders. |
 | Replacement parts inventory | Trade contracts may include guaranteed parts availability for warranty period (annexed to project quote). |
 
-### 21.9 Extended Warranty (Paid Add-on)
+### 20.9 Extended Warranty (Paid Add-on)
 
 > **Phase 2 add-on revenue stream.** Customer-purchased extension to standard warranty.
 
@@ -1828,7 +1829,7 @@ flowchart TD
 - Post-delivery within **TC-W08: 90 days** via account dashboard.
 - Non-refundable once activated. Transferable on item resale only with admin approval (BR-W06).
 
-### 21.10 Service Partner Network
+### 20.10 Service Partner Network
 
 | Capability | Detail |
 |---|---|
@@ -1838,7 +1839,7 @@ flowchart TD
 | SLA contracts | Partner contracts include response time, repair quality standards, customer rating threshold (≥4.0 to remain active). |
 | Payment | Net-30 from completion-of-repair confirmation. Disputes via admin portal. |
 
-### 21.11 Business Rules — Warranty Module
+### 20.11 Business Rules — Warranty Module
 
 | ID | Rule |
 |---|---|
@@ -1856,12 +1857,12 @@ flowchart TD
 | BR-W12 | Made-to-order items have the same warranty period as standard catalogue. Bespoke items (custom dimensions or custom fabric outside standard range) are warranted only for material/manufacturing defect — not for fit-for-purpose. |
 | BR-W13 | DOA (Damaged on Arrival, reported within 30 days of delivery) bypasses standard repair-first logic and proceeds directly to full replacement. Tracked separately from warranty claims for KPI purposes. |
 
-### 21.12 Time Constraints — Warranty (TC-W01 to TC-W10)
+### 20.12 Time Constraints — Warranty (TC-W01 to TC-W10)
 
 | TC Ref | Constraint | Value | Configurable? | Behaviour on Expiry / Breach |
 |---|---|---|---|---|
 | TC-W01 | Guest warranty registration window | 30 days from delivery | Yes — Admin | Warranty marked 'Unregistered'. Customer can still register up to component-class warranty expiry but loses claim eligibility for issues arising before registration. |
-| TC-W02 | Claim submission within warranty period | Per component class (Section 21.2) | No (legal/contractual) | 'File a Claim' button hidden in UI after expiry. Server-side re-validates at submission. |
+| TC-W02 | Claim submission within warranty period | Per component class (Section 20.2) | No (legal/contractual) | 'File a Claim' button hidden in UI after expiry. Server-side re-validates at submission. |
 | TC-W03 | Admin claim review SLA — B2C / Trade | 5 biz-days B2C / 3 biz-days Trade | Yes — Admin | Claim flagged 'Overdue Review'. Super Admin alert. KPI: % within SLA tracked. |
 | TC-W04 | Repair scheduling SLA | 10 biz-days from approval | Yes — Admin | Customer offered partial refund / replacement as alternative if scheduling slips. |
 | TC-W05 | Replacement dispatch SLA | 21 biz-days from approval (or production lead time for made-to-order) | Yes — Admin | Customer notified of revised ETA; partial refund offered if breach >50%. |
@@ -1871,24 +1872,24 @@ flowchart TD
 | TC-W09 | Customer evidence upload deadline | 14 days from claim filing | Yes — Admin | Incomplete claims auto-closed. Customer can re-file within remaining warranty period. |
 | TC-W10 | Warranty certificate PDF availability | Validity period = longest covered component | No | Certificate downloadable until last covered component's period expires. |
 
-### 21.13 Business Capabilities — Warranty (BC-54 to BC-65)
+### 20.13 Business Capabilities — Warranty (BC-54 to BC-65)
 
 | ID | Capability | Business Value + Time Constraints | Priority |
 |---|---|---|---|
 | BC-54 | Warranty auto-registration & certificate generation | Reduces friction; certificate downloadable from order history. PDF generated on `Delivered`. | Critical |
 | BC-55 | Customer warranty claim submission portal | Self-service replaces email/phone claims. TC-W09 evidence window enforced. | Critical |
 | BC-56 | Evidence photo/video upload via S3 presigned URLs | Secure direct-to-S3 uploads (TC-09 pattern); min. 3 photos required. | Critical |
-| BC-57 | Admin claim review queue with SLA tracking | TC-W03 B2C 5-day / Trade 3-day. Auto-escalation on breach via Process 12.10. | Critical |
+| BC-57 | Admin claim review queue with SLA tracking | TC-W03 B2C 5-day / Trade 3-day. Auto-escalation on breach via Process 11.10. | Critical |
 | BC-58 | Service partner network & vendor portal | Geographic routing, TC-W07 3-day partner response, partner SLA contracts, rating ≥4.0 retention threshold. | High |
-| BC-59 | Repair / Replace / Partial Refund / Store Credit resolution engine | Resolution matrix (Section 21.7) drives Stripe refund (via BC-35) or replacement order (via BC-34). | Critical |
+| BC-59 | Repair / Replace / Partial Refund / Store Credit resolution engine | Resolution matrix (Section 20.7) drives Stripe refund (via BC-35) or replacement order (via BC-34). | Critical |
 | BC-60 | Customer warranty dashboard | Lists all covered items, periods per component, active claims, downloadable certificates. | High |
-| BC-61 | Trade warranty extended terms with commercial-grade flagging | Per Section 21.8. Trade catalogue flags commercial-grade fabrics; auto-applied at order. | Critical |
+| BC-61 | Trade warranty extended terms with commercial-grade flagging | Per Section 20.8. Trade catalogue flags commercial-grade fabrics; auto-applied at order. | Critical |
 | BC-62 | Extended warranty (paid add-on) purchase | At checkout & TC-W08 90-day post-delivery window. Non-refundable (BR-W10). | High |
 | BC-63 | DOA (Damaged on Arrival) fast-track | 30-day post-delivery window. Skips repair-first logic; routes to immediate replacement (BR-W13). | Critical |
 | BC-64 | Warranty fraud detection & escalation | BR-W11 triggers Super Admin review when claim count or frequency exceeds thresholds. | High |
 | BC-65 | Warranty KPI dashboard & reporting | Claim rate, resolution time, repair-vs-replace ratio, post-claim CSAT, extended warranty attach rate, cost per claim. | High |
 
-### 21.14 New Email Triggers — Warranty (E-13 to E-21)
+### 20.14 New Email Triggers — Warranty (E-13 to E-21)
 
 | # | Trigger | Content Summary | TC Ref | Retry / Timing |
 |---|---|---|---|---|
@@ -1902,19 +1903,19 @@ flowchart TD
 | E-20 | Extended Warranty Purchase Confirmation | Plan; coverage; new expiry dates per component | TC-W08 | Sent on payment confirmation |
 | E-21 | Warranty Expiry Reminder | 30 days before earliest component expiry; offer extended plan if eligible | TC-W08 | BullMQ scheduled job |
 
-### 21.15 Admin Module Additions (Warranty Module)
+### 20.15 Admin Module Additions (Warranty Module)
 
 | Module Area | Capability |
 |---|---|
 | Warranty Dashboard | Real-time KPI cards: open claims, claims by SLA status, claim rate this month, partner SLA compliance, fraud-watch flags. |
 | Claim Queue | Filterable list of claims by status, age, customer type (B2C/Trade), component class, geographic zone. Bulk approve/reassign actions. |
 | Service Partner Management | CRUD partners with service zones (ZIP/postal range), certifications, insurance docs, SLA contract upload, performance rating dashboard. |
-| Resolution Configuration | Manage resolution matrix tiers (Section 21.7), partial refund percentages, store credit bonus rates, replacement-vs-repair business rules. |
+| Resolution Configuration | Manage resolution matrix tiers (Section 20.7), partial refund percentages, store credit bonus rates, replacement-vs-repair business rules. |
 | Warranty Catalogue | Per-product warranty configuration: component periods per class, exceptions for bespoke, extended warranty plan eligibility & pricing. |
 | Claims Reporting | Exportable reports: claim rate by product/collection/designer, repair-vs-replace ratio, partner cost, CSAT post-claim, fraud-flag investigations. |
 | Audit Trail | All claim status changes, admin decisions, partner assignments logged (extends BC-40). |
 
-### 21.16 Integration with Existing Modules
+### 20.16 Integration with Existing Modules
 
 | Existing Module | Integration Point |
 |---|---|
@@ -1927,7 +1928,7 @@ flowchart TD
 | Stripe (BC-49) | Partial refunds use existing Stripe refund flow. Extended warranty purchase uses Stripe one-off payment with metadata linkage. |
 | Reporting (BC-42) | Warranty KPIs join the executive dashboard. Filterable in admin reports. |
 
-### 21.17 Warranty KPIs
+### 20.17 Warranty KPIs
 
 | KPI | Definition | Target (12 Months Post-Phase-2-Launch) | Source |
 |---|---|---|---|
@@ -1940,7 +1941,7 @@ flowchart TD
 | Cost per Claim | Operational cost (parts + partner + admin time) / total claims | Trend down quarter-over-quarter | Finance + Warranty Module |
 | Fraud-Flag Rate | Claims escalated under BR-W11 / total claims | ≤2% (trend) | Warranty Module |
 
-### 21.18 Open Decisions — Phase 2 Warranty
+### 20.18 Open Decisions — Phase 2 Warranty
 
 | # | Decision | Options | Owner |
 |---|---|---|---|
@@ -1951,7 +1952,7 @@ flowchart TD
 | OD-W05 | DOA fast-track threshold | A) 30 days (recommended, BR-W13) / B) 14 days / C) 60 days | Biz Owner + Ops |
 | OD-W06 | Out-of-warranty paid repair | A) Offer via service partner network / B) Refer to third party / C) Not offered | Biz Owner + Ops |
 
-### 21.19 Assumptions & Constraints — Warranty
+### 20.19 Assumptions & Constraints — Warranty
 
 **Assumptions:**
 - Phase 1 systems (orders, returns, Stripe refund, S3 upload, BullMQ, admin RBAC) are stable in production before Phase 2 build begins.
@@ -1960,11 +1961,11 @@ flowchart TD
 - Insurance providers cover replacement-cost exposure for warranty obligations (Finance to confirm).
 
 **Constraints:**
-- Legal must finalise warranty terms per market (US state-specific, UK Consumer Rights Act 2015, EU Sale of Goods Directive 2019/771 — minimum 2 years statutory). Section 21.2 values are *commitments above* statutory minimums.
-- Trade contract warranties may exceed Section 21.2 if individually negotiated; Phase 2 admin tooling must support per-contract overrides.
+- Legal must finalise warranty terms per market (US state-specific, UK Consumer Rights Act 2015, EU Sale of Goods Directive 2019/771 — minimum 2 years statutory). Section 20.2 values are *commitments above* statutory minimums.
+- Trade contract warranties may exceed Section 20.2 if individually negotiated; Phase 2 admin tooling must support per-contract overrides.
 - Phase 2 launch contingent on minimum 5 service partners onboarded across primary US states and EU launch countries.
 
-### 21.20 Phase 2 Client Responsibilities (Warranty)
+### 20.20 Phase 2 Client Responsibilities (Warranty)
 
 | # | Deliverable | Specification | Required By |
 |---|---|---|---|
@@ -1972,9 +1973,9 @@ flowchart TD
 | CR-W02 | Warranty Terms (per market) | Final legal-approved warranty terms per US state nexus, UK, and EU country. PDF version + structured data for system display. | Phase 2 Month 2 |
 | CR-W03 | Component-Level Spec Data | Updated product spec sheets identifying component class per part (frame, mechanism, upholstery type, finish) for accurate per-component warranty calculation. | Phase 2 Month 2 |
 | CR-W04 | Insurance Confirmation | Finance confirmation that warranty obligations are covered under existing product liability + a contingency reserve for replacement exposure. | Phase 2 Month 1 |
-| CR-W05 | Commercial-Grade Fabric Flagging | Trade catalogue updated to flag which fabrics carry commercial-use ratings (per Section 21.8 / BR-W04). | Phase 2 Month 2 |
+| CR-W05 | Commercial-Grade Fabric Flagging | Trade catalogue updated to flag which fabrics carry commercial-use ratings (per Section 20.8 / BR-W04). | Phase 2 Month 2 |
 
-### 21.21 Out of Scope — Phase 2 Warranty (Future / Phase 3)
+### 20.21 Out of Scope — Phase 2 Warranty (Future / Phase 3)
 
 - Self-serve warranty transfer on resale (OD-W04 dependent).
 - White-label warranty programme for trade clients (resold to their end customers).
@@ -1985,9 +1986,9 @@ flowchart TD
 
 ---
 
-## 22. Approvals
+## 21. Approvals
 
-By signing below, the named stakeholder confirms they have reviewed BRD v4.0 — including all time constraints and validation rules in Section 17 and the trade portal scope in Section 8.3 — and approve it as the basis for proceeding to the Software Requirements Specification (SRS) phase.
+By signing below, the named stakeholder confirms they have reviewed BRD v4.0 — including all time constraints and validation rules in Section 16 and the trade portal scope in Section 7.3 — and approve it as the basis for proceeding to the Software Requirements Specification (SRS) phase.
 
 > **NOTE:** Before signing: Legal must confirm data retention values TC-31 to TC-38 and returns policy OD-07/OD-08. The Development Lead must confirm technical feasibility of all TC values. Business Owner must resolve Open Decisions OD-05 through OD-10. Trade Manager must confirm trade pricing tiers and VAT exemption approach.
 
