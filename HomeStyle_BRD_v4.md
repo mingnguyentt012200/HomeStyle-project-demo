@@ -3,7 +3,7 @@
 
 | Field | Value |
 |---|---|
-| Version | 4.0 |
+| Version | 4.6 |
 | Status | Draft — Pending Client Approval |
 | Date | April 2026 |
 | Build Type | Custom Web Application (Full-Stack) |
