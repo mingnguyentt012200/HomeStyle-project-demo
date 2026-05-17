@@ -1637,7 +1637,7 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 
 ---
 
-## 21. Approvals
+## 20. Approvals
 
 By signing below, the named stakeholder confirms they have reviewed BRD v4.0 — including all time constraints and validation rules in Section 16 and the trade portal scope in Section 7.3 — and approve it as the basis for proceeding to the Software Requirements Specification (SRS) phase.
 
