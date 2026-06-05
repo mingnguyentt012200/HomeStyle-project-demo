@@ -1,8 +1,8 @@
 # Business Rule Catalog
 > **Project:** HomeStyle — Premium Design Furniture
 > **Owner:** BA / PO
-> **Last Updated:** 2026-06-02
-> **Version:** 1.0
+> **Last Updated:** 2026-06-05
+> **Version:** 1.1
 
 ---
 
@@ -23,6 +23,8 @@
    - [🔒 Compliance](#-domain-compliance) — BR-060 to BR-065
    - [⚙️ Admin & Config](#️-domain-admin--config) — BR-066 to BR-070
    - [🤝 Trade Portal](#-domain-trade-portal) — BR-071 to BR-076
+   - [🚚 Logistics & Carrier](#-domain-logistics--carrier) — BR-077 to BR-083
+   - [📊 Inventory Intelligence](#-domain-inventory-intelligence) — BR-084 to BR-093
 5. [Change History](#change-history)
 
 ---
@@ -125,6 +127,23 @@
 | BR-074 | Trade Application Review SLA | Trade Portal | ACTIVE |
 | BR-075 | Trade Approval Triggers | Trade Portal | ACTIVE |
 | BR-076 | Every Active Trade Account Needs an AM | Trade Portal | ACTIVE |
+| BR-077 | Carrier Weight/Dimension Eligibility Check | Logistics & Carrier | ACTIVE |
+| BR-078 | DPD EU Parcel Weight Ceiling | Logistics & Carrier | ACTIVE |
+| BR-079 | LTL/White-Glove Routing for Heavy Furniture | Logistics & Carrier | ACTIVE |
+| BR-080 | Carrier Auto-Assignment with Manual Override | Logistics & Carrier | ACTIVE |
+| BR-081 | CARRIER_UNRESOLVED Blocks Label Generation | Logistics & Carrier | ACTIVE |
+| BR-082 | Green Delivery Zone Preferential Routing | Logistics & Carrier | ACTIVE |
+| BR-083 | Green Delivery KPI Target & Monitoring | Logistics & Carrier | ACTIVE |
+| BR-084 | Dynamic Safety Stock Configuration Scope | Inventory Intelligence | ACTIVE |
+| BR-085 | Risk Level Derivation Formula | Inventory Intelligence | ACTIVE |
+| BR-086 | Sales Velocity Computation | Inventory Intelligence | ACTIVE |
+| BR-087 | Lead Time Computation | Inventory Intelligence | ACTIVE |
+| BR-088 | Threshold Change Governance — Auto-Approval | Inventory Intelligence | ACTIVE |
+| BR-089 | Threshold Change Governance — Manager Approval | Inventory Intelligence | ACTIVE |
+| BR-090 | Threshold Change Governance — Finance Approval | Inventory Intelligence | ACTIVE |
+| BR-091 | Threshold Change Audit & Versioning | Inventory Intelligence | ACTIVE |
+| BR-092 | Seasonal Config Expiration & Reversion | Inventory Intelligence | ACTIVE |
+| BR-093 | Historical Reports Use Active Config at Event Time | Inventory Intelligence | ACTIVE |
 
 ---
 
@@ -1970,8 +1989,399 @@ Non-retroactive: locked checkout sessions and confirmed orders use price at lock
 
 ---
 
+---
+
+### 🚚 Domain: Logistics & Carrier
+
+*Rules governing carrier eligibility validation, auto-assignment, and EU Green Delivery routing. Implemented at the F-05.6 Pack-Verify step and configured via F-09.1 Admin Shipping Configuration.*
+
+---
+
+#### BR-077 | Carrier Weight/Dimension Eligibility Check
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-077 |
+| **Name** | Carrier Weight/Dimension Eligibility Check |
+| **Domain** | Logistics & Carrier |
+| **Status** | ACTIVE |
+| **Feature** | F-09.1 (config), F-05.6 (enforcement) |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Before generating a shipping label, the system must validate that the selected carrier's `max_weight_kg`, `max_length_cm`, and `max_girth_cm` constraints are not exceeded by the packed consignment. Any carrier that fails this check is excluded from the eligible carrier list.
+
+**Rationale**
+
+Prevents carrier refusals at collection (e.g. DPD EU refusing a 120 kg sofa assigned by a warehouse operator who did not check weight limits), which cause 2+ day delivery delays and negative customer reviews.
+
+**Enforcement Point**
+
+At pack-verify step in F-05.6, before label API call.
+
+**Related Rules** — `BR-078`, `BR-079`, `BR-080`, `BR-081`
+
+---
+
+#### BR-078 | DPD EU Parcel Weight Ceiling
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-078 |
+| **Name** | DPD EU Parcel Weight Ceiling |
+| **Domain** | Logistics & Carrier |
+| **Status** | ACTIVE |
+| **Feature** | F-09.1, F-05.6 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+DPD EU parcel service (`carrier_code: DPD-EU`) is constrained to consignments of ≤ 31.5 kg. Any consignment exceeding this limit must not be assigned to DPD-EU, regardless of zone eligibility.
+
+**Rationale**
+
+DPD EU's contractual and physical limit is 31.5 kg per consignment. Assignment of heavier items causes guaranteed refusal at collection.
+
+**Related Rules** — `BR-077`, `BR-079`
+
+---
+
+#### BR-079 | LTL/White-Glove Routing for Heavy Furniture
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-079 |
+| **Name** | LTL/White-Glove Routing for Heavy Furniture |
+| **Domain** | Logistics & Carrier |
+| **Status** | ACTIVE |
+| **Feature** | F-09.1, F-05.6 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Furniture SKUs with `requires_ltl = true` OR packed weight > 31.5 kg must be routed exclusively to carriers with `service_type = ltl` or `service_type = white_glove`. Assignment to a `service_type = parcel` carrier is blocked by the eligibility engine.
+
+**Related Rules** — `BR-077`, `BR-078`, `BR-080`
+
+---
+
+#### BR-080 | Carrier Auto-Assignment with Manual Override
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-080 |
+| **Name** | Carrier Auto-Assignment with Manual Override |
+| **Domain** | Logistics & Carrier |
+| **Status** | ACTIVE |
+| **Feature** | F-05.6, F-09.1 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+The system auto-selects the highest-ranked eligible carrier and presents it to the warehouse operator for confirmation. The operator may override the auto-selected carrier, but must provide a mandatory reason code. All overrides — including the auto-selected carrier, the chosen carrier, the operator ID, and the reason — are audit-logged.
+
+**Override Safeguard**
+
+If the operator selects an ineligible carrier (fails BR-077 constraints), the system presents a warning. The operator may still confirm with a reason code, but the override is flagged for monthly audit review.
+
+**Related Rules** — `BR-077`, `BR-081`, `BR-082`
+
+---
+
+#### BR-081 | CARRIER_UNRESOLVED Blocks Label Generation
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-081 |
+| **Name** | CARRIER_UNRESOLVED Blocks Label Generation |
+| **Domain** | Logistics & Carrier |
+| **Status** | ACTIVE |
+| **Feature** | F-05.6, F-07.4 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+If no eligible carrier is found after running the eligibility engine, the shipment enters `CARRIER_UNRESOLVED` status. Label generation is blocked. An F-07.4 admin alert is raised within 60 seconds. An Ops Admin must resolve the status manually before dispatch can proceed. TC-17/TC-18 SLA clocks continue running.
+
+**Related Rules** — `BR-077`, `BR-080`
+
+---
+
+#### BR-082 | Green Delivery Zone Preferential Routing
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-082 |
+| **Name** | Green Delivery Zone Preferential Routing |
+| **Domain** | Logistics & Carrier |
+| **Status** | ACTIVE |
+| **Feature** | F-09.1, F-05.6 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+For shipments destined for a configured `green_delivery_zone` (e.g. Berlin, Paris, Amsterdam urban postal prefixes), the carrier eligibility engine must preferentially rank carriers with `green_certified = true` first, **when** the rolling 30-day green-delivery ratio for that zone is below `green_kpi_target_pct` (default 30%). When the ratio is at or above target, standard cost-optimised ranking applies.
+
+**Rationale**
+
+EU urban tax rebate policy requires ≥ 30% of intra-urban deliveries to use certified green carriers (EV fleet or carbon-neutral certified). Non-compliance forfeits EU tax rebate revenue.
+
+**Related Rules** — `BR-083`, `BR-080`
+
+---
+
+#### BR-083 | Green Delivery KPI Target & Monitoring
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-083 |
+| **Name** | Green Delivery KPI Target & Monitoring |
+| **Domain** | Logistics & Carrier |
+| **Status** | ACTIVE |
+| **Feature** | F-09.1, F-09.4 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+- Green delivery ratio is computed per `green_delivery_zone` on a rolling 30-day basis, recalculated nightly.
+- Target: ≥ 30% of shipments into each zone must use `green_certified = true` carriers.
+- Zones below target for two consecutive months trigger a Logistics Director alert.
+- `green_cert_reference` is mandatory for all carriers with `green_certified = true`; missing reference blocks carrier activation.
+- Monthly CSV export of green shipments is generated for EU tax rebate submission.
+
+**Related Rules** — `BR-082`
+
+---
+
+### 📊 Domain: Inventory Intelligence
+
+*Rules governing dynamic safety stock configuration, risk-based alert prioritisation, and governance of threshold changes. Replaces the deprecated hardcoded ATP ≤ 5 universal threshold. Implemented in F-09.3 Admin Inventory Management.*
+
+---
+
+#### BR-084 | Dynamic Safety Stock Configuration Scope
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-084 |
+| **Name** | Dynamic Safety Stock Configuration Scope |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Safety stock is configured per scope in `inventory_threshold_config`. Resolution priority (highest wins): SKU + Warehouse > SKU (all warehouses) > Category + Warehouse > Category (all warehouses) > System Default. System defaults: parcel accessory = 2; white-glove furniture = 5; made-to-order = 0.
+
+**Deprecates**
+
+The previous hardcoded universal threshold of ATP ≤ 5 for all SKUs is deprecated and must not be used.
+
+**Related Rules** — `BR-085`, `BR-088`, `BR-089`, `BR-090`
+
+---
+
+#### BR-085 | Risk Level Derivation Formula
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-085 |
+| **Name** | Risk Level Derivation Formula |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Alert risk level is derived dynamically, not from a static threshold:
+
+```
+days_of_stock = ATP / sales_velocity (units/day)
+lead_time     = category_avg_lead_time_days (or SKU-level override)
+
+CRITICAL  : days_of_stock < lead_time
+MEDIUM    : days_of_stock < (lead_time × 1.5)
+LOW       : days_of_stock ≥ (lead_time × 1.5)  [silent — no alert]
+```
+
+| Risk Level | Alert Behaviour |
+|---|---|
+| Critical | Real-time alert + dashboard Critical badge |
+| Medium | Dashboard amber warning |
+| Low | Silent monitoring only |
+
+**Examples**
+
+- Sofa: ATP=4, velocity=3/day → days=1.3, lead time=28 → **Critical**
+- Lamp: ATP=4, velocity=0.1/day → days=40, lead time=2 → **Low**
+
+**Related Rules** — `BR-084`, `BR-086`, `BR-087`
+
+---
+
+#### BR-086 | Sales Velocity Computation
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-086 |
+| **Name** | Sales Velocity Computation |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Sales velocity per SKU is the 30-day rolling average of `quantity_sold_per_day`, computed by a nightly background job from `sales_velocity_daily`. Admin may set a `sales_velocity_override` at SKU level to handle new products with no history or manual corrections. New products with no history default to category average velocity.
+
+**Related Rules** — `BR-085`, `BR-087`
+
+---
+
+#### BR-087 | Lead Time Computation
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-087 |
+| **Name** | Lead Time Computation |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Lead time per product category is the monthly-recomputed average of `DATEDIFF(day, po_created_date, received_date)` from `purchase_order_receipts`. Admin may set a `lead_time_days_override` at SKU level. This value feeds the BR-085 risk formula.
+
+**Related Rules** — `BR-085`, `BR-086`
+
+---
+
+#### BR-088 | Threshold Change Governance — Auto-Approval
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-088 |
+| **Name** | Threshold Change Governance — Auto-Approval |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Safety stock threshold changes of **less than 10%** relative to the current active config are auto-approved and take effect from `effective_date` with no human approval step. An audit record is still created.
+
+**Related Rules** — `BR-089`, `BR-090`, `BR-091`
+
+---
+
+#### BR-089 | Threshold Change Governance — Manager Approval
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-089 |
+| **Name** | Threshold Change Governance — Manager Approval |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Safety stock threshold changes of **10%–30%** require Inventory Manager approval before taking effect. A pending approval request is created and surfaced in the approver's dashboard. Requests expire after 5 business days (auto-rejected; requester and approver notified).
+
+**Related Rules** — `BR-088`, `BR-090`, `BR-091`
+
+---
+
+#### BR-090 | Threshold Change Governance — Finance Approval
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-090 |
+| **Name** | Threshold Change Governance — Finance Approval |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Safety stock threshold changes of **more than 30%** require Finance Manager approval. Inventory Manager approval alone is insufficient for changes in this band. Rationale: large threshold increases materially affect working capital and safety stock cost.
+
+**Related Rules** — `BR-088`, `BR-089`, `BR-091`
+
+---
+
+#### BR-091 | Threshold Change Audit & Versioning
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-091 |
+| **Name** | Threshold Change Audit & Versioning |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Every threshold config change — auto-approved or manually approved — produces an immutable audit record containing: `old_value`, `new_value`, `changed_by`, `approved_by` (null if auto-approved), `change_reason`, `timestamp`, and `version`. Config records are versioned; no record is deleted.
+
+**Related Rules** — `BR-088`, `BR-089`, `BR-090`, `BR-093`
+
+---
+
+#### BR-092 | Seasonal Config Expiration & Reversion
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-092 |
+| **Name** | Seasonal Config Expiration & Reversion |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Threshold configs may include an `expiration_date`. At expiration, the system automatically reverts to the next-priority active config in the resolution chain (BR-084). No manual action is required. Admins are notified 3 days before expiration.
+
+**Use Case**
+
+Christmas collection: temporary safety stock increase effective Dec 1 → expires Jan 7. System auto-reverts to standard category config on Jan 7.
+
+**Related Rules** — `BR-084`, `BR-091`
+
+---
+
+#### BR-093 | Historical Reports Use Active Config at Event Time
+
+| Field | Value |
+|---|---|
+| **Rule ID** | BR-093 |
+| **Name** | Historical Reports Use Active Config at Event Time |
+| **Domain** | Inventory Intelligence |
+| **Status** | ACTIVE |
+| **Feature** | F-09.3 |
+| **Last Modified** | 2026-06-05 |
+
+**Rule Statement**
+
+Inventory reports for past periods must use the threshold config version whose `effective_date` ≤ event date < `expiration_date` (or no expiration). Reports must not apply the current active config retroactively, as this would misrepresent historical alert conditions and distort trend analysis.
+
+**Related Rules** — `BR-091`, `BR-092`
+
+---
+
 ## Change History
 
 | Date | Rule ID | Change | Changed By | Reason |
 |---|---|---|---|---|
 | 2026-06-02 | BR-001 to BR-076 | Initial catalog created | BA | Project documentation |
+| 2026-06-05 | BR-077 to BR-083 | Added 🚚 Logistics & Carrier domain — carrier eligibility validation and Green Delivery routing rules | BA | EU logistics expansion: Poland warehouse → DE/FR/NL markets; carrier mis-assignment incidents; EU Green Delivery KPI |
+| 2026-06-05 | BR-084 to BR-093 | Added 📊 Inventory Intelligence domain — dynamic safety stock, risk-based alerting, governance workflow | BA | Replaced hardcoded ATP ≤ 5 threshold; 20K+ SKU differentiated replenishment; Finance governance concern |

@@ -1,8 +1,8 @@
 # Feature Dependency Matrix
 > **Project:** HomeStyle — Premium Design Furniture
 > **Owner:** BA / PO
-> **Last Updated:** 2026-06-02
-> **Version:** 1.0
+> **Last Updated:** 2026-06-05
+> **Version:** 1.1
 
 ---
 
@@ -129,10 +129,10 @@
 | **F-08.1** Cookie Consent | — | — | Analytics & marketing scripts | BR-060, BR-061 | `cookie_consents` |
 | **F-08.2** Data Erasure | F-01.5, F-01.6 | 🔴 Strong | F-08.3, F-09.2 | BR-062, BR-063 | `users`, all PII tables |
 | **F-08.3** Data Retention Jobs | F-08.2 | 🟡 Weak | — | BR-006, BR-063, BR-064, BR-065 | All tables (retention policies) |
-| **F-09.1** Admin Shipping Configuration | — | — | F-02.4, F-04.4 | BR-045, BR-066, BR-067 | `shipping_zones`, `shipping_rates`, `whiteglove_partners` |
+| **F-09.1** Admin Shipping Configuration | — | — | F-02.4, F-04.4, F-05.6 | BR-045, BR-066, BR-067, BR-077–083 | `shipping_zones`, `shipping_rates`, `whiteglove_partners`, `carrier_profiles`, `green_delivery_zones` |
 | **F-09.2** Admin Customer Management | F-01.5 | 🔴 Strong | F-08.2 | BR-068 | `users` |
-| **F-09.3** Admin Inventory Management | F-02.5 | 🔴 Strong | F-02.3, F-04.1 | BR-031 | `inventory_records`, `sku_stock` |
-| **F-09.4** Admin Dashboard & KPIs | F-05.1, F-10.1 | 🟡 Weak | — | — | Aggregated from orders, returns, trade |
+| **F-09.3** Admin Inventory Management | F-02.5, **Velocity Job** | 🔴 Strong | F-02.3, F-04.1, **F-09.4** | BR-031, **BR-084–093** | `inventory_records`, `sku_stock`, **`inventory_threshold_config`**, **`sales_velocity_daily`** |
+| **F-09.4** Admin Dashboard & KPIs | F-05.1, F-10.1, **F-09.1**, **F-09.3** | 🟡 Weak | — | — | Aggregated from orders, returns, trade, **green_delivery_zones**, **inventory_threshold_config** |
 | **F-09.5** Admin Promotions & Discounts | — | — | F-04.3 | BR-069, BR-070 | `discount_codes`, `code_redemptions` |
 | **F-10.1** Trade Account Review | F-01.5, F-10.2, F-10.3, F-07.3 | 🔴 Strong | F-01.2, F-03.3, F-04.4 | BR-074, BR-075 | `trade_accounts`, `trade_documents` |
 | **F-10.2** Trade Pricing Tiers | F-10.1 | 🔴 Strong | F-02.3, F-04.1, F-04.4 | BR-071, BR-072, BR-073 | `trade_tiers`, `trade_price_overrides` |
@@ -326,7 +326,8 @@
 | **Domain** | Admin & Config |
 | **Owner** | Ops Team |
 | **Status** | Active |
-| **Description** | Admin interface to configure shipping zones, rates, free-shipping thresholds, and white-glove delivery partners |
+| **Spec Version** | v3.0 (updated 2026-06-05) |
+| **Description** | Admin interface to configure shipping zones, rates, free-shipping thresholds, white-glove delivery partners, **carrier profiles (weight/dim limits, green certification)**, and **EU Green Delivery zones** |
 
 **Depends On** — *(none — configuration source)*
 
@@ -336,24 +337,42 @@
 |---|---|---|---|
 | F-02.4 | Delivery Availability Checker | 🔴 Strong | Zone coverage data determines delivery availability and estimate |
 | F-04.4 | Tax & Shipping Calculation | 🔴 Strong | All rate calculations read from shipping zones/rates tables |
+| **F-05.6** | **Warehouse Pick, Pack & Ship** | 🔴 Strong | **Carrier auto-assignment engine reads `carrier_profiles` at label generation; CARRIER_UNRESOLVED blocks dispatch** |
+| **F-09.4** | **Admin Dashboard & KPIs** | 🟡 Weak | **Green Delivery Ratio KPI card per zone sourced from green_delivery_zones** |
 
 **Business Rules**
 - `BR-045` — Shipping rate formula
 - `BR-066` — Rate changes non-retroactive
 - `BR-067` — Soft-delete only
 - `BR-028` — White-glove eligibility
+- `BR-077` — Carrier weight/dimension eligibility check *(new)*
+- `BR-078` — DPD EU parcel weight ceiling (≤ 31.5 kg) *(new)*
+- `BR-079` — LTL/white-glove routing for heavy furniture *(new)*
+- `BR-080` — Carrier auto-assignment with manual override *(new)*
+- `BR-081` — CARRIER_UNRESOLVED blocks label generation *(new)*
+- `BR-082` — Green Delivery zone preferential routing *(new)*
+- `BR-083` — Green Delivery KPI target & monitoring *(new)*
 
 **Data / Tables Involved**
 - `shipping_zones`, `shipping_rates`, `whiteglove_partners`
+- `carrier_profiles` *(new)* — weight/dim limits, green certification per carrier
+- `green_delivery_zones` *(new)* — EU urban postal prefixes + KPI targets
+- `carrier_assignment_log` *(new)* — audit log of auto-selected vs. operator-chosen carriers
 
 **Teams to Notify on Change**
-- [ ] Finance Team — any rate change affects checkout cost
-- [ ] Ops Team — white-glove partner coverage changes
+- [ ] Finance Team — any rate change affects checkout cost; green KPI affects EU tax rebate revenue
+- [ ] Ops Team — white-glove partner coverage changes; carrier profile changes
+- [ ] Logistics Director — green delivery zone config and KPI target changes
+- [ ] Warehouse Team — carrier auto-assignment logic changes at pack step (F-05.6)
 
 **CR Impact Checklist**
 - [ ] Are rate changes non-retroactive (locked checkouts and confirmed orders unaffected)?
 - [ ] Does the free-shipping threshold still display correctly at checkout?
 - [ ] Does white-glove eligibility logic still use the correct weight threshold and zone coverage?
+- [ ] Does carrier auto-assignment correctly enforce weight/dim limits at F-05.6 pack-verify?
+- [ ] Does CARRIER_UNRESOLVED state correctly block label generation and trigger F-07.4 alert?
+- [ ] Does green delivery preferential routing activate correctly when zone ratio < target?
+- [ ] Is `green_cert_reference` still required for all `green_certified = true` carriers?
 
 ---
 
@@ -458,6 +477,10 @@
 | F-09.1 Shipping Config | F-04.4 Tax & Shipping | High | Shipping rates non-retroactive, but locked checkout sessions must snapshot the rate at lock time. Any rate structure change (new fields, formula change) must be backward-compatible with existing snapshots. | 2026-06-02 |
 | F-01.5 Token Management | F-09.2 Customer Management | Medium | Admin deactivating a customer must trigger immediate token revocation. If token revocation logic in F-01.5 changes, F-09.2 deactivation may silently fail to log out the customer. | 2026-06-02 |
 | F-07.3 Email System | F-10.1 Trade Approval | Medium | Trade approval sends welcome email via F-07.3. Template changes or email system downtime will affect the approval completion experience. | 2026-06-02 |
+| **F-09.1 Shipping Config** | **F-05.6 Pick, Pack & Ship** | High | **Carrier auto-assignment at pack-verify reads `carrier_profiles` from F-09.1. Changes to carrier weight/dim limits, green certification status, or zone coverage immediately affect which carriers are eligible at label generation. A carrier deactivation mid-wave can cause CARRIER_UNRESOLVED for in-progress shipments.** | 2026-06-05 |
+| **F-09.1 Green Delivery Zones** | **F-09.4 Admin Dashboard** | Medium | **Green Delivery Ratio KPI card in F-09.4 reads rolling ratio from green_delivery_zones. Changes to zone postal prefixes or KPI target percentage will alter the dashboard KPI values immediately and may trigger or suppress Logistics Director alerts.** | 2026-06-05 |
+| **F-09.3 Inventory Threshold Config** | **F-09.3 Background Velocity Job** | High | **Risk level (Critical/Medium/Low) classification depends on nightly velocity and monthly lead-time recomputation jobs. If either job fails silently, risk scores become stale — warehouse teams act on incorrect data. Job failure must surface in F-07.4 admin alerts.** | 2026-06-05 |
+| **F-09.3 Threshold Governance** | **F-09.4 Admin Dashboard** | Medium | **F-09.4 must surface pending approval request count as a KPI card. If F-09.3 approval workflow changes (approval bands, approver roles), the F-09.4 dashboard task count and routing logic must be updated together.** | 2026-06-05 |
 
 ---
 
@@ -487,3 +510,7 @@ Use the `Teams to Notify on Change` list from the feature's detail card.
 | Date | Feature ID | Change | Changed By | Reason |
 |---|---|---|---|---|
 | 2026-06-02 | All features | Initial matrix created | BA | Project documentation |
+| 2026-06-05 | F-09.1 | Added F-05.6 as affected feature (🔴 Strong); added carrier_profiles and green_delivery_zones to data tables; added BR-077–083; updated detail card and CR checklist | BA | Carrier validation + Green Delivery routing extension |
+| 2026-06-05 | F-09.3 | Added Velocity Job dependency; added F-09.4 as affected feature; added BR-084–093; added inventory_threshold_config and sales_velocity_daily tables | BA | Dynamic safety stock + risk-based replenishment extension |
+| 2026-06-05 | F-09.4 | Added F-09.1 and F-09.3 as data sources for new KPI cards (Green Delivery Ratio, Risk Summary, Pending Approvals) | BA | New operational KPIs from logistics and inventory intelligence extensions |
+| 2026-06-05 | Cross-Feature Watchlist | Added 4 new conflict pairs: F-09.1↔F-05.6, F-09.1 Green Zones↔F-09.4, F-09.3 Threshold Config↔Velocity Job, F-09.3 Governance↔F-09.4 | BA | New dependencies introduced by F-09.1 and F-09.3 extensions |

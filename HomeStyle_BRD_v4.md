@@ -3,7 +3,7 @@
 
 | Field | Value |
 |---|---|
-| Version | 4.6 |
+| Version | 4.0 |
 | Status | Draft — Pending Client Approval |
 | Date | April 2026 |
 | Build Type | Custom Web Application (Full-Stack) |
@@ -36,7 +36,8 @@
 17. [Operational Domain Model & Business Rules](#17-operational-domain-model--business-rules)
 18. [Key Performance Indicators](#18-key-performance-indicators-kpis)
 19. [Stakeholder Register & RACI](#19-stakeholder-register--raci)
-20. [Approvals](#20-approvals)
+20. [Warranty & Aftercare Specification (Phase 2)](#20-warranty--aftercare-specification-phase-2)
+21. [Approvals](#21-approvals)
 
 ---
 
@@ -54,6 +55,8 @@
 | 4.4 | May 2026 | Senior-BA refactor of catalogue and operations core (per e-commerce domain best practice). Section 17.1 refactored to 5-level catalogue hierarchy (Family → Product → Option Types → SKU → Bundle) with EAV attributes. Section 17.4 refactored to full inventory state machine with Physical/Reserved/ATP layers and Soft/Hard Lock distinction. New 17.5 Order Routing & Allocation, 17.6 WMS, 17.7 DIM Weight, 17.8 Overselling Prevention. New 17.9 consolidated Business Rules (BR-PRD-01..10, BR-INV-01..10, BR-FUL-01..10, BR-WHS-01..10). New processes 11.11 Order Routing, 11.12 Pick Pack Ship, 11.13 Goods Receipt & Putaway (each with BPMN). New capabilities BC-66..87 across 3 new subsections (12.12 Catalogue Hierarchy, 12.13 Inventory & Routing, 12.14 WMS). New TC values TC-INV-01..03, TC-FUL-01..02, TC-WHS-01..05 in Section 16.6. | PO / BA |
 | 4.5 | May 2026 | Added Mermaid BPMN swim-lane diagrams to processes 11.1 (Customer Purchase Journey), 11.2 (Trade Account Application & Approval), and 11.3 (Returns & Exchange). All 13 processes in Section 11 now have both a stage table and a BPMN diagram for stakeholder review consistency. | PO / BA |
 | 4.6 | May 2026 | Renamed Section 17 from "Domain-Specific Considerations" to "Operational Domain Model & Business Rules". Renamed Section 14 from "Returns & Exchange — Business Rules" to "Returns & Exchange Eligibility Rules" to disambiguate from the codified BR registry in Section 17.9. Added cross-reference note in Section 14. | PO / BA |
+| 4.7 | May 2026 | **Numbering fix.** Renumbered all top-level sections from legacy 1, 3–22 (with a gap at 2) to sequential 1–21. All subsections (`N.M`), TOC anchor URLs, body cross-references to "Section N" / "Section N.M" / "Section N.M.K", and "Process N.M" references updated consistently. Revision history entries above updated to reflect current section numbers. | PO / BA |
+| 4.8 | Jun 2026 | **EU Logistics & Inventory Intelligence upgrade.** (1) Carrier Validation & Green Delivery: added BC-88–90 (§12.13), TC-CAR-01 and TC-GREEN-01 (§16.6), BR-FUL-11–13 (§17.9), Green Delivery Ratio KPI (§18.2). BR-INV-02 updated to reflect dynamic scope. (2) Dynamic Safety Stock & Risk-Based Replenishment: replaced hardcoded ATP ≤ 5 threshold with dynamic `inventory_threshold_config` system; added BC-91–93 (§12.13), TC-INV-03 updated to continuous review cadence, BR-INV-11–16 (§17.9), Inventory Risk Alert Accuracy KPI (§18.2). Safety stock definition note in §17.4 updated. Feature specs F-09.1 (v3.0) and F-09.3 (v4.0) updated. Business Rule Catalog updated to BR-077–093. Feature Dependency Matrix updated. | PO / BA |
 
 ---
 
@@ -1137,6 +1140,12 @@ flowchart TD
 | BC-77 | Chargeable weight (DIM / volumetric) calculation for rate quotes | `MAX(gross_weight, (L×W×H)/DIM_divisor)`. Used by BC-51 for accurate carrier quotes. Trade pricing tier can override DIM divisor per carrier contract. BR-FUL-07. | Critical |
 | BC-78 | Overselling prevention with auto-incident response | Defense-in-depth (5 control layers per Section 17.8); auto-detection at pick; auto-apology + voucher + Stripe refund without CSR intervention. KPI Oversell Rate ≤0.05%. BR-INV-09. | Critical |
 | BC-79 | Channel buffer stock (Phase 3 marketplace prep) | Withholds N units from each external channel's ATP feed to absorb sync lag. Architecture in Phase 1; activated in Phase 3 when marketplaces are integrated. BR-WHS-10. | Medium |
+| BC-88 | Dynamic safety stock configuration (category / SKU / warehouse scope) | Replaces hardcoded universal threshold. Safety stock configurable per category, SKU, or warehouse with priority resolution chain and version history. Seasonal configs supported via effective/expiration dates. BR-INV-11 / BR-INV-12. | Critical |
+| BC-89 | Risk-based inventory alert prioritisation (Critical / Medium / Low) | Alert level derived from `days_of_stock = ATP / sales_velocity` vs. `lead_time_days`. Critical = real-time alert; Medium = dashboard warning; Low = silent. Replaces ATP ≤ 5 uniform threshold. BR-INV-13 / BR-INV-14 / BR-INV-15. | Critical |
+| BC-90 | Threshold change governance — approval workflow with audit versioning | Changes < 10%: auto-approved. 10–30%: Inventory Manager approval. > 30%: Finance Manager approval. Immutable audit record per change. Pending requests expire after 5 biz days. BR-INV-16. | High |
+| BC-91 | Carrier profile management (weight/dim limits, green certification) | Admin configures `carrier_profiles` with per-carrier weight, dimension, and girth limits, service type, supported zones, and green certification status. Drives auto-assignment at pack-verify. BR-FUL-11. | Critical |
+| BC-92 | Carrier auto-assignment & CARRIER_UNRESOLVED incident handling | At pack-verify, system auto-selects highest-ranked eligible carrier. No eligible carrier → `CARRIER_UNRESOLVED` state blocks label generation and fires F-07.4 alert. Manual override requires reason code and is audit-logged. BR-FUL-12. | Critical |
+| BC-93 | EU Green Delivery zone routing & KPI tracking | Admin configures EU urban postal zones (Berlin, Paris, Amsterdam). System preferentially routes to `green_certified = true` carriers when rolling 30-day ratio < target (default 30%). Monthly export for EU tax rebate. BR-FUL-13 / BR-INV-09. | High |
 
 ### 12.14 Warehouse Operations (WMS)
 
@@ -1306,7 +1315,9 @@ flowchart TD
 |---|---|---|---|---|
 | TC-INV-01 | Soft-lock TTL at checkout initiation | 15 minutes (alias of TC-13) | No | Hold released on TTL expiry. Other shoppers' ATP recovers. See Section 17.4.3. |
 | TC-INV-02 | Hard-lock auto-release on order cancellation before pick | Immediate | No | Reserved decremented; ATP recomputed; if SKU was OOS due to lock: TC-28 back-in-stock job queued. |
-| TC-INV-03 | Safety Stock review cadence | Quarterly (per SKU) | Yes — Admin | Admin Ops reviews safety-stock values quarterly using oversell incidents + carrier delay data. Adjustments audit-logged. |
+| TC-INV-03 | Safety Stock review cadence | Continuous (event-driven) + quarterly governance audit | Yes — Admin | Dynamic safety stock system (BC-88/89) recomputes risk levels nightly. Admin may update thresholds at any time subject to governance (BR-INV-16). A formal quarterly audit of all active configs remains recommended practice. Supersedes the prior quarterly-only review cadence. |
+| TC-CAR-01 | Carrier auto-assignment decision time at pack-verify | ≤ 5 seconds | No | If eligibility engine cannot return a result within 5 s: shipment flagged CARRIER_UNRESOLVED; Ops Admin alerted. TC-18 SLA clock continues. BC-92. |
+| TC-GREEN-01 | Green Delivery ratio computation cadence | Nightly (rolling 30 days) | No | Green delivery ratio per zone recomputed nightly by background job. Stale ratio (job failure) must surface in F-07.4 admin alert within 1 hour of job failure. BC-93 / BR-FUL-13. |
 | TC-FUL-01 | Order routing decision time | 30 seconds | No | If routing engine cannot decide within 30 sec: order queued for Super Admin manual allocation. Alerts dashboard. |
 | TC-FUL-02 | Split shipment customer notification | Within 5 minutes of allocation | No | If split allocated: E-04 enriched with per-shipment ETA. If failed to send: TC-29 retry. |
 | TC-WHS-01 | Wave generation cadence | Every 4 hours | Yes — Admin | Configurable per warehouse. Smaller windows for high-volume periods (e.g. hourly during peak season). |
@@ -1367,7 +1378,7 @@ flowchart TD
 | **Reserved / Allocated Stock** | Units already promised to active orders but not yet shipped out. Reservations exist in two flavours (see 18.4.3). | Increments on order creation / checkout initiation; decrements on order cancel, hold expiry, or pick confirmation. |
 | **ATP — Available to Promise** | The number actually shown to customers on PDPs and used for "Add to Cart" eligibility. | **`ATP = Physical − Reserved − Safety Stock`**. Recomputed on every reservation event. |
 
-> **Safety Stock** is a configurable buffer per SKU (admin System Settings, BC-41) protecting against carrier delays, returns processing lag, and channel-sync race conditions. Default: 2 units for parcel-shipped accessories; 0 for made-to-order items (lead time handles uncertainty); 1 for white-glove large items.
+> **Safety Stock** is a dynamically configurable buffer per SKU or product category (BC-88), protecting against carrier delays, returns processing lag, and channel-sync race conditions. Configuration supports category-level defaults, SKU-level overrides, and warehouse-specific values with effective/expiration dates for seasonal adjustment. System defaults: 2 units for parcel accessories; 5 units for white-glove furniture; 0 for made-to-order. Threshold changes above 10% are subject to governance approval (BC-90, BR-INV-16). Supersedes the prior single-field per-SKU config in BC-41.
 
 **18.4.2 Inventory State Machine (SKU-level)**
 
@@ -1532,7 +1543,7 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 | ID | Rule |
 |---|---|
 | BR-INV-01 | `ATP = Physical − Reserved − Safety Stock`. ATP is the **only number shown to customers** and used for Add-to-Cart eligibility. Physical and Reserved are admin-only. |
-| BR-INV-02 | Safety Stock is configured per SKU in admin (BC-41). Defaults: 2 units (parcel accessories), 1 unit (white-glove items), 0 (made-to-order). |
+| BR-INV-02 | Safety Stock is configured dynamically per scope (SKU, Category, or Warehouse) via `inventory_threshold_config` (BC-88). Resolution priority: SKU+Warehouse > SKU > Category+Warehouse > Category > System Default. System defaults: 2 (parcel accessory), 5 (white-glove furniture), 0 (made-to-order). Supersedes prior single-field per-SKU config. |
 | BR-INV-03 | **Soft Lock** is created at checkout initiation (TC-13: Redis SETNX, 15-min TTL). Soft locks release automatically on TTL expiry, cart abandonment, or payment failure. |
 | BR-INV-04 | **Hard Lock** is created on `payment_intent.succeeded` webhook (durable row in `order_allocations` table). Hard locks release **only** on pick confirmation, order cancellation, or admin manual override (audit-logged). |
 | BR-INV-05 | Reservation must be **atomic**. Redis SETNX (soft) and DB transaction (hard) prevent concurrent reservation of the same physical unit. |
@@ -1540,7 +1551,18 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 | BR-INV-07 | Returned items enter `QC-Hold` location and do **not** increment Physical Stock until QC pass. QC fail routes to scrap or refurb (Phase 3 outlet channel). |
 | BR-INV-08 | Stock adjustments outside of order flow (cycle count, supplier delivery, manual write-off) are all audit-logged with actor, before/after values, and reason code (BC-40). |
 | BR-INV-09 | Oversell Rate KPI: ≤0.05% target. >0.2% in any rolling month triggers mandatory postmortem and safety-stock review. |
-| BR-INV-10 | Low-stock threshold per SKU is admin-configurable (BC-41). Default: 5 units for parcel; 2 units for white-glove. Customer PDP shows 'Only X left' below threshold. |
+| BR-INV-10 | Low-stock threshold per SKU is admin-configurable (BC-41). Default: 5 units for parcel; 2 units for white-glove. Customer PDP shows 'Only X left' below threshold. Note: the operational low-stock *alert* system is superseded by risk-based alerting (BR-INV-13); this rule governs only the customer-facing PDP display label. |
+
+**Fulfillment & Order Routing Rules (BR-FUL)**
+
+| ID | Rule |
+|---|---|
+| BR-INV-11 | Dynamic safety stock configs support an `effective_date` and optional `expiration_date`. On expiration, system auto-reverts to the next-priority active config in the resolution chain. No manual action required. Admins notified 3 days before expiration. |
+| BR-INV-12 | Every threshold config change (auto-approved or manually approved) produces an immutable audit record: old_value, new_value, changed_by, approved_by, change_reason, timestamp, version. Config records are versioned and never deleted. |
+| BR-INV-13 | Alert risk level is derived dynamically: `days_of_stock = ATP / sales_velocity`. Critical if `days_of_stock < lead_time_days`. Medium if `days_of_stock < lead_time_days × 1.5`. Low (silent) otherwise. Replaces the deprecated hardcoded ATP ≤ 5 alert threshold for operational alerting. |
+| BR-INV-14 | Sales velocity per SKU = 30-day rolling average of `quantity_sold_per_day`, recomputed nightly. New SKUs with no history default to category average. Admin may set `sales_velocity_override` at SKU level. |
+| BR-INV-15 | Lead time per category = monthly-recomputed average of `DATEDIFF(day, po_created_date, received_date)` from purchase_order_receipts. Admin may set `lead_time_days_override` at SKU level to override the category average. |
+| BR-INV-16 | Threshold change governance: < 10% change → auto-approved. 10–30% → Inventory Manager approval required. > 30% → Finance Manager approval required. Pending approval requests expire after 5 business days (auto-rejected; both parties notified). |
 
 **Fulfillment & Order Routing Rules (BR-FUL)**
 
@@ -1556,6 +1578,9 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 | BR-FUL-08 | TC-18 dispatch SLA (48 biz-hrs) starts at order confirmation for in-stock items and at production completion for made-to-order items. |
 | BR-FUL-09 | White-glove items are picked individually and not wave-picked — their dispatch requires partner appointment booking and dedicated handling. |
 | BR-FUL-10 | An order may not be cancelled by a customer after status `Picked` (already off the shelf). Cancellations after pick require Operations Admin override. |
+| BR-FUL-11 | At the pack-verify step (Process 11.12), the system must validate carrier eligibility before label generation: selected carrier's `max_weight_kg`, `max_length_cm`, and `max_girth_cm` must not be exceeded by the packed consignment. Any carrier failing these checks is excluded from the eligible list. Enforcement is by the carrier auto-assignment engine reading `carrier_profiles` (BC-91). |
+| BR-FUL-12 | If no eligible carrier is found after eligibility check, the shipment enters `CARRIER_UNRESOLVED` status. Label generation is blocked. An F-07.4 admin alert is raised within 60 seconds. TC-17/TC-18 SLA clocks continue. Ops Admin manual resolution required. Operator override of the auto-selected carrier (including selection of an ineligible carrier with a reason code) is permitted but audit-logged (BC-92). |
+| BR-FUL-13 | For shipments into a configured `green_delivery_zone`, the carrier eligibility engine preferentially ranks `green_certified = true` carriers when the rolling 30-day green-delivery ratio for that zone is below `green_kpi_target_pct` (default 30%). Green delivery ratio is computed per zone nightly (TC-GREEN-01). Target ≥ 30% per zone. Zones below target for two consecutive months trigger a Logistics Director alert (BC-93). |
 
 **Warehouse Operations Rules (BR-WHS)**
 
@@ -1598,6 +1623,10 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 | Return Rate | % of delivered orders returned | ≤ 5% (premium lower expectation) | Returns Reports |
 | Avg. Product Rating | Mean star rating across all reviewed products | ≥ 4.5 / 5.0 | Review Module |
 | Page Load Time (LCP) | Largest Contentful Paint on product pages | < 2.5 seconds | Core Web Vitals |
+| **Green Delivery Ratio** | **% of shipments into configured EU urban zones (Berlin, Paris, Amsterdam) using `green_certified = true` carriers — rolling 30-day per zone** | **≥ 30% per zone (EU tax rebate eligibility threshold)** | **Admin Reports / Green KPI Dashboard (BC-93)** |
+| **Inventory Risk Alert Accuracy** | **% of Critical-level inventory alerts that result in a replenishment action within lead time (i.e. alert was justified)** | **≥ 85% (reduces alert fatigue vs. prior hardcoded threshold)** | **F-09.3 Risk Dashboard (BC-89)** |
+| **Threshold Approval Cycle Time** | **Average time from safety stock change request to approval/rejection (where approval is required)** | **≤ 2 business days** | **F-09.3 Governance Log (BC-90)** |
+| **CARRIER_UNRESOLVED Rate** | **% of shipments entering CARRIER_UNRESOLVED status (label generation blocked due to no eligible carrier)** | **≤ 0.1% of shipments** | **F-05.6 / F-09.1 Carrier Audit Log (BC-92)** |
 
 ---
 
@@ -1636,7 +1665,355 @@ Single-order picking ("one customer at a time") is the most common Junior mistak
 
 ---
 
-## 20. Approvals
+## 20. Warranty & Aftercare Specification (Phase 2)
+
+> **PHASE:** Months 7–12 (Phase 2 — Growth). **STATUS:** Specification draft. Full SRS to follow on Phase 2 kickoff. This section establishes the BA-level scope and rules so the Phase 2 backlog can be estimated and prioritised at MVP go-live.
+
+### 20.1 Overview & Business Value
+
+Premium design furniture is a multi-year purchase. Buyers expect manufacturer-backed warranty as a hallmark of quality, and trade clients (hospitality, contract, corporate) typically require commercial warranty terms in their procurement contracts. HomeStyle's current offline business handles warranty via account managers and email — the goal of Phase 2 is to bring this in-house with a self-service portal, defined SLAs, and a service partner network.
+
+| Driver | Business Outcome |
+|---|---|
+| Reduce reactive support workload | Replace 80% of warranty email back-and-forth with portal-based claims. |
+| Win trade & contract tenders | Published 5-year structural warranty becomes a competitive proof point in B2B RFPs. |
+| Aftercare revenue | Paid Extended Warranty Plans create new recurring revenue (target: ≥8% attach rate). |
+| Brand trust | Visible warranty status + transparent resolution timelines reinforce premium positioning (NFR target: post-claim CSAT ≥4.5). |
+| Inventory recovery | Returned-for-warranty items refurbished and re-routed to outlet channel (Phase 3 enabler). |
+
+### 20.2 Warranty Types & Coverage Periods
+
+> Warranty period **starts on confirmed delivery date** (BR-W01). Made-to-order items inherit standard warranty unless flagged "bespoke" (BR-W02 / BR-W04).
+
+| Component Class | B2C — Standard Warranty | Trade — Commercial Warranty | Notes |
+|---|---|---|---|
+| Structural / Frame (timber, metal) | 5 years | 10 years | Manufacturing & material defects only |
+| Mechanism (reclining, lift, swivel) | 2 years | 3 years | Hardware & motor (where applicable) |
+| Upholstery — Leather Grade A/B | 2 years | 2 years (commercial-grade only) | Excludes natural variation & wear |
+| Upholstery — Fabric Grade A | 2 years | 1 year | Heavy commercial use shortens cover |
+| Cushion fill / resilience | 1 year | 6 months | Excludes normal compression |
+| Finish (wood lacquer, paint, plating) | 1 year | 1 year | Excludes UV fade & cleaning damage |
+| Electrical components | 1 year | 1 year | Where applicable (LED, USB, motors) |
+| Hardware & fixings | 2 years | 2 years | Replacement parts dispatched free |
+
+> **B2C → Trade Crossover (BR-W04):** Furniture installed in commercial premises (hotels, offices, restaurants, hospitality) under a B2C order is **not** covered under the B2C warranty. Customer must purchase via Trade account for commercial use.
+
+### 20.3 Coverage — Inclusions & Exclusions
+
+| Covered (eligible for claim) | Excluded (claim will be rejected) |
+|---|---|
+| Manufacturing defects (frame, joints, welding) | Customer-caused damage (drops, spills, pets, sharp objects) |
+| Material defects (fabric weave failure, leather splitting) | Normal wear & tear (fabric pilling, leather patina, cushion softening) |
+| Mechanism / hardware failure | Modifications / DIY repairs by unauthorised parties |
+| Finish defects (peeling, cracking, blistering from manufacturing) | UV fading, environmental damage (humidity, dryness) |
+| Inconsistencies vs. confirmed specification | Use beyond intended (e.g. outdoor use of indoor furniture) |
+| Failed components within stated warranty period | Items installed in commercial premises under B2C warranty (BR-W04) |
+| Defects discovered within first 30 days (DOA — full replacement) | Cosmetic variation natural to material (wood grain, leather marks) |
+| | Damage from improper assembly by customer (when self-assembly is optional) |
+| | Bespoke / custom items unless faulty per spec |
+
+### 20.4 Warranty Registration & Activation
+
+Standard warranty is **auto-activated on delivery confirmation** for registered customers — no manual action required. Guest-checkout customers must register within **TC-W01** to retain warranty.
+
+| # | Stage | Detail |
+|---|---|---|
+| 1 | Auto-Activation (Registered) | On `Delivered` status, system creates warranty record linked to order item. Warranty period calculated per component class (Section 20.2). Customer receives E-13 with digital warranty certificate (PDF). |
+| 2 | Manual Registration (Guest) | Guest customer receives E-13 with registration link. Must register within **TC-W01: 30 days** of delivery. Order ID + email + last 4 of delivery postcode verify the link. |
+| 3 | Trade Customers | Auto-activated with extended terms. Trade pricing tier (OD-05) determines commercial warranty scope. |
+| 4 | Extended Warranty Purchase | Optional paid add-on. Available at checkout AND for **TC-W08: 90 days** post-delivery via account dashboard. Extends component-class periods by 1–3 additional years (tier-priced). |
+| 5 | Warranty Card | PDF certificate generated with warranty ID, order ID, items covered, period per component, terms. Downloadable from order history; accessible to trade buyers' clients via project share link (BC-22). |
+
+### 20.5 Customer Warranty Claim Process
+
+> **Actor:** Registered Customer or Verified Trade Account. **Trigger:** Customer files claim via 'My Orders → Warranty' or trade portal.
+
+| # | Stage | Process Detail + Time Constraints |
+|---|---|---|
+| 1 | Initiate Claim | Customer opens warranty record from order history → 'File a Claim'. Selects affected item, component class, issue type. |
+| 2 | Evidence Upload | **TC-W09: 14 days** to upload required photos (min. 3) and optional video. S3 presigned upload (TC-09 pattern, 15-min URL). Claim cannot be submitted without evidence. |
+| 3 | Describe Issue | Free-text description, date issue noticed, usage context (residential / commercial — affects BR-W04 eligibility). |
+| 4 | Eligibility Pre-Check | System validates: (a) within warranty period for component, (b) order belongs to customer, (c) usage context permitted for plan type, (d) evidence uploaded. |
+| 5 | Submit | Claim record created with status `Submitted`. **TC-W02 server-side check**: claim must be submitted within active warranty period. E-14 confirmation dispatched. |
+| 6 | Tracking | Customer sees claim status in 'My Warranty' dashboard. Status updates trigger emails (E-15 / E-16 / E-17 / E-18 / E-19). |
+
+**BPMN — Customer Warranty Claim Submission:**
+
+```mermaid
+flowchart TD
+    subgraph Customer
+        A([My Orders → Warranty]) --> B[Select item<br/>+ component class]
+        B --> C[Upload photos<br/>S3 presigned URL<br/>TC-W09 14-day window]
+        C --> D[Describe issue<br/>usage context]
+        D --> E[Submit claim]
+    end
+    subgraph System
+        E --> F{Pre-check<br/>eligibility}
+        F -- Within period<br/>+ evidence ok --> G[Create claim<br/>status=Submitted]
+        F -- Out of period --> H[Reject<br/>BR-W02 expired]
+        F -- Missing evidence --> I[Block submit<br/>prompt upload]
+        F -- Commercial use<br/>on B2C plan --> J[Flag BR-W04<br/>route to Trade upsell]
+        G --> K[Send E-14<br/>Claim Received]
+        K --> L[Queue for admin<br/>TC-W03 5-biz-day SLA starts]
+    end
+    L --> Z([Hand-off to<br/>Admin Review<br/>Process 20.6])
+```
+
+### 20.6 Admin Claim Review & Resolution Process
+
+> **Actor:** Admin — Operations (Warranty role extension), Service Partner (external), Super Admin (escalation). **Trigger:** Claim submitted by customer enters admin queue.
+
+| # | Stage | Process Detail + Time Constraints |
+|---|---|---|
+| 1 | Triage | Admin opens claim, reviews evidence, validates eligibility against business rules. **TC-W03: 5 biz-day review SLA.** |
+| 2 | Decision | Admin chooses: **Approve**, **Reject** (with reason), or **Request More Info** (pauses TC-W03, restarts on customer response). |
+| 3 | Approved → Resolution Selection | Admin selects resolution path: **Repair**, **Replace** (component or full item), **Partial Refund**, **Store Credit**. Defined by Section 20.7 matrix. |
+| 4a | Repair Path | Admin dispatches service partner request via partner portal. **TC-W04: 10 biz-day** scheduling SLA. Customer receives E-17 with appointment slot. **TC-W07: 3 biz-day** partner response. |
+| 4b | Replace Path | Admin generates replacement order linked to original. Replacement dispatched within **TC-W05: 21 biz-days** (incl. made-to-order lead time). E-18 with tracking. |
+| 4c | Partial Refund Path | Admin selects refund tier (Section 20.7) → Stripe refund via existing returns engine (BC-35). E-19 dispatched. |
+| 4d | Store Credit Path | Admin issues credit to customer account (Phase 2 dependency on loyalty/credit module). E-19 with credit amount. |
+| 5 | Closure | Admin marks claim `Resolved`. Customer survey (post-claim CSAT) auto-sent 3 days later. **TC-W06: 30 biz-day** total resolution target. |
+| 6 | Escalation | If TC-W03 / W04 / W05 breached → Super Admin alerted (per SLA Monitoring Process 11.10 extended). |
+| 7 | Fraud Watch | If customer has >3 claims in 12 months OR claim count > order count: flag for Super Admin manual review (risk BR-W11). |
+
+**BPMN — Admin Claim Review & Resolution:**
+
+```mermaid
+flowchart TD
+    A([Claim submitted<br/>TC-W03 starts]) --> B[Admin triage<br/>review evidence]
+    subgraph Admin_Warranty[Admin — Warranty]
+        B --> C{Eligible?}
+        C -- No --> D[Reject<br/>send E-16]
+        C -- Need info --> E[Request more info<br/>pause TC-W03]
+        C -- Yes --> F[Select resolution]
+        F --> G{Path}
+    end
+    subgraph Customer_Response[Customer]
+        E --> H[Customer provides<br/>additional info]
+        H --> B
+    end
+    subgraph Service_Partner[Service Partner]
+        G -- Repair --> I[Dispatch partner<br/>request portal]
+        I --> J{Partner accept<br/>TC-W07 3-day?}
+        J -- No --> K[Reassign or<br/>escalate]
+        J -- Yes --> L[Schedule visit<br/>TC-W04 10-day]
+        L --> M[Repair performed]
+        K --> L
+    end
+    subgraph System_Replace[System / Warehouse]
+        G -- Replace --> N[Create replacement<br/>order linked to original]
+        N --> O[Dispatch within<br/>TC-W05 21 days]
+    end
+    subgraph System_Refund[System / Finance]
+        G -- Partial Refund --> P[Tier per Section 20.7]
+        P --> Q[Stripe refund<br/>via BC-35]
+        G -- Store Credit --> R[Issue credit<br/>to account]
+    end
+    M --> S[Mark Resolved<br/>send E-19]
+    O --> S
+    Q --> S
+    R --> S
+    D --> Z([Close])
+    S --> T[CSAT survey<br/>3 days later]
+    T --> Z
+```
+
+### 20.7 Resolution Options Matrix
+
+| Resolution | When Used | Customer Cost | Operational Cost | SLA |
+|---|---|---|---|---|
+| Free Repair | Mechanism, hardware, fixings; cosmetic finish on display surfaces; first claim on component | $0 | Parts + Service partner fee | TC-W04: 10 biz-days |
+| Component Replacement | Cushion, fabric panel, mechanism module — when repair impractical | $0 | Component cost + dispatch | TC-W05: 21 biz-days |
+| Full Item Replacement | Structural failure (frame); third valid claim on same item (BR-W08); DOA within 30 days | $0 | Full item cost + dispatch | TC-W05: 21 biz-days (or made-to-order lead time) |
+| Partial Refund — 75% | Out-of-stock component, customer accepts pre-discount | 25% retained | Refund cost | TC-W06: 30 biz-days |
+| Partial Refund — 50% | Item out of catalogue, no equivalent available, no replacement possible | 50% retained | Refund cost | TC-W06: 30 biz-days |
+| Store Credit (110%) | Customer prefers credit over refund; bonus 10% to retain | Credit issued | Future order discount | Immediate |
+| Out-of-Warranty Repair | Component class period expired but customer wants paid repair | Quoted | Quote + partner fee | TC-W07 + scheduling |
+
+### 20.8 Trade-Specific Warranty Terms
+
+| Aspect | Trade Provision |
+|---|---|
+| Period extension | Structural: 10 years (vs B2C 5). Mechanism: 3 years. |
+| Commercial-grade upholstery | Trade catalogue specifies which fabrics are rated for commercial use. Non-rated fabrics void on commercial install (BR-W04). |
+| Service level | Priority queue (TC-W03 reduced to 3 biz-days for verified trade). Dedicated trade warranty manager. |
+| Bulk claims | Trade can submit multiple-item claims for the same project under one ticket (one evidence pack, batched resolution). |
+| On-site repair | Available for projects ≥$25,000. Standard for hospitality / contract orders. |
+| Replacement parts inventory | Trade contracts may include guaranteed parts availability for warranty period (annexed to project quote). |
+
+### 20.9 Extended Warranty (Paid Add-on)
+
+> **Phase 2 add-on revenue stream.** Customer-purchased extension to standard warranty.
+
+| Plan | Adds to Standard | Price Model | Target Attach Rate |
+|---|---|---|---|
+| Extended 2-Year | +2 years on Structural & Mechanism only | 4% of item price | ≥8% B2C |
+| Extended 5-Year — Premium | +5 years on Structural, +2 on Mechanism, +1 on Upholstery | 9% of item price | ≥3% B2C |
+| Trade Service Plan | Annual maintenance visits + priority parts access | Annual fee per project | Trade contract negotiated |
+
+**Purchase windows:**
+- At checkout (BC-49 integration): single-click add-on.
+- Post-delivery within **TC-W08: 90 days** via account dashboard.
+- Non-refundable once activated. Transferable on item resale only with admin approval (BR-W06).
+
+### 20.10 Service Partner Network
+
+| Capability | Detail |
+|---|---|
+| Partner onboarding | Admin Trade/Super onboards repair partners with geographic service zones, certification, insurance verification, response capacity. |
+| Partner portal | Vendor-facing web app: receive claim assignments, accept/decline within TC-W07, upload repair completion evidence, invoice HomeStyle. |
+| Coverage zones | ZIP/postal-code mapped per partner. Auto-routing on approval based on customer delivery address. Fallback escalation if no partner in zone. |
+| SLA contracts | Partner contracts include response time, repair quality standards, customer rating threshold (≥4.0 to remain active). |
+| Payment | Net-30 from completion-of-repair confirmation. Disputes via admin portal. |
+
+### 20.11 Business Rules — Warranty Module
+
+| ID | Rule |
+|---|---|
+| BR-W01 | Warranty period begins on confirmed delivery date (not order date). Same rule for replacements: replacement carries the remainder of the original item's warranty, not a fresh period. |
+| BR-W02 | Claim must be submitted within active warranty period for the affected component class. Submission after expiry is rejected at server-side validation. |
+| BR-W03 | Customer-caused damage is excluded. Photo/video evidence reviewed by admin determines causation. Disputes escalated to Super Admin. |
+| BR-W04 | B2C warranty does NOT cover items installed in commercial premises. Trade account upgrade or claim rejection. |
+| BR-W05 | Proof of purchase is the linked order ID (registered customers auto-linked; guest must register within TC-W01). |
+| BR-W06 | Warranty is **non-transferable** to second-hand buyers in Phase 2. Phase 3 may introduce transfer-with-fee (Open Decision OD-W04 below). |
+| BR-W07 | A customer may submit multiple claims within the warranty period for different defects on the same item or different items. |
+| BR-W08 | After **3 valid claims** on the same item, the next resolution defaults to full item replacement or partial refund — not repair. |
+| BR-W09 | Trade warranty (extended terms) requires the order to have been placed via a Verified Trade Account. Standard B2C orders by trade buyers receive B2C terms. |
+| BR-W10 | Extended warranty must be purchased within TC-W08: 90 days post-delivery. After 90 days, only out-of-warranty repair quotes available. |
+| BR-W11 | Fraud watch: if a customer's lifetime claim count exceeds order count, OR more than 3 claims in rolling 12 months, claims flagged for Super Admin manual review before approval. |
+| BR-W12 | Made-to-order items have the same warranty period as standard catalogue. Bespoke items (custom dimensions or custom fabric outside standard range) are warranted only for material/manufacturing defect — not for fit-for-purpose. |
+| BR-W13 | DOA (Damaged on Arrival, reported within 30 days of delivery) bypasses standard repair-first logic and proceeds directly to full replacement. Tracked separately from warranty claims for KPI purposes. |
+
+### 20.12 Time Constraints — Warranty (TC-W01 to TC-W10)
+
+| TC Ref | Constraint | Value | Configurable? | Behaviour on Expiry / Breach |
+|---|---|---|---|---|
+| TC-W01 | Guest warranty registration window | 30 days from delivery | Yes — Admin | Warranty marked 'Unregistered'. Customer can still register up to component-class warranty expiry but loses claim eligibility for issues arising before registration. |
+| TC-W02 | Claim submission within warranty period | Per component class (Section 20.2) | No (legal/contractual) | 'File a Claim' button hidden in UI after expiry. Server-side re-validates at submission. |
+| TC-W03 | Admin claim review SLA — B2C / Trade | 5 biz-days B2C / 3 biz-days Trade | Yes — Admin | Claim flagged 'Overdue Review'. Super Admin alert. KPI: % within SLA tracked. |
+| TC-W04 | Repair scheduling SLA | 10 biz-days from approval | Yes — Admin | Customer offered partial refund / replacement as alternative if scheduling slips. |
+| TC-W05 | Replacement dispatch SLA | 21 biz-days from approval (or production lead time for made-to-order) | Yes — Admin | Customer notified of revised ETA; partial refund offered if breach >50%. |
+| TC-W06 | Total claim resolution target | 30 biz-days from submission | Informational | Business benchmark, not hard-enforced. Quarterly KPI report. |
+| TC-W07 | Service partner response window | 3 biz-days from assignment | Yes — Admin | Auto-reassign to next partner in zone. After 2 reassigns: Super Admin escalation. |
+| TC-W08 | Extended warranty purchase window | 90 days post-delivery | Yes — Admin | 'Purchase Extended Warranty' option removed from dashboard after 90 days. |
+| TC-W09 | Customer evidence upload deadline | 14 days from claim filing | Yes — Admin | Incomplete claims auto-closed. Customer can re-file within remaining warranty period. |
+| TC-W10 | Warranty certificate PDF availability | Validity period = longest covered component | No | Certificate downloadable until last covered component's period expires. |
+
+### 20.13 Business Capabilities — Warranty (BC-54 to BC-65)
+
+| ID | Capability | Business Value + Time Constraints | Priority |
+|---|---|---|---|
+| BC-54 | Warranty auto-registration & certificate generation | Reduces friction; certificate downloadable from order history. PDF generated on `Delivered`. | Critical |
+| BC-55 | Customer warranty claim submission portal | Self-service replaces email/phone claims. TC-W09 evidence window enforced. | Critical |
+| BC-56 | Evidence photo/video upload via S3 presigned URLs | Secure direct-to-S3 uploads (TC-09 pattern); min. 3 photos required. | Critical |
+| BC-57 | Admin claim review queue with SLA tracking | TC-W03 B2C 5-day / Trade 3-day. Auto-escalation on breach via Process 11.10. | Critical |
+| BC-58 | Service partner network & vendor portal | Geographic routing, TC-W07 3-day partner response, partner SLA contracts, rating ≥4.0 retention threshold. | High |
+| BC-59 | Repair / Replace / Partial Refund / Store Credit resolution engine | Resolution matrix (Section 20.7) drives Stripe refund (via BC-35) or replacement order (via BC-34). | Critical |
+| BC-60 | Customer warranty dashboard | Lists all covered items, periods per component, active claims, downloadable certificates. | High |
+| BC-61 | Trade warranty extended terms with commercial-grade flagging | Per Section 20.8. Trade catalogue flags commercial-grade fabrics; auto-applied at order. | Critical |
+| BC-62 | Extended warranty (paid add-on) purchase | At checkout & TC-W08 90-day post-delivery window. Non-refundable (BR-W10). | High |
+| BC-63 | DOA (Damaged on Arrival) fast-track | 30-day post-delivery window. Skips repair-first logic; routes to immediate replacement (BR-W13). | Critical |
+| BC-64 | Warranty fraud detection & escalation | BR-W11 triggers Super Admin review when claim count or frequency exceeds thresholds. | High |
+| BC-65 | Warranty KPI dashboard & reporting | Claim rate, resolution time, repair-vs-replace ratio, post-claim CSAT, extended warranty attach rate, cost per claim. | High |
+
+### 20.14 New Email Triggers — Warranty (E-13 to E-21)
+
+| # | Trigger | Content Summary | TC Ref | Retry / Timing |
+|---|---|---|---|---|
+| E-13 | Warranty Registration Confirmation | Warranty ID, items covered, component periods, certificate PDF link | TC-W01 | Sent on `Delivered` (auto) or on manual guest registration |
+| E-14 | Claim Received | Claim #, items affected, expected review timeframe | TC-W03 | Sent within 5 min of submission |
+| E-15 | Claim Approved + Resolution Path | Approved; resolution path; next steps; ETA | TC-W03 | Sent on admin approval |
+| E-16 | Claim Rejected | Reason; appeal instructions; out-of-warranty repair quote option | — | Sent on admin rejection |
+| E-17 | Repair Scheduled | Service partner name; appointment slot; what to prepare | TC-W04 | Sent on partner schedule confirmation |
+| E-18 | Replacement Dispatched | Replacement order #; tracking; ETA | TC-W05 | Sent on shipment of replacement |
+| E-19 | Refund / Credit Initiated | Amount; method; ETA to receipt | TC-W06 | Sent on refund or credit issuance |
+| E-20 | Extended Warranty Purchase Confirmation | Plan; coverage; new expiry dates per component | TC-W08 | Sent on payment confirmation |
+| E-21 | Warranty Expiry Reminder | 30 days before earliest component expiry; offer extended plan if eligible | TC-W08 | BullMQ scheduled job |
+
+### 20.15 Admin Module Additions (Warranty Module)
+
+| Module Area | Capability |
+|---|---|
+| Warranty Dashboard | Real-time KPI cards: open claims, claims by SLA status, claim rate this month, partner SLA compliance, fraud-watch flags. |
+| Claim Queue | Filterable list of claims by status, age, customer type (B2C/Trade), component class, geographic zone. Bulk approve/reassign actions. |
+| Service Partner Management | CRUD partners with service zones (ZIP/postal range), certifications, insurance docs, SLA contract upload, performance rating dashboard. |
+| Resolution Configuration | Manage resolution matrix tiers (Section 20.7), partial refund percentages, store credit bonus rates, replacement-vs-repair business rules. |
+| Warranty Catalogue | Per-product warranty configuration: component periods per class, exceptions for bespoke, extended warranty plan eligibility & pricing. |
+| Claims Reporting | Exportable reports: claim rate by product/collection/designer, repair-vs-replace ratio, partner cost, CSAT post-claim, fraud-flag investigations. |
+| Audit Trail | All claim status changes, admin decisions, partner assignments logged (extends BC-40). |
+
+### 20.16 Integration with Existing Modules
+
+| Existing Module | Integration Point |
+|---|---|
+| Orders (BC-11, BC-34) | Warranty record auto-linked to order item on `Delivered`. Replacement orders generated via BC-34 with parent-claim reference. |
+| Returns (BC-13, BC-35) | Warranty claims share evidence-upload, review-SLA, and Stripe-refund patterns. Returns dashboard surfaces both. |
+| Inventory (BC-28) | Replacement dispatch decrements stock; component replacements decrement component-level inventory (new sub-SKU table required). |
+| Trade Portal (BC-09, BC-21–24) | Trade buyers see extended-warranty terms inline on PDPs. Trade dashboard adds Warranty queue & priority badge. |
+| Notifications (BC-25) | E-13 to E-21 integrate with existing email engine + retry policy (TC-29). |
+| Admin RBAC (BC-39) | New 'Admin — Warranty' role (or extension to Ops). Service partner is a new external auth class (limited-scope JWT). |
+| Stripe (BC-49) | Partial refunds use existing Stripe refund flow. Extended warranty purchase uses Stripe one-off payment with metadata linkage. |
+| Reporting (BC-42) | Warranty KPIs join the executive dashboard. Filterable in admin reports. |
+
+### 20.17 Warranty KPIs
+
+| KPI | Definition | Target (12 Months Post-Phase-2-Launch) | Source |
+|---|---|---|---|
+| Warranty Claim Rate | % of delivered items with at least one claim | ≤4% B2C; ≤7% Trade | Warranty Module |
+| Avg. Claim Resolution Time | Days from submission to `Resolved` | ≤20 biz-days (target TC-W06 = 30) | Warranty Module |
+| Repair-vs-Replace Ratio | Resolved-by-Repair / Resolved-by-Replace | ≥2:1 (repair preferred operationally) | Warranty Module |
+| Partner SLA Compliance | % of partner assignments responded to within TC-W07 | ≥90% | Partner Portal |
+| Post-Claim CSAT | Customer satisfaction survey post-resolution | ≥4.5 / 5.0 | Survey Module |
+| Extended Warranty Attach Rate | % of qualifying orders that purchase an extended plan | ≥8% B2C | Checkout Reports |
+| Cost per Claim | Operational cost (parts + partner + admin time) / total claims | Trend down quarter-over-quarter | Finance + Warranty Module |
+| Fraud-Flag Rate | Claims escalated under BR-W11 / total claims | ≤2% (trend) | Warranty Module |
+
+### 20.18 Open Decisions — Phase 2 Warranty
+
+| # | Decision | Options | Owner |
+|---|---|---|---|
+| OD-W01 | Warranty period for Structural — B2C | A) 5 years (recommended) / B) 10 years (matching trade — more competitive but higher liability) | Biz Owner + Legal |
+| OD-W02 | Extended Warranty pricing model | A) % of item price (recommended) / B) Flat fee per item / C) Tiered by item value bracket | Biz Owner + Finance |
+| OD-W03 | Service partner model | A) Build network of contractors / B) Single national partner per market / C) Hybrid | Biz Owner + Ops |
+| OD-W04 | Warranty transferability | A) Non-transferable (default, BR-W06) / B) Transferable with admin approval + fee / C) Transferable freely with new owner registration | Biz Owner + Legal |
+| OD-W05 | DOA fast-track threshold | A) 30 days (recommended, BR-W13) / B) 14 days / C) 60 days | Biz Owner + Ops |
+| OD-W06 | Out-of-warranty paid repair | A) Offer via service partner network / B) Refer to third party / C) Not offered | Biz Owner + Ops |
+
+### 20.19 Assumptions & Constraints — Warranty
+
+**Assumptions:**
+- Phase 1 systems (orders, returns, Stripe refund, S3 upload, BullMQ, admin RBAC) are stable in production before Phase 2 build begins.
+- Component-level SKU tracking required — a new sub-SKU table (or component metadata on parent SKU) will be designed during Phase 2 SRS.
+- Service partner agreements drafted and signed in parallel with build (CR-W01 below).
+- Insurance providers cover replacement-cost exposure for warranty obligations (Finance to confirm).
+
+**Constraints:**
+- Legal must finalise warranty terms per market (US state-specific, UK Consumer Rights Act 2015, EU Sale of Goods Directive 2019/771 — minimum 2 years statutory). Section 20.2 values are *commitments above* statutory minimums.
+- Trade contract warranties may exceed Section 20.2 if individually negotiated; Phase 2 admin tooling must support per-contract overrides.
+- Phase 2 launch contingent on minimum 5 service partners onboarded across primary US states and EU launch countries.
+
+### 20.20 Phase 2 Client Responsibilities (Warranty)
+
+| # | Deliverable | Specification | Required By |
+|---|---|---|---|
+| CR-W01 | Service Partner Network | Min. 5 onboarded partners (3 US, 2 EU) with signed SLA contracts, insurance verification, and service-zone definitions. | Phase 2 Month 3 |
+| CR-W02 | Warranty Terms (per market) | Final legal-approved warranty terms per US state nexus, UK, and EU country. PDF version + structured data for system display. | Phase 2 Month 2 |
+| CR-W03 | Component-Level Spec Data | Updated product spec sheets identifying component class per part (frame, mechanism, upholstery type, finish) for accurate per-component warranty calculation. | Phase 2 Month 2 |
+| CR-W04 | Insurance Confirmation | Finance confirmation that warranty obligations are covered under existing product liability + a contingency reserve for replacement exposure. | Phase 2 Month 1 |
+| CR-W05 | Commercial-Grade Fabric Flagging | Trade catalogue updated to flag which fabrics carry commercial-use ratings (per Section 20.8 / BR-W04). | Phase 2 Month 2 |
+
+### 20.21 Out of Scope — Phase 2 Warranty (Future / Phase 3)
+
+- Self-serve warranty transfer on resale (OD-W04 dependent).
+- White-label warranty programme for trade clients (resold to their end customers).
+- IoT-enabled warranty (smart furniture with sensors auto-reporting issues).
+- Multi-language warranty portal beyond Phase 2 language scope (DE/FR/IT — depends on Phase 2 i18n).
+- Mobile-app native warranty claim flow (Phase 3 alongside native mobile app).
+- Refurbished/outlet channel for warranty-returned items (Phase 3).
+
+---
+
+## 21. Approvals
 
 By signing below, the named stakeholder confirms they have reviewed BRD v4.0 — including all time constraints and validation rules in Section 16 and the trade portal scope in Section 7.3 — and approve it as the basis for proceeding to the Software Requirements Specification (SRS) phase.
 
