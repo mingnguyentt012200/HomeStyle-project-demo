@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeStyle Admin — Wireframe Design · F-09.1 & F-09.3</title>
+<link rel="stylesheet" href="https://unpkg.com/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f0;padding:24px}
+.nav{display:flex;gap:6px;flex-wrap:wrap;padding:0 0 1.25rem}
+.nav button{font-size:12px;padding:5px 12px;border:0.5px solid #ccc;border-radius:8px;background:#fff;color:#555;cursor:pointer}
+.nav button.active{background:#f0f0ea;color:#1a1a1a;border-color:#999;font-weight:500}
+.screen{display:none;background:#fff;border-radius:12px;border:0.5px solid #ddd;overflow:hidden}.screen.active{display:block}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:0.5px solid #e8e8e0;background:#fff}
+.topbar-title{font-size:15px;font-weight:500}
+.topbar-meta{font-size:12px;color:#888}
+.page{padding:20px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.kpi{background:#f5f5f0;border-radius:8px;padding:14px 16px}
+.kpi-label{font-size:11px;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em}
+.kpi-val{font-size:22px;font-weight:500}
+.kpi-val.red{color:#A32D2D}
+.kpi-val.amber{color:#854F0B}
+.kpi-val.green{color:#3B6D11}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-title{font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:0.05em}
+.btn{font-size:12px;padding:5px 12px;border:0.5px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;color:#1a1a1a}
+.btn-primary{background:#185FA5;border-color:#185FA5;color:#E6F1FB}
+.table-wrap{border:0.5px solid #e8e8e0;border-radius:12px;overflow:hidden;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#f5f5f0;padding:9px 14px;text-align:left;font-weight:500;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.04em;border-bottom:0.5px solid #e8e8e0}
+td{padding:10px 14px;border-bottom:0.5px solid #e8e8e0;color:#1a1a1a}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f9f9f5}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 8px;border-radius:8px}
+.badge-red{background:#FCEBEB;color:#A32D2D}
+.badge-amber{background:#FAEEDA;color:#854F0B}
+.badge-teal{background:#E1F5EE;color:#0F6E56}
+.badge-blue{background:#E6F1FB;color:#185FA5}
+.badge-gray{background:#F1EFE8;color:#5F5E5A}
+.badge-green{background:#EAF3DE;color:#3B6D11}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.dot-red{background:#A32D2D}
+.dot-amber{background:#854F0B}
+.dot-green{background:#3B6D11}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+label{font-size:12px;font-weight:500;color:#888}
+input,select,textarea{font-size:13px;padding:7px 10px;border:0.5px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;width:100%}
+.card{background:#fff;border:0.5px solid #e8e8e0;border-radius:12px;padding:16px 20px;margin-bottom:14px}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:500}
+.card-sub{font-size:12px;color:#888;margin-top:2px}
+.divider{border:none;border-top:0.5px solid #e8e8e0;margin:14px 0}
+.info-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0}
+.info-row .lbl{color:#888}
+.progress-bar{height:6px;border-radius:3px;background:#e8e8e0;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:3px}
+.alert-banner{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;border:0.5px solid}
+.alert-red{background:#FCEBEB;border-color:#F09595;color:#791F1F}
+.alert-amber{background:#FAEEDA;border-color:#FAC775;color:#633806}
+.alert-blue{background:#E6F1FB;border-color:#B5D4F4;color:#0C447C}
+.toggle{width:32px;height:18px;border-radius:9px;border:0.5px solid #ccc;background:#e8e8e0;position:relative;cursor:pointer}
+.toggle.on{background:#1D9E75;border-color:#1D9E75}
+.toggle-dot{width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px}
+.toggle.on .toggle-dot{left:16px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid #e8e8e0}
+.toggle-row:last-child{border-bottom:none}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-bg{background:rgba(0,0,0,0.35);border-radius:12px;padding:40px 20px;display:flex;align-items:center;justify-content:center;min-height:500px}
+.modal{background:#fff;border:0.5px solid #e8e8e0;border-radius:12px;padding:24px;width:440px}
+.modal-title{font-size:15px;font-weight:500;margin-bottom:4px}
+.modal-sub{font-size:12px;color:#888;margin-bottom:18px}
+.carrier-option{border:0.5px solid #e8e8e0;border-radius:8px;padding:12px 14px;margin-bottom:8px;cursor:pointer;position:relative}
+.carrier-option.selected{border:1.5px solid #185FA5;background:#E6F1FB}
+.carrier-option-name{font-size:13px;font-weight:500}
+.carrier-option-meta{font-size:11px;color:#888;margin-top:3px}
+.carrier-selected-dot{width:8px;height:8px;border-radius:50%;background:#185FA5;position:absolute;top:14px;right:14px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:11px;padding:3px 8px;border:0.5px solid #ccc;border-radius:8px;color:#888}
+code{font-family:monospace;font-size:12px;background:#f5f5f0;padding:2px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div style="margin-bottom:20px">
+  <h1 style="font-size:18px;font-weight:500;margin-bottom:4px">HomeStyle Admin — Wireframe Design</h1>
+  <p style="font-size:13px;color:#888">F-09.1 Carrier Validation & Green Delivery · F-09.3 Dynamic Safety Stock & Risk-Based Replenishment · 6 screens</p>
+</div>
+
+<div class="nav" id="nav">
+  <button class="active" onclick="show('s1',this)">1 · Inventory risk dashboard</button>
+  <button onclick="show('s2',this)">2 · Threshold config</button>
+  <button onclick="show('s3',this)">3 · Approval queue</button>
+  <button onclick="show('s4',this)">4 · Carrier profiles</button>
+  <button onclick="show('s5',this)">5 · Green delivery zones</button>
+  <button onclick="show('s6',this)">6 · Pack-verify modal</button>
+</div>
+
+<!-- SCREEN 1 -->
+<div class="screen active" id="s1">
+  <div class="topbar">
+    <div><div class="topbar-title">Inventory risk dashboard</div><div class="topbar-meta">F-09.3 · Real-time ATP risk classification · Last computed 03:00 UTC</div></div>
+    <div style="display:flex;gap:8px"><button class="btn">Refresh velocity</button><button class="btn btn-primary">Configure thresholds</button></div>
+  </div>
+  <div class="page">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Critical SKUs</div><div class="kpi-val red">47</div><div style="font-size:11px;color:#A32D2D;margin-top:4px">days of stock &lt; lead time</div></div>
+      <div class="kpi"><div class="kpi-label">Medium risk</div><div class="kpi-val amber">183</div><div style="font-size:11px;color:#854F0B;margin-top:4px">days of stock &lt; lead time × 1.5</div></div>
+      <div class="kpi"><div class="kpi-label">Low / silent</div><div class="kpi-val green">19,770</div><div style="font-size:11px;color:#3B6D11;margin-top:4px">no alert needed</div></div>
+      <div class="kpi"><div class="kpi-label">Pending approvals</div><div class="kpi-val" style="color:#185FA5">12</div><div style="font-size:11px;color:#185FA5;margin-top:4px">threshold change requests</div></div>
+    </div>
+    <div class="alert-banner alert-red">3 SKUs have less than 1 day of stock remaining against a 28-day lead time. Immediate replenishment action required.</div>
+    <div class="section-head"><span class="section-title">Critical SKUs — immediate action required</span><button class="btn">Export CSV</button></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>SKU</th><th>Description</th><th>ATP</th><th>Velocity/day</th><th>Days of stock</th><th>Lead time</th><th>Risk</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><code>IT-SOFA-001</code></td><td>Aria 3-seater sofa — oak</td><td>4</td><td>3.0</td><td style="color:#A32D2D;font-weight:500">1.3 days</td><td>28 days</td><td><span class="badge badge-red"><span class="dot dot-red"></span> Critical</span></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Raise PO</button></td></tr>
+          <tr><td><code>BED-FRAME-014</code></td><td>Como bed frame — walnut</td><td>6</td><td>2.1</td><td style="color:#A32D2D;font-weight:500">2.9 days</td><td>21 days</td><td><span class="badge badge-red"><span class="dot dot-red"></span> Critical</span></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Raise PO</button></td></tr>
+          <tr><td><code>DIN-TBL-009</code></td><td>Marco dining table — marble</td><td>2</td><td>0.9</td><td style="color:#A32D2D;font-weight:500">2.2 days</td><td>21 days</td><td><span class="badge badge-red"><span class="dot dot-red"></span> Critical</span></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Raise PO</button></td></tr>
+          <tr><td><code>SOFA-ACC-022</code></td><td>Aria replacement cushion set</td><td>9</td><td>1.2</td><td style="color:#854F0B;font-weight:500">7.5 days</td><td>14 days</td><td><span class="badge badge-amber"><span class="dot dot-amber"></span> Medium</span></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Monitor</button></td></tr>
+          <tr><td><code>LAMP-002</code></td><td>Luce table lamp — brass</td><td>4</td><td>0.1</td><td style="color:#3B6D11;font-weight:500">40 days</td><td>3 days</td><td><span class="badge badge-teal"><span class="dot dot-green"></span> Low</span></td><td><span style="font-size:11px;color:#888">No action</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section-head"><span class="section-title">Risk formula reference</span></div>
+    <div class="card" style="font-size:13px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="padding:10px;border-radius:8px;background:#FCEBEB;border:0.5px solid #F09595"><div style="font-weight:500;color:#A32D2D;font-size:12px;margin-bottom:4px">Critical</div><div style="color:#791F1F;font-size:12px">days_of_stock &lt; lead_time</div><div style="color:#791F1F;font-size:11px;margin-top:4px">Real-time alert</div></div>
+        <div style="padding:10px;border-radius:8px;background:#FAEEDA;border:0.5px solid #FAC775"><div style="font-weight:500;color:#854F0B;font-size:12px;margin-bottom:4px">Medium</div><div style="color:#633806;font-size:12px">days_of_stock &lt; lead_time × 1.5</div><div style="color:#633806;font-size:11px;margin-top:4px">Dashboard warning</div></div>
+        <div style="padding:10px;border-radius:8px;background:#E1F5EE;border:0.5px solid #9FE1CB"><div style="font-weight:500;color:#0F6E56;font-size:12px;margin-bottom:4px">Low</div><div style="color:#085041;font-size:12px">days_of_stock ≥ lead_time × 1.5</div><div style="color:#085041;font-size:11px;margin-top:4px">Silent — no alert</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen" id="s2">
+  <div class="topbar">
+    <div><div class="topbar-title">Configure safety stock threshold</div><div class="topbar-meta">F-09.3 · New threshold config · Changes &gt;10% require approval</div></div>
+    <div style="display:flex;gap:8px"><button class="btn">Cancel</button><button class="btn btn-primary">Submit for review</button></div>
+  </div>
+  <div class="page">
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Scope</div><div class="card-sub">Define which SKUs this config applies to</div></div></div>
+          <div class="form-grid">
+            <div class="form-group"><label>Scope type</label><select><option>Category</option><option>SKU</option></select></div>
+            <div class="form-group"><label>Scope value</label><select><option>SOFA</option><option>BED</option><option>DINING TABLE</option><option>LAMP</option></select></div>
+            <div class="form-group"><label>Warehouse (optional)</label><select><option>All warehouses</option><option>EU-WH-01 (Poland)</option><option>US-WH-01 (NJ)</option></select></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Threshold values</div><div class="card-sub">Current: 5 units (system default) → Proposed: 50 units</div></div><span class="badge badge-red">+900% — Finance approval required</span></div>
+          <div class="form-grid">
+            <div class="form-group"><label>Safety stock (units)</label><input type="number" value="50" /></div>
+            <div class="form-group"><label>Lead time override (days)</label><input type="number" placeholder="28 (category avg)" /></div>
+            <div class="form-group"><label>Velocity override (units/day)</label><input type="number" placeholder="3.0 (30-day avg)" /></div>
+          </div>
+          <div style="background:#E6F1FB;border:0.5px solid #B5D4F4;border-radius:8px;padding:10px 12px;font-size:12px;color:#0C447C">
+            <strong>Preview:</strong> At ATP = 50, velocity = 3.0/day, lead time = 28 days → days_of_stock = 16.7 days → <strong>Medium</strong> alert (not Critical)
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Effective period</div><div class="card-sub">Leave expiration blank for permanent config</div></div></div>
+          <div class="form-grid">
+            <div class="form-group"><label>Effective date</label><input type="date" value="2026-07-01" /></div>
+            <div class="form-group"><label>Expiration date (optional)</label><input type="date" /></div>
+            <div class="form-group full"><label>Reason for change (required)</label><textarea rows="3" placeholder="e.g. Pre-holiday season buffer increase — sofa category historically peaks in Q4..."></textarea></div>
+          </div>
+        </div>
+        <div class="card" style="background:#FAEEDA;border-color:#FAC775">
+          <div class="card-title" style="color:#633806;margin-bottom:10px">Approval required</div>
+          <div style="font-size:13px;color:#633806;line-height:1.6">This change exceeds 30% of the current value. Finance Manager approval is required before the config becomes active.</div>
+          <div class="divider" style="border-color:#FAC775"></div>
+          <div class="info-row"><span class="lbl">Change magnitude</span><span style="color:#633806;font-weight:500">+900%</span></div>
+          <div class="info-row"><span class="lbl">Approver</span><span>Finance Manager</span></div>
+          <div class="info-row"><span class="lbl">Request expires</span><span>5 business days</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen" id="s3">
+  <div class="topbar">
+    <div><div class="topbar-title">Threshold approval queue</div><div class="topbar-meta">F-09.3 · 12 pending requests · Governance workflow</div></div>
+    <button class="btn">Export audit log</button>
+  </div>
+  <div class="page">
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi"><div class="kpi-label">Pending your review</div><div class="kpi-val" style="color:#185FA5">12</div></div>
+      <div class="kpi"><div class="kpi-label">Approved this month</div><div class="kpi-val green">34</div></div>
+      <div class="kpi"><div class="kpi-label">Auto-approved (&lt;10%)</div><div class="kpi-val">208</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><div class="card-title">REQ-2026-0041 · SOFA category — EU-WH-01</div><div class="card-sub">Submitted by: Ops Admin · 2026-06-04 · Expires 2026-06-11</div></div><span class="badge badge-red">Finance approval · +900%</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+        <div class="kpi"><div class="kpi-label">Current value</div><div class="kpi-val">5</div></div>
+        <div class="kpi"><div class="kpi-label">Proposed value</div><div class="kpi-val">50</div></div>
+        <div class="kpi"><div class="kpi-label">Change</div><div class="kpi-val red">+900%</div></div>
+        <div class="kpi"><div class="kpi-label">Affected SKUs</div><div class="kpi-val">412</div></div>
+      </div>
+      <div style="background:#f5f5f0;border-radius:8px;padding:10px 12px;font-size:12px;color:#888;margin-bottom:14px"><strong style="color:#1a1a1a">Reason provided:</strong> Pre-holiday season buffer increase. Sofa category historically peaks in Q4. Lead time from Italy is 28 days.</div>
+      <div class="divider"></div>
+      <div class="form-group" style="margin-bottom:12px"><label>Approver note (optional)</label><input type="text" placeholder="Add context for the audit log..." /></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" style="color:#A32D2D;border-color:#F09595">Reject</button><button class="btn btn-primary">Approve</button></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><div class="card-title">REQ-2026-0039 · BED category — all warehouses</div><div class="card-sub">Submitted by: Inventory Manager · 2026-06-03 · Expires 2026-06-10</div></div><span class="badge badge-amber">Manager approval · +22%</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px">
+        <div class="kpi"><div class="kpi-label">Current</div><div class="kpi-val">5</div></div>
+        <div class="kpi"><div class="kpi-label">Proposed</div><div class="kpi-val">6</div></div>
+        <div class="kpi"><div class="kpi-label">Change</div><div class="kpi-val amber">+22%</div></div>
+        <div class="kpi"><div class="kpi-label">Affected SKUs</div><div class="kpi-val">87</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="screen" id="s4">
+  <div class="topbar">
+    <div><div class="topbar-title">Carrier profiles</div><div class="topbar-meta">F-09.1 · Weight/dimension limits · Green certification · Auto-assignment rules</div></div>
+    <button class="btn btn-primary">+ Add carrier</button>
+  </div>
+  <div class="page">
+    <div class="alert-banner alert-blue">Carrier profiles drive automatic eligibility at pack-verify. Changes take effect immediately for all new shipments.</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Carrier code</th><th>Service type</th><th>Max weight</th><th>Max length</th><th>Supported zones</th><th>Green certified</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><strong>DPD-EU</strong></td><td><span class="badge badge-blue">Parcel</span></td><td>31.5 kg</td><td>175 cm</td><td><div class="chip-row"><span class="chip">EU-DE</span><span class="chip">EU-FR</span><span class="chip">EU-NL</span></div></td><td><span class="badge badge-gray">No</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Edit</button></td></tr>
+          <tr><td><strong>DHL-GREEN-EU</strong></td><td><span class="badge badge-blue">Parcel</span></td><td>31.5 kg</td><td>175 cm</td><td><div class="chip-row"><span class="chip">EU-DE</span><span class="chip">EU-FR</span><span class="chip">EU-NL</span></div></td><td><span class="badge badge-teal">ISO 14064</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Edit</button></td></tr>
+          <tr><td><strong>KN-LTL-EU</strong></td><td><span class="badge badge-amber">LTL freight</span></td><td>1,000 kg</td><td>600 cm</td><td><div class="chip-row"><span class="chip">EU-DE</span><span class="chip">EU-FR</span><span class="chip">EU-NL</span><span class="chip">EU-PL</span></div></td><td><span class="badge badge-gray">No</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Edit</button></td></tr>
+          <tr style="opacity:0.5"><td><strong>OLD-CARRIER-1</strong></td><td><span class="badge badge-blue">Parcel</span></td><td>20 kg</td><td>120 cm</td><td><div class="chip-row"><span class="chip">EU-DE</span></div></td><td><span class="badge badge-gray">No</span></td><td><span class="badge badge-gray">Inactive</span></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Activate</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section-head"><span class="section-title">Add carrier</span></div>
+    <div class="card">
+      <div class="form-grid">
+        <div class="form-group"><label>Carrier code</label><input type="text" placeholder="e.g. DHL-EXPRESS-EU" /></div>
+        <div class="form-group"><label>Carrier name</label><input type="text" placeholder="DHL Express EU" /></div>
+        <div class="form-group"><label>Service type</label><select><option>Parcel</option><option>LTL freight</option><option>White glove</option></select></div>
+        <div class="form-group"><label>Max weight (kg)</label><input type="number" placeholder="31.5" /></div>
+        <div class="form-group"><label>Max length (cm)</label><input type="number" placeholder="175" /></div>
+        <div class="form-group"><label>Max girth (cm)</label><input type="number" placeholder="300" /></div>
+      </div>
+      <div class="toggle-row"><span style="font-size:13px">Green certified (EV fleet / carbon-neutral cert)</span><div class="toggle on"><div class="toggle-dot"></div></div></div>
+      <div class="form-group" style="margin-top:12px"><label>Green certification reference (required if certified)</label><input type="text" placeholder="e.g. DHL GoGreen Plus ISO 14064" /></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 5 -->
+<div class="screen" id="s5">
+  <div class="topbar">
+    <div><div class="topbar-title">Green delivery zones & KPI</div><div class="topbar-meta">F-09.1 · EU urban zone configuration · Rolling 30-day ratio · Tax rebate tracking</div></div>
+    <button class="btn btn-primary">+ Add zone</button>
+  </div>
+  <div class="page">
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+      <div class="kpi"><div class="kpi-label">Berlin urban</div><div class="kpi-val green">34%</div><div class="progress-bar"><div class="progress-fill" style="width:34%;background:#1D9E75"></div></div><div style="font-size:11px;color:#3B6D11;margin-top:4px">Target 30% — on track</div></div>
+      <div class="kpi"><div class="kpi-label">Paris urban</div><div class="kpi-val amber">24%</div><div class="progress-bar"><div class="progress-fill" style="width:24%;background:#EF9F27"></div></div><div style="font-size:11px;color:#854F0B;margin-top:4px">Target 30% — below target</div></div>
+      <div class="kpi"><div class="kpi-label">Amsterdam urban</div><div class="kpi-val amber">27%</div><div class="progress-bar"><div class="progress-fill" style="width:27%;background:#EF9F27"></div></div><div style="font-size:11px;color:#854F0B;margin-top:4px">Target 30% — below target</div></div>
+    </div>
+    <div class="alert-banner alert-amber">Paris and Amsterdam have been below the 30% green delivery target for 2 consecutive months. Logistics Director alert triggered.</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Zone name</th><th>Country</th><th>Postal prefixes</th><th>KPI target</th><th>Current ratio</th><th>Rebate ref</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><strong>Berlin urban</strong></td><td>DE</td><td><div class="chip-row"><span class="chip">10xxx</span><span class="chip">11xxx</span><span class="chip">12xxx</span><span class="chip">13xxx</span><span class="chip">14xxx</span></div></td><td>30%</td><td style="color:#3B6D11;font-weight:500">34% ✓</td><td><code>EU-REB-2026-DE</code></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Edit</button></td></tr>
+          <tr><td><strong>Paris urban</strong></td><td>FR</td><td><div class="chip-row"><span class="chip">75xxx</span></div></td><td>30%</td><td style="color:#854F0B;font-weight:500">24% ↓</td><td><code>EU-REB-2026-FR</code></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Edit</button></td></tr>
+          <tr><td><strong>Amsterdam urban</strong></td><td>NL</td><td><div class="chip-row"><span class="chip">1xxx</span></div></td><td>30%</td><td style="color:#854F0B;font-weight:500">27% ↓</td><td><code>EU-REB-2026-NL</code></td><td><button class="btn" style="font-size:11px;padding:3px 8px">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section-head"><span class="section-title">Monthly export — EU tax rebate submission</span></div>
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between">
+      <div><div class="card-title">May 2026 green delivery report</div><div class="card-sub">3 zones · 1,204 green shipments · CSV format for EU rebate submission</div></div>
+      <button class="btn btn-primary">Export CSV</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 6 -->
+<div class="screen" id="s6">
+  <div class="topbar">
+    <div><div class="topbar-title">Pack-verify · Carrier assignment</div><div class="topbar-meta">F-05.6 / F-09.1 · Auto-assignment at label generation · Shipment SHP-20260605-4821</div></div>
+  </div>
+  <div class="modal-bg">
+    <div class="modal">
+      <div class="modal-title">Confirm carrier assignment</div>
+      <div class="modal-sub">Packed weight: <strong>118 kg</strong> · Destination: Berlin 10115 (green zone) · Green ratio today: 24% — preferring green carriers</div>
+      <div style="font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px">Eligible carriers</div>
+      <div class="carrier-option selected">
+        <div class="carrier-selected-dot"></div>
+        <div style="display:flex;align-items:center;gap:8px"><div class="carrier-option-name">KN-LTL-EU</div><span class="badge badge-teal" style="font-size:10px">Green</span><span class="badge badge-blue" style="font-size:10px">Auto-selected</span></div>
+        <div class="carrier-option-meta">Kuehne+Nagel LTL · Max 1,000 kg · €148.00 · ETA 3–5 days</div>
+      </div>
+      <div class="carrier-option">
+        <div class="carrier-option-name">DHL-GREEN-EU</div>
+        <div class="carrier-option-meta">DHL GoGreen Plus · Max 31.5 kg · <span style="color:#A32D2D">⚠ Below weight limit for this consignment</span></div>
+      </div>
+      <div class="carrier-option" style="opacity:0.45">
+        <div class="carrier-option-name">DPD-EU <span style="font-size:11px;color:#A32D2D;font-weight:400">— ineligible</span></div>
+        <div class="carrier-option-meta">Max 31.5 kg · Consignment is 118 kg — excluded by BR-FUL-11</div>
+      </div>
+      <div class="divider"></div>
+      <select style="font-size:13px;width:100%;padding:7px 10px;border:0.5px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;margin-bottom:14px">
+        <option value="">Override reason — select if changing from auto-selected...</option>
+        <option>Carrier API unavailable</option>
+        <option>Customer requested specific carrier</option>
+        <option>Carrier capacity issue</option>
+        <option>Other</option>
+      </select>
+      <div class="modal-actions">
+        <button class="btn">Cancel</button>
+        <button class="btn btn-primary">Confirm & generate label</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
