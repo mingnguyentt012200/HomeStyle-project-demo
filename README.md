@@ -1,91 +1,142 @@
-# 🛋️ E-commerce Furniture System
+# 🛋️ HomeStyle — Enterprise Furniture Commerce & Operations Platform
 
-## 📌 Overview
-
-This project is a **personal Business Analysis & Product Design portfolio project** for an **e-commerce furniture platform** targeting the **US–Europe market**.
-
-The purpose of this project is to practice and showcase a **real-world BA documentation workflow**, including requirement gathering, feature specification writing, process modeling, and UI planning for an enterprise-style system.
-
-The project currently focuses on:
-
-* 📄 **BRD (Business Requirements Document)**
-* 📑 **Feature Specifications (SRS-level)**
-* 📐 **Figma Wireframes**
-* 🔄 **BPMN Diagrams (Business Process Modeling)**
+> **BA Portfolio Project** · Business Analysis & Product Design
+> **Market:** United States + Europe (B2C + B2B Trade)
+> **Platform type:** Custom-built web application (Next.js storefront + admin panel + REST API)
 
 ---
 
-## 🎯 Current Progress
+## 📌 About This Project
 
-### ✅ Completed
+HomeStyle is a **BA portfolio demonstration** simulating a real-world enterprise documentation workflow for a premium design furniture e-commerce platform. The platform supports multi-channel commerce, inventory management, order fulfillment, customer support, and administrative workflows across US and EU markets.
 
-* BRD (Business Requirements Document)
-* Feature Specifications per module
-
-### 🚧 In Progress
-
-* Wireframes (Figma)
-* BPMN Diagrams
-* User flows & process modeling
-* UI/UX refinement
+The full system spans ~40 features across 10 domains. **This repository contains the complete system-level BRD and feature specs.** My direct BA contribution covers the **Admin Operations domain** — inventory management, logistics automation, and operational reporting. Other domain specs (Auth, Checkout, Trade Portal, etc.) are included for system context and dependency traceability.
 
 ---
 
-## 📄 Project Artifacts
+## 🎯 My BA Scope — What I Owned
 
-* ✅ BRD
-* ✅ Feature Specifications per module
-* 🚧 Figma Wireframes: 
-  * 🚧 Customer interface: https://www.figma.com/design/AaDMTC6h17acKOp4Jv5Vem/Homestyle?node-id=0-1
-  * 🚧 Admin interface: https://www.figma.com/design/AaDMTC6h17acKOp4Jv5Vem/Homestyle?node-id=11-2
-* 🚧 Customer Purchase Journey BPMN: https://lucid.app/lucidchart/239a29ac-57a5-4e17-b75f-f809a7116fd3/edit?viewport_loc=-6007%2C-270%2C10583%2C6141%2C0_0&invitationId=inv_9f726783-163b-403b-8ebf-25f613a55f35
-* 🚧 Return & Refund Journey BPMN: https://lucid.app/lucidchart/32687af9-be2e-456d-9b5e-a9d0f94b8be4/edit?viewport_loc=-5295%2C-993%2C5127%2C2713%2C0_0&invitationId=inv_31dd6994-3243-41d4-a51a-7ea42e341f09
+I was responsible for the following features end-to-end (problem → requirements → business rules → API contracts → acceptance criteria):
 
----
+### 🔑 Feature 1: Dynamic Safety Stock & Risk-Based Replenishment
+**`/feature_specs/F_09.3_Admin_Inventory_Management.md`**
 
+| | |
+|---|---|
+| **Business Problem** | A hardcoded ATP ≤ 5 threshold applied to all 20,000+ SKUs. A sofa with a 28-day lead time and a lamp with a 3-day lead time received the same alert. Warehouse teams began ignoring the dashboard entirely. |
+| **Root Cause** | Not all low-stock situations carry the same business risk. Operational urgency depends on how fast a SKU sells *relative* to how long it takes to replenish. |
+| **Solution** | Replaced the static threshold with a dynamic risk formula: `days_of_stock = ATP / sales_velocity`. Risk classified as Critical / Medium / Low against lead time. Safety stock configurable per category, SKU, and warehouse with governance controls. |
+| **BA Techniques** | SQL analysis on purchase order receipts (lead time) and sales velocity data · Stakeholder interviews · Root cause analysis · RACI governance model · Business rule modeling · API contract design |
 
-## 🛠️ Tools & Workflow
-
-This project was created as a personal BA portfolio project using a combination of documentation, diagramming, design, and AI-assisted productivity tools.
-
-### Tools Used
-
-* 🤖 AI Assistance:
-  * Claude
-  * ChatGPT
-  * Stitch
-  * Lucidchart AI
-
-* 📊 Process & Diagramming:
-  * Mermaid
-  * Lucidchart
-
-* 🎨 Design & Wireframing:
-  * Figma
-
-### How AI Tools Were Used
-
-AI tools were used to support and accelerate parts of the workflow, including:
-
-* Requirement brainstorming
-* Feature specification drafting
-* BPMN structure generation
-* Mermaid diagram generation
-* Documentation refinement
-* UI ideation and wireframe planning
-
-All business flows, feature logic, acceptance criteria, and final documentation decisions were manually reviewed, refined, and structured by the author.
+**Key design decisions:**
+- Category-level defaults with SKU-level overrides and warehouse-specific configs
+- Approval governance: < 10% change → auto-approved · 10–30% → Inventory Manager · > 30% → Finance Manager
+- Immutable audit versioning on every threshold change
+- Seasonal config support (effective date / expiration date)
 
 ---
 
-## 🚧 Limitations
+### 🔑 Feature 2: Carrier Validation & Green Delivery Routing
+**`/feature_specs/F_09.1_Admin_Shipping_Configuration.md`** *(Extension section)*
 
-* No backend implementation
-* No real payment integration
-* Focused on business analysis, documentation, process design, and UI planning only
+| | |
+|---|---|
+| **Business Problem** | Warehouse staff in Poland manually assigned carriers to EU orders without constraint enforcement. A 120 kg oak wardrobe was assigned to DPD EU (contractual max: 31.5 kg). DPD refused collection. 2-day delays. Trustpilot 1-star reviews. Additionally, the CEO introduced a KPI: 30% of EU urban deliveries (Berlin, Paris, Amsterdam) must use certified green carriers to qualify for EU tax rebates. |
+| **Root Cause** | No system-enforced carrier eligibility check at dispatch. Green routing left entirely to individual warehouse judgment. |
+| **Solution** | Carrier profile system with weight/dimension constraints drives automatic eligibility at pack-verify. Green-certified carriers ranked first for EU urban zones when rolling 30-day green ratio < 30% target. |
+| **BA Techniques** | Stakeholder pain mapping (Logistics Director) · Business rule modeling · Data model design · API contract definition · KPI framework definition |
+
+**Key design decisions:**
+- `carrier_profiles` table with per-carrier weight, dimension, girth, and green certification data
+- Auto-assignment engine at F-05.6 pack-verify step — blocks label generation if no eligible carrier found (`CARRIER_UNRESOLVED`)
+- Manual operator override allowed but audit-logged with mandatory reason code
+- Monthly CSV export for EU tax rebate submission
+
+---
+
+## 📁 Repository Structure
+
+```
+HomeStyle-project-demo/
+│
+├── HomeStyle_BRD_v4.md              ← Full system BRD (v4.8)
+│                                       My contributions: §12.13 (BC-88–93),
+│                                       §16.6 (TC-INV-03, TC-CAR-01, TC-GREEN-01),
+│                                       §17.9 (BR-INV-11–16, BR-FUL-11–13),
+│                                       §18.2 (4 new operational KPIs)
+│
+├── feature_specs/
+│   ├── F_09.1_Admin_Shipping_Configuration.md   ← My work (Extension section v3.0)
+│   ├── F_09.3_Admin_Inventory_Management.md     ← My work (Extension section v4.0)
+│   ├── F_05.3_Admin_Order_Fulfilment.md         ← Context: validated scenarios
+│   └── [Other specs — system context, not my authorship]
+│
+└── BPMN/
+    └── [Process diagrams for system-wide flows]
+```
+
+**Start here if you're a reviewer:**
+1. Read the two feature spec extension sections above (F-09.1 carrier validation, F-09.3 dynamic safety stock)
+2. See the corresponding BRD sections: §17.9 BR-INV-11–16 and BR-FUL-11–13
+3. The full BRD is available for system-level context
+
+---
+
+## 🛠️ BA Techniques Demonstrated
+
+| Technique | Where Applied |
+|---|---|
+| **SQL Data Analysis** | Lead time analysis (`AVG(DATEDIFF)` on PO receipts) and sales velocity analysis to validate the risk formula before writing specs. Queries embedded in F-09.3 spec for dev/QA reference. |
+| **Root Cause Analysis** | Both features started with a structured AS-IS → pain point → root cause → solution design flow |
+| **Business Rule Modeling** | BR-INV-11–16, BR-FUL-11–13 — rules with rationale, enforcement point, and related-rule cross-references |
+| **RACI Governance Design** | Threshold change approval matrix (warehouse vs. inventory manager vs. finance) |
+| **API Contract Design** | Endpoint definitions, request/response shapes, validation rules, error codes, and permission matrices in every feature spec |
+| **Acceptance Criteria** | Structured AC tables (criteria, test type, status) per feature |
+| **Stakeholder Management** | Translated Logistics Director pain points into system requirements; resolved Finance Manager governance concern |
+| **KPI Framework** | Defined Green Delivery Ratio, Inventory Risk Alert Accuracy, CARRIER_UNRESOLVED Rate, and Threshold Approval Cycle Time |
+| **Impact Analysis** | Feature dependency matrix showing how F-09.1 changes propagate to F-05.6, F-04.4, and F-09.4 |
+
+---
+
+## 📐 Design Artefacts
+
+| Artefact | Link |
+|---|---|
+| Figma Wireframes | [View on Figma](https://www.figma.com/design/DB9QuzkbAKtjYur3M45C9t/HomeStyle?node-id=0-1&t=JSWWkVBMFnfewZaL-1) |
+| Customer Purchase Journey BPMN | [View on Lucidchart](https://lucid.app/lucidchart/239a29ac-57a5-4e17-b75f-f809a7116fd3/edit?viewport_loc=-6007%2C-270%2C10583%2C6141%2C0_0&invitationId=inv_9f726783-163b-403b-8ebf-25f613a55f35) |
+| Return & Refund Journey BPMN | [View on Lucidchart](https://lucid.app/lucidchart/32687af9-be2e-456d-9b5e-a9d0f94b8be4/edit?viewport_loc=-5295%2C-993%2C5127%2C2713%2C0_0&invitationId=inv_31dd6994-3243-41d4-a51a-7ea42e341f09) |
+
+---
+
+## 🏗️ System Overview (Context)
+
+The full HomeStyle platform covers 10 domains. I contributed to **Admin Operations (F-09.x)**. The other domains exist in this repo for completeness and dependency traceability — they reflect the broader system architecture I worked within, not my individual authorship.
+
+| Domain | Features | My Involvement |
+|---|---|---|
+| 🔐 Identity & Auth | Registration, Login, 2FA, Sessions | Context only |
+| 🏷️ Product & Catalogue | Browse, Search, PDP, Admin Catalogue | Context only |
+| 🛒 Cart & Inventory | Cart, Guest Merge, Wishlist | Context only |
+| 💳 Checkout & Payment | Checkout Flow, Stripe, Tax & Shipping Calc | Dependency: shipping config feeds F-04.4 |
+| 📦 Order Management | Confirmation, Tracking, Fulfilment, Status Machine | Validated operational scenarios for F-05.3 |
+| 🔄 Returns & Refunds | Return Request, Admin Review, Refund | Context only |
+| ⭐ Reviews | Submission, Moderation | Context only |
+| 🔒 Compliance (GDPR) | Cookie Consent, Data Erasure, Retention | Context only |
+| ⚙️ **Admin Operations** | **Shipping Config, Inventory, Dashboard, Promotions** | **Full ownership — F-09.1 extension, F-09.3 extension** |
+| 🤝 Trade Portal | Trade Account Review, Pricing Tiers, AM Assignment | Context only |
+
+---
+
+## 📋 Project Notes
+
+- **No backend implementation** — this is a BA documentation portfolio, not a working application
+- **No real payment data** — Stripe integration is specified at requirements level only
+- The BRD, feature specs, and business rule catalog represent the type of artefacts I produce in a professional BA role
+- All business scenarios, stakeholder pain points, and case studies are based on realistic EU logistics and e-commerce operational contexts
 
 ---
 
 ## 👤 Author
 
-Minh – Business Analyst
+**Minh** — Business Analyst
+Specialisation: Operations domain · Inventory intelligence · Logistics automation · EU market requirements
