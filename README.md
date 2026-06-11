@@ -10,7 +10,7 @@
 
 HomeStyle is a **BA portfolio demonstration** simulating a real-world enterprise documentation workflow for a premium design furniture e-commerce platform. The platform supports multi-channel commerce, inventory management, order fulfillment, customer support, and administrative workflows across US and EU markets.
 
-The full system spans ~40 features across 10 domains. **This repository contains the complete system-level BRD and feature specs.** My direct BA contribution covers the **Admin Operations domain** — inventory management, logistics automation, and operational reporting. Other domain specs (Auth, Checkout, Trade Portal, etc.) are included for system context and dependency traceability.
+The full system spans ~40 features across 10 modules. **This repository contains the complete system-level BRD and feature specs.** My direct BA contribution covers the **Admin Operations domain** — inventory management, logistics automation, and operational reporting. Other domain specs (Auth, Checkout, Trade Portal, etc.) are included for system context and dependency traceability.
 
 ---
 
