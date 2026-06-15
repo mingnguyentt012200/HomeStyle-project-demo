@@ -102,7 +102,7 @@ HomeStyle-project-demo/
 
 | Artefact | Link |
 |---|---|
-| Figma Wireframes (v1) | [View on Figma](https://www.figma.com/design/DB9QuzkbAKtjYur3M45C9t/HomeStyle?node-id=0-1&t=JSWWkVBMFnfewZaL-1) |
+| Figma Wireframes (v1) | [View on Figma](https://www.figma.com/design/AaDMTC6h17acKOp4Jv5Vem/Homestyle?node-id=0-1&t=8Q9n6dpgJ2iTMOhJ-1) |
 | Figma Wireframes (v2 — in progress) | [View on Figma](https://www.figma.com/design/AaDMTC6h17acKOp4Jv5Vem/Homestyle?node-id=11-2&t=8Q9n6dpgJ2iTMOhJ-1) — 🚧 currently on it. Ops Admin and Content Admin wireframes completed; remaining screens in progress. |
 | Customer Purchase Journey BPMN | [View on Lucidchart](https://lucid.app/lucidchart/239a29ac-57a5-4e17-b75f-f809a7116fd3/edit?viewport_loc=-6007%2C-270%2C10583%2C6141%2C0_0&invitationId=inv_9f726783-163b-403b-8ebf-25f613a55f35) |
 | Return & Refund Journey BPMN | [View on Lucidchart](https://lucid.app/lucidchart/32687af9-be2e-456d-9b5e-a9d0f94b8be4/edit?viewport_loc=-5295%2C-993%2C5127%2C2713%2C0_0&invitationId=inv_31dd6994-3243-41d4-a51a-7ea42e341f09) |
